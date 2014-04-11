@@ -6,6 +6,13 @@ This library provides the ability to connect to the [NeuroSky](http://www.neuros
 * [Javolution](http://javolution.org/)
 * [Apache MINA](http://mina.apache.org/)
 
+# Maven Dependency
+       <dependency>
+           <groupId>com.github.mrstampy</groupId>
+           <artifactId>esp</artifactId>
+           <version>1.1</version>
+       </dependency>
+
 Usage of the library is straight-forward. One only needs to instantiate the MultiConnectionThinkGearSocket, add a listener, start the MultiConnectionThinkGearSocket and deal with the events as they occur.
 
 ## Multiple Connections
