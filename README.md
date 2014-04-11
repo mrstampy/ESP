@@ -6,7 +6,7 @@ This library provides the ability to connect to the [NeuroSky](http://www.neuros
 * [Javolution](http://javolution.org/)
 * [Apache MINA](http://mina.apache.org/)
 
-# Maven Dependency
+## Maven Dependency
        <dependency>
            <groupId>com.github.mrstampy</groupId>
            <artifactId>esp</artifactId>
