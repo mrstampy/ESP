@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ant [
-	<!ENTITY ESP.version "1.1-SNAPSHOT">
+	<!ENTITY ESP.version "1.1">
 ]>
 <project name="ESP" basedir="." default="create deployables" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:m="http://ant.apache.org/ivy/maven" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
@@ -58,7 +58,7 @@
 	
 	<target name="deploy staging">
 		<antcall target="copypom">
-			<param name="to.pom" value="${basedir}/build/PoisonIvy-&ESP.version;.pom"/>
+			<param name="to.pom" value="${basedir}/build/esp-&ESP.version;.pom"/>
 			<param name="from.pom" value="${basedir}/pom.xml"/>
 		</antcall>
 		

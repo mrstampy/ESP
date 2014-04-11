@@ -9,15 +9,15 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.mrstampy</groupId>
-  <artifactId>PoisonIvy</artifactId>
+  <artifactId>esp</artifactId>
   <packaging>jar</packaging>
   <version>$ESP.version</version>
   <description>ESP - An EEG Signal Processing Library</description>
   <url>http://mrstampy.github.com/ESP/</url>
   <licenses>
     <license>
-      <name>GNU Public License, Version 2.0</name>
-      <url>http://www.gnu.org/licenses/gpl-2.0.html</url>
+      <name>GNU Lesser General Public License</name>
+      <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
