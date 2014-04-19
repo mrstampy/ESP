@@ -207,16 +207,7 @@ public class ThinkGearSocketConnector {
 	 * {@link EventType#signalProcessed}.
 	 */
 	public boolean subscribeAll() {
-		EventType[] allBut = new EventType[EventType.values().length - 1];
-		int idx = 0;
-		for (EventType type : EventType.values()) {
-			if (type != EventType.signalProcessed) {
-				allBut[idx] = type;
-				idx++;
-			}
-		}
-
-		return subscribe(allBut);
+		return subscribe(EventType.values());
 	}
 
 	/**

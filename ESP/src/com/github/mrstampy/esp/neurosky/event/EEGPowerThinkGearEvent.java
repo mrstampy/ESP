@@ -100,4 +100,23 @@ public class EEGPowerThinkGearEvent extends AbstractThinkGearEvent {
 		this.highGamma = highGamma;
 	}
 
+	/**
+	 * Lowest (Theta) to highest (High Gamma)
+	 * @param e
+	 * @return
+	 */
+	public double[] getPowers() {
+		//@formatter:off
+		return new double[] { 
+				getDelta(), 
+				getTheta(), 
+				getLowAlpha(), 
+				getHighAlpha(), 
+				getLowBeta(),
+				getHighBeta(), 
+				getLowGamma(), 
+				getHighGamma() };
+		//@formatter:on
+	}
+
 }
