@@ -2,11 +2,9 @@ package com.github.mrstampy.esp.mutliconnectionsocket;
 
 import java.util.EventListener;
 
-import com.github.mrstampy.esp.neurosky.MultiConnectionThinkGearSocket;
-
 /**
  * Implement and add to
- * {@link MultiConnectionThinkGearSocket#addConnectionEventListener(ConnectionEventListener)}
+ * {@link AbstractMultiConnectionSocket#addConnectionEventListener(ConnectionEventListener)}
  * to receive connected state events
  * 
  * @author burton
@@ -15,7 +13,7 @@ public interface ConnectionEventListener extends EventListener {
 
 	/**
 	 * Invoked when the connected state of the
-	 * {@link MultiConnectionThinkGearSocket} changes
+	 * {@link AbstractMultiConnectionSocket} changes
 	 * 
 	 * @param e
 	 */

@@ -19,8 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.mrstampy.esp.mutliconnectionsocket.event.AbstractMultiConnectionEvent;
 import com.github.mrstampy.esp.mutliconnectionsocket.subscription.MultiConnectionSubscriptionRequest;
-import com.github.mrstampy.esp.neurosky.MultiConnectionThinkGearSocket;
-import com.github.mrstampy.esp.neurosky.subscription.ThinkGearSocketConnector;
 
 /**
  * Abstract {@link IoHandler} implementation to receive subscriptions and
@@ -35,7 +33,7 @@ import com.github.mrstampy.esp.neurosky.subscription.ThinkGearSocketConnector;
  * @param <MCSR>
  *          the {@link MultiConnectionSubscriptionRequest}
  */
-public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS extends AbstractMultiConnectionSocket, MCSR extends MultiConnectionSubscriptionRequest<E>>
+public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS extends AbstractMultiConnectionSocket<?>, MCSR extends MultiConnectionSubscriptionRequest<E>>
 		extends IoHandlerAdapter {
 
 	private static final Logger log = LoggerFactory.getLogger(AbstractSubscriptionHandlerAdapter.class);
@@ -65,7 +63,7 @@ public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS
 	public void sessionClosed(IoSession session) throws Exception {
 		HostPort hostPort = createHostPort(session);
 
-		log.info("Disconnecting ThinkGearSocketConnector on {}", hostPort);
+		log.info("Disconnecting socket on {}", hostPort);
 
 		writeLock.lock();
 		try {
@@ -84,8 +82,8 @@ public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS
 	 * subscribers.
 	 * 
 	 * @param event
-	 * @see MultiConnectionThinkGearSocket
-	 * @see ThinkGearSocketConnector
+	 * @see AbstractMultiConnectionSocket
+	 * @see AbstractSocketConnector
 	 */
 	public void sendMultiConnectionEvent(AbstractMultiConnectionEvent<E> event) {
 		List<HostPort> list = null;

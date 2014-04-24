@@ -2,15 +2,7 @@ package com.github.mrstampy.esp.mutliconnectionsocket;
 
 import java.io.IOException;
 
-import com.github.mrstampy.esp.neurosky.subscription.ThinkGearSocketConnector;
-
 public interface MultiConnectionSocket {
-
-	/**
-	 * System property key to control whether broadcasting has been enabled. False
-	 * by default. Use '-Dbroadcast.messages=true' to enable socket broadcasting.
-	 */
-	public static final String BROADCAST_MESSAGES = "broadcast.messages";
 
 	public abstract void addConnectionEventListener(ConnectionEventListener listener);
 
@@ -19,7 +11,7 @@ public interface MultiConnectionSocket {
 	public abstract void clearConnectionEventListeners();
 
 	/**
-	 * Connects to the ThinkGear socket
+	 * Connects to the socket
 	 * 
 	 * @throws MultiConnectionSocketException
 	 *           if already connected or an unexpected error occurs
@@ -27,12 +19,13 @@ public interface MultiConnectionSocket {
 	public abstract void start() throws MultiConnectionSocketException;
 
 	/**
-	 * Closes the connection to the ThinkGear socket.
+	 * Closes the connection to the {@link AbstractMultiConnectionSocket} socket.
 	 */
 	public abstract void stop();
 
 	/**
-	 * Returns true if connected to the ThinkGear socket
+	 * Returns true if connected to the {@link AbstractMultiConnectionSocket}
+	 * socket
 	 * 
 	 * @return true if connected
 	 */
@@ -40,17 +33,17 @@ public interface MultiConnectionSocket {
 
 	/**
 	 * Binds the broadcaster to the local host and the broadcaster port in
-	 * {@link ThinkGearSocketConnector}
+	 * {@link AbstractSocketConnector}
 	 * 
 	 * @throws IOException
-	 * @see ThinkGearSocketConnector
+	 * @see AbstractSocketConnector
 	 */
 	public abstract void bindBroadcaster() throws IOException;
 
 	/**
 	 * Unbinds the broadcaster.
 	 * 
-	 * @see ThinkGearSocketConnector
+	 * @see AbstractSocketConnector
 	 */
 	public abstract void unbindBroadcaster();
 
@@ -58,7 +51,7 @@ public interface MultiConnectionSocket {
 	 * Returns true if the broadcaster is bound.
 	 * 
 	 * @return
-	 * @see ThinkGearSocketConnector
+	 * @see AbstractSocketConnector
 	 */
 	public abstract boolean isBound();
 

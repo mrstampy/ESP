@@ -2,15 +2,12 @@ package com.github.mrstampy.esp.mutliconnectionsocket;
 
 import java.io.Serializable;
 
-import com.github.mrstampy.esp.neurosky.SubscriptionHandlerAdapter;
-import com.github.mrstampy.esp.neurosky.subscription.ThinkGearSocketConnector;
-
 /**
  * Convenience class to identify connected subscribers.
  * 
  * @author burton
- * @see ThinkGearSocketConnector
- * @see SubscriptionHandlerAdapter
+ * @see AbstractSocketConnector
+ * @see AbstractSubscriptionHandlerAdapter
  */
 public class HostPort implements Serializable {
 
@@ -43,7 +40,7 @@ public class HostPort implements Serializable {
 	public int hashCode() {
 		return host.hashCode() + (17 * port);
 	}
-	
+
 	public String toString() {
 		return host + ":" + port;
 	}

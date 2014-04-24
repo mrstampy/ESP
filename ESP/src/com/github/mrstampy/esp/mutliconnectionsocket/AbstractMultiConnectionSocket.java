@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.mrstampy.esp.mutliconnectionsocket.ConnectionEvent.State;
 import com.github.mrstampy.esp.mutliconnectionsocket.event.AbstractMultiConnectionEvent;
-import com.github.mrstampy.esp.neurosky.subscription.ThinkGearSocketConnector;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
@@ -35,7 +34,7 @@ import com.lmax.disruptor.dsl.Disruptor;
  * @author burton
  * 
  */
-public abstract class AbstractMultiConnectionSocket implements MultiConnectionSocket {
+public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiConnectionSocket {
 	private static final Logger log = LoggerFactory.getLogger(AbstractMultiConnectionSocket.class);
 
 	private NioSocketAcceptor socketBroadcaster;
@@ -44,11 +43,11 @@ public abstract class AbstractMultiConnectionSocket implements MultiConnectionSo
 
 	private final boolean broadcasting;
 
-	private EventHandler<MessageEvent> messageEventHandler;
+	private EventHandler<MessageEvent<MESSAGE>> messageEventHandler;
 
-	private Disruptor<MessageEvent> disruptor;
+	private Disruptor<MessageEvent<MESSAGE>> disruptor;
 
-	private RingBuffer<MessageEvent> rb;
+	private RingBuffer<MessageEvent<MESSAGE>> rb;
 
 	private Executor processExecutor = Executors.newSingleThreadExecutor();
 
@@ -141,7 +140,7 @@ public abstract class AbstractMultiConnectionSocket implements MultiConnectionSo
 			return;
 		}
 
-		socketBroadcaster.bind(new InetSocketAddress(ThinkGearSocketConnector.THINK_GEAR_SOCKET_BROADCASTER_PORT));
+		socketBroadcaster.bind(new InetSocketAddress(AbstractSocketConnector.BROADCASTER_PORT));
 
 		notifyConnectionEventListeners(State.BOUND);
 	}
@@ -219,27 +218,27 @@ public abstract class AbstractMultiConnectionSocket implements MultiConnectionSo
 	 * @see AbstractMultiConnectionSocket#parseMessage(String)
 	 * @param message
 	 */
-	protected void publishMessage(String message) {
+	protected void publishMessage(MESSAGE message) {
 		long seq = rb.next();
 		log.trace("Publishing message {} for sequence {}", message, seq);
-		MessageEvent be = rb.get(seq);
+		MessageEvent<MESSAGE> be = rb.get(seq);
 		be.setMessage(message);
 		rb.publish(seq);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void initDisruptor() {
-		disruptor = new Disruptor<MessageEvent>(MessageEvent.EVENT_FACTORY, Executors.newCachedThreadPool(),
-				new SingleThreadedClaimStrategy(8), new BlockingWaitStrategy());
+		disruptor = new Disruptor<MessageEvent<MESSAGE>>(new MessageEventFactory<MESSAGE>(),
+				Executors.newCachedThreadPool(), new SingleThreadedClaimStrategy(8), new BlockingWaitStrategy());
 
 		disruptor.handleEventsWith(messageEventHandler);
 	}
 
 	private void initMessageEventHandler() {
-		messageEventHandler = new EventHandler<MessageEvent>() {
+		messageEventHandler = new EventHandler<MessageEvent<MESSAGE>>() {
 
 			@Override
-			public void onEvent(final MessageEvent event, long sequence, boolean endOfBatch) throws Exception {
+			public void onEvent(final MessageEvent<MESSAGE> event, long sequence, boolean endOfBatch) throws Exception {
 				processExecutor.execute(new Runnable() {
 
 					@Override
@@ -257,6 +256,6 @@ public abstract class AbstractMultiConnectionSocket implements MultiConnectionSo
 	 * 
 	 * @param message
 	 */
-	protected abstract void parseMessage(String message);
+	protected abstract void parseMessage(MESSAGE message);
 
 }

@@ -2,8 +2,6 @@ package com.github.mrstampy.esp.mutliconnectionsocket.event;
 
 import java.io.Serializable;
 
-import com.github.mrstampy.esp.neurosky.event.AbstractThinkGearEvent;
-
 public abstract class AbstractMultiConnectionEvent<E extends Enum<E>> implements Serializable {
 	private static final long serialVersionUID = 8285549904986718450L;
 
@@ -34,7 +32,7 @@ public abstract class AbstractMultiConnectionEvent<E extends Enum<E>> implements
 	/**
 	 * "This method can only be used to measure elapsed time and is not related to
 	 * any other notion of system or wall-clock time." Use only in comparison to
-	 * other {@link AbstractThinkGearEvent#nanoTime}s
+	 * other {@link AbstractMultiConnectionEvent#nanoTime}s
 	 * 
 	 * @return The nano time this event was created
 	 * @see System#nanoTime()
