@@ -1,8 +1,10 @@
 package com.github.mrstampy.esp.dsp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -55,6 +57,8 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 
 	protected int sampleRate;
 
+	protected List<ArrayBlockingQueue<Double>> queues = new ArrayList<ArrayBlockingQueue<Double>>();
+
 	/**
 	 * Instantiate with the socket, sample rate and frequencies of interest
 	 * 
@@ -76,26 +80,9 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	}
 
 	/**
-	 * Implement to return the map snapshot representing the approximate powers
-	 * (the values) of the frequencies specified (the keys).
-	 * 
-	 * @return
-	 * 
-	 * @see RawProcessedListener
-	 */
-	public abstract Map<Double, Double> getSnapshot();
-
-	/**
 	 * Implement any takedown logic here
 	 */
 	protected abstract void destroyImpl();
-
-	/**
-	 * Process the current batch of samples for use with {@link #getSnapshot()}
-	 * 
-	 * @param list
-	 */
-	protected abstract void processSamples(List<Map<Double, Double>> list);
 
 	/**
 	 * Return the aggregator for the raw signal.
@@ -110,6 +97,29 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	 * @return
 	 */
 	protected abstract EspSignalUtilities getUtilities();
+
+	/**
+	 * Returns the snapshot of the current processed raw data
+	 * 
+	 * @return
+	 */
+	public Map<Double, Double> getSnapshot() {
+		Map<Double, Double> map = new HashMap<Double, Double>();
+
+		for (int i = 0; i < frequencies.length; i++) {
+			ArrayBlockingQueue<Double> queue = queues.get(i);
+			Double[] snap = queue.toArray(new Double[] {});
+			double[] shot = new double[snap.length];
+			for (int j = 0; j < snap.length; j++) {
+				shot[j] = snap[j];
+			}
+
+			double wms = getUtilities().wma(shot);
+			map.put(frequencies[i], wms);
+		}
+
+		return map;
+	}
 
 	public void addProcessedListener(RawProcessedListener l) {
 		listeners.add(l);
@@ -146,12 +156,28 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 				Map<Double, Double> map = getUtilities().getLogPowersFor(sampled[i], frequencies);
 				list.add(map);
 			}
-			
+
 			processSamples(list);
-			
+
 			notifyListeners();
 		} catch (Exception e) {
 			log.error("Could not process current sample", e);
+		}
+	}
+
+	/**
+	 * Applies the snapshot to the queue.
+	 * 
+	 * @param list
+	 */
+	protected void processSamples(List<Map<Double, Double>> list) {
+		for (int i = 0; i < frequencies.length; i++) {
+			double[] powers = getPowers(frequencies[i], list);
+			double wmad = getUtilities().wma(powers);
+
+			ArrayBlockingQueue<Double> queue = queues.get(i);
+			if (queue.remainingCapacity() == 0) queue.remove();
+			queue.add(wmad);
 		}
 	}
 
@@ -188,7 +214,7 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	 * Invoked when the {@link #numCyclesPerSecond} value changed.
 	 */
 	protected void numCyclesChanged() {
-		// override appropriately
+		createQueues();
 	}
 
 	/**
@@ -218,6 +244,13 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	public void setNumCyclesPerSecond(int numCyclesPerSecond) {
 		this.numCyclesPerSecond = numCyclesPerSecond;
 		numCyclesChanged();
+	}
+
+	private void createQueues() {
+		queues.clear();
+		for (int i = 0; i < frequencies.length; i++) {
+			queues.add(new ArrayBlockingQueue<Double>(getNumCyclesPerSecond()));
+		}
 	}
 
 	private void initSocket(SOCKET socket) {
