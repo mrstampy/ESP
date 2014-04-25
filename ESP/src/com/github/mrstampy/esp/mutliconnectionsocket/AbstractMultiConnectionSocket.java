@@ -20,10 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import com.github.mrstampy.esp.mutliconnectionsocket.ConnectionEvent.State;
 import com.github.mrstampy.esp.mutliconnectionsocket.event.AbstractMultiConnectionEvent;
-import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.SingleThreadedClaimStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 
 /**
@@ -228,8 +226,8 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 
 	@SuppressWarnings("unchecked")
 	private void initDisruptor() {
-		disruptor = new Disruptor<MessageEvent<MESSAGE>>(new MessageEventFactory<MESSAGE>(),
-				Executors.newCachedThreadPool(), new SingleThreadedClaimStrategy(8), new BlockingWaitStrategy());
+		disruptor = new Disruptor<MessageEvent<MESSAGE>>(new MessageEventFactory<MESSAGE>(), 16,
+				Executors.newCachedThreadPool());
 
 		disruptor.handleEventsWith(messageEventHandler);
 	}

@@ -159,7 +159,10 @@ public abstract class EspSignalUtilities {
 	 */
 	public double getLogPower(double[] logFftd, double frequency) {
 		assert logFftd != null && logFftd.length > 0;
-		assert frequency > 1 && frequency < getUpperMeasurableFrequency() - 1 && ((int) frequency) < frequency;
+		assert frequency >= 1 && frequency <= getUpperMeasurableFrequency() - 1;
+		
+		boolean isInt = ((int)frequency) - frequency == 0;
+		if(isInt) return logFftd[(int)frequency];
 
 		int lower = (int) frequency;
 		int upper = lower + 1;

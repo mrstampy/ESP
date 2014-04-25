@@ -3,7 +3,7 @@
        xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
 	   xmlns:m="http://ant.apache.org/ivy/maven">
        
-	<info organisation="com.github.mrstampy" module="esp" status="integration" revision="1.2" />
+	<info organisation="com.github.mrstampy" module="esp" status="integration" revision="1.3-SNAPSHOT" />
 	    
     <publications>
         <artifact name="esp"/>
@@ -16,7 +16,7 @@
 		<dependency org="org.slf4j" name="slf4j-api" rev="1.7.7"/>
 		<dependency org="ch.qos.logback" name="logback-classic" rev="1.1.2" transitive="false" />
 		<dependency org="ch.qos.logback" name="logback-core" rev="1.1.2" transitive="false" />
-		<dependency org="com.googlecode.disruptor" name="disruptor" rev="2.10.4"/>
+		<dependency org="com.lmax" name="disruptor" rev="3.2.1"/>
 		<dependency org="javolution" name="javolution" rev="5.5.1"/>
 		<dependency org="org.apache.mina" name="mina-core" rev="2.0.7"/>
 	</dependencies>
