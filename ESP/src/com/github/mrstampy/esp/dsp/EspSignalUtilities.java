@@ -2,6 +2,8 @@ package com.github.mrstampy.esp.dsp;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
 
 import javolution.lang.MathLib;
 import ddf.minim.analysis.FFT;
@@ -19,22 +21,48 @@ import de.dfki.lt.signalproc.filter.LowPassFilter;
  */
 public abstract class EspSignalUtilities {
 
-	private FFT fft;
+	private FFT fft = new FFT(getFFTSize(), getSampleRate());
 
 	protected EspSignalUtilities(WindowFunction window) {
-		fft = new FFT(getFFTSize(), getSampleRate());
 		setWindow(window);
 	}
 
 	/**
-	 * Sets the window function for the encapsulated fast fourier transform. This
-	 * method is not thread safe.
+	 * Sets the windowing function within the FFT instance.
 	 * 
 	 * @param window
-	 * @see FFT
 	 */
 	public void setWindow(WindowFunction window) {
 		fft.window(window);
+	}
+
+	/**
+	 * Returns a map of frequency / log power pairs from the given sample. This
+	 * method is not thread safe.
+	 * 
+	 * @param sample
+	 * @param frequencies
+	 * @return
+	 */
+	public Map<Double, Double> getLogPowersFor(double[] sample, double... frequencies) {
+		assert sample != null && sample.length > 0;
+		assert frequencies != null && frequencies.length > 0;
+
+		Map<Double, Double> map = new HashMap<Double, Double>();
+
+		double[] logFftd = fftLogPowerSpectrum(sample);
+
+		for (double frequency : frequencies) {
+			assert frequency >= 1 && frequency < getUpperMeasurableFrequency();
+
+			boolean isInt = ((int) frequency) - frequency == 0;
+
+			double value = isInt ? logFftd[(int) frequency] : getLogPower(logFftd, frequency);
+
+			map.put(frequency, value);
+		}
+
+		return map;
 	}
 
 	/**
@@ -58,6 +86,8 @@ public abstract class EspSignalUtilities {
 	 * 
 	 * @param sample
 	 * @return
+	 * @see #getLogPower(double[], double)
+	 * @see #getLogPower(double[], int, int)
 	 */
 	public double[] fftLogPowerSpectrum(double[] sample) {
 		assert sample != null && sample.length > 0;
@@ -77,18 +107,18 @@ public abstract class EspSignalUtilities {
 	 * For range i to i + 3, weights 1, 2, 2, 1<br>
 	 * For range i to i + 4, weights 1, 2, 3, 2, 1<br>
 	 * 
-	 * @param fftd
+	 * @param logFftd
 	 *          the frequency-domain shifted sample
 	 * @param lowerFreqHz
 	 *          > 0 Hz
 	 * @param upperFreqHz
 	 *          < {@link #getUpperMeasurableFrequency()} Hz
-	 * @see #fftRealSpectrum(double[])
+	 * @see #fftLogPowerSpectrum(double[])
 	 * @see #createBandPassFilter(double, double)
 	 * @return
 	 */
-	public double getPower(double[] fftd, int lowerFreqHz, int upperFreqHz) {
-		assert fftd != null && fftd.length > 0;
+	public double getLogPower(double[] logFftd, int lowerFreqHz, int upperFreqHz) {
+		assert logFftd != null && logFftd.length > 0;
 		assert lowerFreqHz > 0 && lowerFreqHz <= upperFreqHz && upperFreqHz < getUpperMeasurableFrequency();
 
 		int boundary = upperFreqHz - lowerFreqHz;
@@ -100,7 +130,7 @@ public abstract class EspSignalUtilities {
 		double val = 0;
 		for (int i = lowerFreqHz; i <= upperFreqHz; i++) {
 			total += cntr;
-			val += (fftd[i] * cntr);
+			val += (logFftd[i] * cntr);
 			int span = i - lowerFreqHz;
 			int hispan = upperFreqHz - span;
 
@@ -117,25 +147,25 @@ public abstract class EspSignalUtilities {
 
 	/**
 	 * Linearly estimates the signal power at the specified frequency, between the
-	 * surrounding two fft data points (non-integer value between 1 Hz and ({@link #getUpperMeasurableFrequency()} - 1) Hz
-	 * exclusive).
+	 * surrounding two fft data points (non-integer value between 1 Hz and (
+	 * {@link #getUpperMeasurableFrequency()} - 1) Hz exclusive).
 	 * 
-	 * @param fftd
+	 * @param logFftd
 	 *          the frequency-domain shifted sample
 	 * @param frequency
 	 *          non-integer, > 1 && < ({@link #getUpperMeasurableFrequency()} - 1)
-	 * @see #fftRealSpectrum(double[])
+	 * @see #fftLogPowerSpectrum(double[])
 	 * @return
 	 */
-	public double getPower(double[] fftd, double frequency) {
-		assert fftd != null && fftd.length > 0;
+	public double getLogPower(double[] logFftd, double frequency) {
+		assert logFftd != null && logFftd.length > 0;
 		assert frequency > 1 && frequency < getUpperMeasurableFrequency() - 1 && ((int) frequency) < frequency;
 
 		int lower = (int) frequency;
 		int upper = lower + 1;
 
-		double powLower = fftd[lower];
-		double powHigher = fftd[upper];
+		double powLower = logFftd[lower];
+		double powHigher = logFftd[upper];
 
 		double highFrac = ((double) upper) - frequency;
 		double lowFrac = frequency - ((double) lower);
@@ -158,7 +188,8 @@ public abstract class EspSignalUtilities {
 	 * @param lowerCutoffHz
 	 *          the minimum index to use for normalization, >= 1
 	 * @param upperCutoffHz
-	 *          the maximum index to use for normalization, < {@link #getUpperMeasurableFrequency()}
+	 *          the maximum index to use for normalization, <
+	 *          {@link #getUpperMeasurableFrequency()}
 	 * @return
 	 */
 	public double[] normalize(double[] fftd, int lowerCutoffHz, int upperCutoffHz) {
@@ -305,19 +336,22 @@ public abstract class EspSignalUtilities {
 	}
 
 	/**
-	 * Return the size of the sample arrays.  Must be a power of 2;
+	 * Return the size of the sample arrays. Must be a power of 2;
+	 * 
 	 * @return
 	 */
 	protected abstract int getFFTSize();
 
 	/**
 	 * Return the sample rate
+	 * 
 	 * @return
 	 */
 	protected abstract double getSampleRate();
 
 	/**
 	 * Return the range of the raw signal values (max - min)
+	 * 
 	 * @return
 	 */
 	protected abstract BigDecimal getRawSignalBreadth();
