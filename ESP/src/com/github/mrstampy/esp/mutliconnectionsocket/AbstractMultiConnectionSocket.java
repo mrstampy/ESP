@@ -29,6 +29,10 @@ import com.lmax.disruptor.dsl.Disruptor;
  * uses Disruptor to pull EEG device messages off a socket and pass them to an
  * Executor for processing.
  * 
+ * Subclasses type the format of the raw data messages. Should multiple types
+ * ie. double and byte arrays be received from the device then a serializable
+ * wrapper can be created to contain the data.
+ * 
  * @author burton
  * 
  */
