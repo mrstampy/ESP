@@ -169,6 +169,8 @@ public abstract class EspSignalUtilities {
 
 		double powLower = logFftd[lower];
 		double powHigher = logFftd[upper];
+		
+		if(isInfinite(powLower) || isInfinite(powHigher)) return 0;
 
 		double highFrac = ((double) upper) - frequency;
 		double lowFrac = frequency - ((double) lower);
@@ -179,6 +181,10 @@ public abstract class EspSignalUtilities {
 		BigDecimal high = new BigDecimal(powHigher).multiply(frac);
 
 		return low.add(high).divide(BigDecimal.ONE.add(frac), 10, RoundingMode.HALF_UP).doubleValue();
+	}
+
+	private boolean isInfinite(double d) {
+		return d == Double.NEGATIVE_INFINITY || d == Double.POSITIVE_INFINITY;
 	}
 
 	/**
