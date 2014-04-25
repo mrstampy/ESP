@@ -77,6 +77,7 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 		setNumSamplesPerCycle(sampleRate);
 
 		initSocket(socket);
+		createQueues();
 	}
 
 	/**
