@@ -21,7 +21,7 @@ public abstract class RawSignalAggregator {
 		this.sampleRate = sampleRate;
 	}
 
-	protected void addSample(double... sample) {
+	public void addSample(double... sample) {
 		if (queue.remainingCapacity() == 0) queue.remove();
 
 		queue.add(sample);
