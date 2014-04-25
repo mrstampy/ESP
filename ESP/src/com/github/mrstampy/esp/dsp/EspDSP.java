@@ -254,6 +254,6 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 			public void run() {
 				process();
 			}
-		}, snooze, snooze, TimeUnit.MILLISECONDS);
+		}, snooze * 4, snooze, TimeUnit.MILLISECONDS);
 	}
 }
