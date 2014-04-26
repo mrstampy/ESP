@@ -2,174 +2,83 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
 <body>
-	<h1>Entrainer ESP - EEG Signal Processing</h1>
-	<h2>Release 1.1, 11-04-14</h2>
+	<h1>ESP - EEG Signal Processing</h1>
+	<h2>Release 1.3, 26-04-14</h2>
 	<p>
-		This library provides the ability to connect to the <a
-			href="http://www.neurosky.com">NeuroSky</a> MindWave ThinkGear
-		connector. As of version 1.0.0 the core functionality has been abstracted,
-		allowing implementations for other devices to be created.
-		It is designed to be fast and efficient, using high
-		performance Java libraries:
+		This library provides core classes to implement EEG signal acquisition and processing
+		in Java and was compiled for Java version 1.6 compatibility.  There are currently two implementations: 
+		<a href="http://mrstampy.github.com/ESP-ThinkGear/">ESP-ThinkGear</a>
+		and <a href="http://mrstampy.github.com/ESP-Nia/">ESP-Nia</a>. The core classes have been designed with speed and concurrency
+		in mind using high performance Java libraries:
 	<ul>
-		<li><a href="https://code.google.com/p/disruptor/">Disruptor</a></li>
+		<li><a href="https://github.com/LMAX-Exchange/disruptor">Disruptor</a></li>
 		<li><a href="http://javolution.org/">Javolution</a></li>
 		<li><a href="http://mina.apache.org/">Apache MINA</a></li>
 	</ul>
+	
+	<h2>Architecture</h2>
+	
+	<img src="LocalMCSUse.jpg" alt="Local use of the Multi Connection Socket" />
 	<p>
-		Usage of the library is straight-forward. After installing the
-		ThinkGear connector and running it with a NeuroSky device, add the 
-		libraries included in the EntrainerESP distribution to your
-		application's classpath.  One only needs to instantiate 
-		the MultiConnectionThinkGearSocket, add a listener, start the 
-		MultiConnectionThinkGearSocket and deal with the events as they occur:
-
-		<code>
-			<pre>
-	<a href="com/github/mrstampy/esp/neurosky/MultiConnectionThinkGearSocket.html">MultiConnectionThinkGearSocket</a> socket = new MultiConnectionThinkGearSocket();
-	
-	socket.addListener(new ThinkGearEventListenerAdapter() {
-
-		protected void rawEEGEventPerformed(<a href="com/github/mrstampy/esp/neurosky/event/RawEEGThinkGearEvent.html">RawEEGThinkGearEvent</a> e) {
-			// blank implementation in superclass, override
-			// if required
-		}
-
-		protected void poorSignalEventPerformed(<a href="com/github/mrstampy/esp/neurosky/event/PoorSignalLevelThinkGearEvent.html">PoorSignalLevelThinkGearEvent</a> e) {
-			// blank implementation in superclass, override
-			// if required
-		}
-
-		protected void eegPowerEventPerformed(<a href="com/github/mrstampy/esp/neurosky/event/EEGPowerThinkGearEvent.html">EEGPowerThinkGearEvent</a> e) {
-			// blank implementation in superclass, override
-			// if required
-		}
-
-		protected void eSenseEventPerformed(<a href="com/github/mrstampy/esp/neurosky/event/ESenseThinkGearEvent.html">ESenseThinkGearEvent</a> e) {
-			// blank implementation in superclass, override
-			// if required
-		}
-
-		protected void blinkStrengthEventPerformed(<a href="com/github/mrstampy/esp/neurosky/event/BlinkStrengthThinkGearEvent.html">BlinkStrengthThinkGearEvent</a> e) {
-			// blank implementation in superclass, override
-			// if required
-		}
-	});
-	
-	socket.start();
-		</pre>
-		</code>
-		<h2>Multiple Connections</h2>
-		<p>
-			As implied by the name of the class, the
-			MultiConnectionThinkGearSocket is capable of not only processing
-			ThinkGear messages for a single application but also of broadcasting
-			the messages to separate applications, even on separate machines and
-			devices! This functionality is disabled by default. To enable it
-			either set the System property
-			<code>broadcast.messages</code>
-			to true or instantiate the MultiConnectionThinkGearSocket using one
-			of its other constructors:
-		</p>
-
-		<code>
-			<pre>
-	MultiConnectionThinkGearSocket socket = new MultiConnectionThinkGearSocket("ThinkGear socket hostname", true);
-	...
-	socket.start();
-		</pre>
-		</code>
-
-	...and then in another application:
-	<code>
-		<pre>
-	<a href="com/github/mrstampy/esp/neurosky/subscription/ThinkGearSocketConnector.html">ThinkGearSocketConnector</a> connector = new ThinkGearSocketConnector("Hostname running MultiConnectionThinkGearSocket");
-		
-	connector.addThinkGearEventListener(new ThinkGearEventListenerAdapter() {
-		// overriding methods as appropriate
-	});
-	
-	connector.connect();
-	
-	//after successful connection...
-	connector.subscribe(<a href="com/github/mrstampy/esp/neurosky/event/EventType.html">EventType</a>...);
-		</pre>
-	</code>
-
-	<h2>Future Releases...</h2>
-	<ul>
-		<li><strike>Process raw EEG output.</strike></li>
-		<li>Incorporate <a href="http://neuroph.sourceforge.net">Neuroph</a>
-			to analyze, normalize and calibrate the EEG signals.
-		</li>
-	</ul>
-	
-	<h2>Release 1.0.1 Final - Raw Signal Processing</h2>
+		The <a href="com/github/mrstampy/esp/multiconnectionsocket/AbstractMultiConnectionSocket.html">AbstractMultiConnectionSocket</a>
+		is the core class of this library.  Implementations connect to a specific EEG device and generate events based upon the 
+		data received from the device.  Listeners can register themselves with the socket implementation and will receive the generated
+		events as they occur, allowing near-realtime signal acquisition from the device. 
+	</p>
 	<p>
-	Additional classes have been added to assist with raw signal processing. The examples 
-	shown will work with the NeuroSky raw output however these classes can be used for any DSP
-	work with low sample sizes (ie. < 1000 samples / sec).  For greater sample sizes the utilization of
-	primitive arrays is recommended.
+		But this doesn't explain the 'multi connection' name...
 	</p>
 	
+	<h3>Remote Connection to the Multi Connection Socket</h3>
+	<img src="RemoteMCSUse.png" alt="Remote use of the Multi Connection Socket" />
 	<p>
-	<a href="com/github/mrstampy/esp/dsp/SignalProcessor.html">SignalProcessor</a> is the class which aggregates the signal
-	and notifies <a href="com/github/mrstampy/esp/dsp/SignalProcessorListener.html">listeners</a> of snapshots of the signal 
-	taken at the specified frequency.  By default the sample size is 256 evenly spaced data points across a second's worth 
-	of sample points at a rate of 50 samples per second.
+		The Multi Connection Socket implementations allow connections from
+		<a href="com/github/mrstampy/esp/multiconnectionsocket/AbstractSocketConnector.html">AbstractSocketConnector</a> implementations.
+		Multi connection sockets can accept many such remote connections (theoretically thousands).
+		The connections can be running in the same JVM or in different Java programs, even on different computers.  Due to the introduced
+		latency resulting from the remote connection the signal received cannot be considered near-realtime, however the socket connector
+		is quite useful for highly buffered signals and for applications such as data recorders. 
+	</p>
+	<p>
+		Applications using the socket connector create the connection to the multi connection socket and subscribe to receive 
+		device-specific events.  Listeners register themselves with the socket connector and receive the event notifications
+		as they are received by the socket connector.
 	</p>
 	
+	<h3>Raw Signal Processing (new in version 1.3)</h3>
+	<img src="RawDataProcessing.jpg" alt="Raw data processing"/>
 	<p>
-	<a href="com/github/mrstampy/esp/dsp/SignalInstance.html">SignalInstance</a> encapsulates a snapshot of the signal
-	and is the object sent to the listeners.  This class allows access to the raw sample as well as the ability to
-	perform a Fast Fourier Transform on the data in order to obtain signal strengths.  By default the class normalizes the
-	signal across the frequency spectrum (25 Hz by default).  This can be changed by setting an array of frequencies upon
-	which to normalize prior to obtaining the power data.  Differing <a href="ddf/minim/analysis/WindowFunction.html">windows</a>
-	can be used to process the signal.
+		In the development of the <a href="http://mrstampy.github.com/ESP-Nia/">ESP-Nia</a> implementation the base classes
+		for raw signal processing were developed.  Multi connection socket implementations contain a raw data buffer which contains
+		the current second's worth of data (for the OCZ Nia this translates to 3910 data points, for the ThinkGear devices this translates
+		to 512 data points).  A sampler snapshots the buffer at a rate of 100Hz and raw data events are generated from the snapshots
+		(for both the Nia and ThinkGear implementations each snapshot consists of 512 evenly spaced data points).
 	</p>
-	
 	<p>
-	<a href="com/github/mrstampy/esp/dsp/PowerInstance.java">PowerInstance</a> assists with the aggregation of SignalInstances.
-	In addition by supplying a list of PowerInstances in the constructor this class will create itself using a weighted average
-	of the powers in the list (ie. the last in the list has a weighting of list.size(), the previous list.size() -1 etc.)
+		Raw data event listeners can make use of <a href="com/github/mrstampy/esp/dsp/RawSignalAggregator.html">RawSignalAggregator</a> 
+		implementations which keep the current second's worth of snapshots in memory (100).  The 
+		<a href="com/github/mrstampy/esp/dsp/EspDSP.html">EspDSP</a> base class
+		provides the ability to apply signal processing algorithms to the current group of snapshots and notifies any 
+		<a href="com/github/mrstampy/esp/dsp/RawProcessedListener.html">RawProcessedListener</a>s upon completion of each cycle. 
+		A <a href="com/github/mrstampy/esp/dsp/EspSignalUtilities.html">utility</a> base class is provided which contains
+		methods which may be useful in processing the raw signal and the ESP library contains classes liberated from 
+		<a href="https://github.com/ddf/Minim">Minim</a>
+		and <a href="https://github.com/marytts/marytts/">MaryTTS</a> projects which can be used to process the signal.
 	</p>
-	
-	<h3>RSP Usage</h3>
 	<p>
-		<code>
-		<pre>
-		
-		// added to an instance of <a href="com/github/mrstampy/esp/neurosky/subscription/ThinkGearSocketConnector.html">ThinkGearSocketConnector</a>
-		thinkGearEventListener = new <a href="com/github/mrstampy/esp/neurosky/subscription/ThinkGearEventListenerAdapter.html">ThinkGearEventListenerAdapter()</a> {
-
-		  protected void rawEEGEventPerformed(RawEEGThinkGearEvent e) {
-		    <a href="com/github/mrstampy/esp/dsp/SignalProcessor.html">signalProcessor</a>.addSignal(e.getNanoTime(), e.getRawData());
-		  }
-
-		};
-		
-		signalProcessor.addListener(new SignalProcessorListener() {
-		
-		  public void signalProcessed(SignalInstance signalInstance) {
-		    // aggregate signal
-		  }
-		  
-		});
-		
-		signalProcessor.start();
-		
-		</pre>
-		</code>
+		The goal of the ESP raw signal processing is to line the ducks up in a row for processing.  How the signal is 
+		processed is up to the application using the library.
 	</p>
 
 	Additional functionality is described in these JavaDocs. This work is
 	released under the GPL 3.0 license. No warranty of any kind is offered.
-	<a href="http://entrainer.sourceforge.net">Entrainer</a> Copyright (C) 2008 - 2014 Burton Alexander. eSense
+	<a href="http://mrstampy.github.com/ESP/">ESP</a> Copyright (C) 2013 - 2014 Burton Alexander. 
+	eSense
 	<sup>TM</sup>, ThinkGear
 	<sup>TM</sup>, MDT
 	<sup>TM</sup>, NeuroBoy
 	<sup>TM</sup> and NeuroSky
 	<sup>TM</sup> are trademarks of
-	<a href="http://www.neurosky.com">NeuroSky Inc</a>.
+	<a href="http://www.neurosky.com">NeuroSky Inc</a>. OCZ Nia <sup>TM</sup> is the trademark of <a href="http://www.ocz.com">OCZ</a>.
 </body>
 </html>
