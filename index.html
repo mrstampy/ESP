@@ -34,28 +34,43 @@
         <h1>
 <a name="esp---an-eeg-signal-processing-library" class="anchor" href="#esp---an-eeg-signal-processing-library"><span class="octicon octicon-link"></span></a>ESP - An EEG Signal Processing Library</h1>
 
-<p>This library provides the ability to connect to the <a href="http://www.neurosky.com">NeuroSky</a> MindWave ThinkGear connector. As of version 1.0.0 the core functionality has been abstracted, allowing implementations for other devices to be created. It is designed to be fast and efficient, using high performance Java libraries:</p>
+<p>This library provides the ability to connect to the <a href="http://www.neurosky.com">NeuroSky</a> MindWave ThinkGear connector and the OCZ Nia. As of version 1.3 the core functionality has been abstracted.  The ThinkGear classes are now a separate library as are the Nia classes. It is designed to be fast and efficient, using high performance Java libraries:</p>
 
 <ul>
-<li><a href="https://code.google.com/p/disruptor/">Disruptor</a></li>
+<li><a href="https://github.com/LMAX-Exchange/disruptor">Disruptor</a></li>
 <li><a href="http://javolution.org/">Javolution</a></li>
 <li><a href="http://mina.apache.org/">Apache MINA</a></li>
 </ul><h2>
-<a name="maven-dependency" class="anchor" href="#maven-dependency"><span class="octicon octicon-link"></span></a>Maven Dependency</h2>
+<a name="maven-dependencies" class="anchor" href="#maven-dependencies"><span class="octicon octicon-link"></span></a>Maven Dependencies</h2>
 
 <pre><code>   &lt;dependency&gt;
        &lt;groupId&gt;com.github.mrstampy&lt;/groupId&gt;
+       &lt;!-- for the ThinkGear implementation --&gt;
+       &lt;artifactId&gt;esp-thinkgear&lt;/artifactId&gt;
+       &lt;version&gt;1.3&lt;/version&gt;
+   &lt;/dependency&gt;
+
+   &lt;dependency&gt;
+       &lt;groupId&gt;com.github.mrstampy&lt;/groupId&gt;
+       &lt;!-- for the Nia implementation --&gt;
+       &lt;artifactId&gt;esp-nia&lt;/artifactId&gt;
+       &lt;version&gt;1.3&lt;/version&gt;
+   &lt;/dependency&gt;
+
+   &lt;dependency&gt;
+       &lt;groupId&gt;com.github.mrstampy&lt;/groupId&gt;
+       &lt;!-- for the base classes, if not using the above implementations --&gt;
        &lt;artifactId&gt;esp&lt;/artifactId&gt;
-       &lt;version&gt;1.2&lt;/version&gt;
+       &lt;version&gt;1.3&lt;/version&gt;
    &lt;/dependency&gt;
 </code></pre>
 
-<p>Usage of the library is straight-forward. One only needs to instantiate the MultiConnectionThinkGearSocket, add a listener, start the MultiConnectionThinkGearSocket and deal with the events as they occur.</p>
+<p>Usage of the library is straight-forward. One only needs to instantiate the AbstractMultiConnectionSocket implementation, add a listener, start the socket and deal with the events as they occur.</p>
 
 <h2>
 <a name="multiple-connections" class="anchor" href="#multiple-connections"><span class="octicon octicon-link"></span></a>Multiple Connections</h2>
 
-<p>As implied by the name of the class, the MultiConnectionThinkGearSocket is capable of not only processing ThinkGear messages for a single application but also of broadcasting the messages to separate applications, even on separate machines and devices! This functionality is disabled by default. To enable it either set the System property 'broadcast.messages' to true or instantiate the MultiConnectionThinkGearSocket using one of its other constructors:</p>
+<p>As implied by the name of the class, the AbstractMultiConnectionSocket is capable of not only processing ThinkGear messages for a single application but also of broadcasting the messages to separate applications, even on separate machines and devices! This functionality is disabled by default. To enable it either set the System property 'broadcast.messages' to true or instantiate the MultiConnectionThinkGearSocket using one of its other constructors:</p>
 
 <pre><code>MultiConnectionThinkGearSocket socket = new MultiConnectionThinkGearSocket("ThinkGear socket hostname", true);
 ...
@@ -77,13 +92,15 @@ connector.subscribe(EventType...);
 </code></pre>
 
 <h2>
-<a name="raw-signal-processing" class="anchor" href="#raw-signal-processing"><span class="octicon octicon-link"></span></a>Raw Signal Processing</h2>
+<a name="raw-signal-processing-as-of-version-13" class="anchor" href="#raw-signal-processing-as-of-version-13"><span class="octicon octicon-link"></span></a>Raw Signal Processing (as of version 1.3)</h2>
+
+<p>In the development of the <a href="http://mrstampy.github.com/ESP-Nia/">ESP-Nia</a> implementation the base classes for raw signal processing were developed.  Multi connection socket implementations contain a raw data buffer which contains the current second's worth of data (for the OCZ Nia this translates to 3910 data points, for the ThinkGear devices this translates to 512 data points).  A sampler snapshots the buffer at a rate of 100Hz and raw data events are generated from the snapshots (for both the ThinkGear and ThinkGear implementations each snapshot consists of 512 evenly spaced data points).</p>
 
 <p>Additional classes have been added to assist with raw signal processing. The examples shown will work with the NeuroSky raw output however these classes can be used for any DSP work with low sample sizes (ie. &lt; 1000 samples / sec).  For greater sample sizes the utilization of    primitive arrays is recommended.</p>
 
 <p>Additional functionality is described in the JavaDocs. This work is released under the GPL 3.0 license. No warranty of any kind is offered.</p>
 
-<p><a href="http://entrainer.sourceforge.net">Entrainer</a> Copyright (C) 2008 - 2014 Burton Alexander. </p>
+<p><a href="http://mrstampy.github.io/ESP/">ESP</a> Copyright (C) 2013 - 2014 Burton Alexander. </p>
 
 <p>eSense, ThinkGear, MDT, NeuroBoy and NeuroSky are trademarks of <a href="http://www.neurosky.com">NeuroSky Inc</a>.</p>
       </section>
