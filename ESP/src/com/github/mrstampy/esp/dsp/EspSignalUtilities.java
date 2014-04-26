@@ -293,7 +293,7 @@ public abstract class EspSignalUtilities {
 			sum += MathLib.pow(fftd[i], 2);
 		}
 
-		return new BigDecimal(MathLib.sqrt(sum)).divide(new BigDecimal(divisor), 10, RoundingMode.HALF_UP).doubleValue();
+		return MathLib.sqrt(new BigDecimal(sum).divide(new BigDecimal(divisor), 10, RoundingMode.HALF_UP).doubleValue());
 	}
 
 	/**
