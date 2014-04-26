@@ -2,7 +2,7 @@
 
 This library provides the ability to connect to the [NeuroSky](http://www.neurosky.com) MindWave ThinkGear connector and the OCZ Nia. As of version 1.3 the core functionality has been abstracted.  The ThinkGear classes are now a separate library as are the Nia classes. It is designed to be fast and efficient, using high performance Java libraries:
 
-* [Disruptor](https://code.google.com/p/disruptor/)
+* [Disruptor](https://github.com/LMAX-Exchange/disruptor)
 * [Javolution](http://javolution.org/)
 * [Apache MINA](http://mina.apache.org/)
 
