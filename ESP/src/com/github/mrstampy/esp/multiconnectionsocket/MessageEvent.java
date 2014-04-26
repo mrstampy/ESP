@@ -16,15 +16,25 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * 
  */
-package com.github.mrstampy.esp.mutliconnectionsocket;
+package com.github.mrstampy.esp.multiconnectionsocket;
 
-import com.lmax.disruptor.EventFactory;
+/**
+ * Disruptor event to pass EEG device messages from the device to the
+ * {@link MultiConnectionSocket}'s message processing.
+ * 
+ * @author burton
+ * 
+ */
+public class MessageEvent<MESSAGE> {
 
-public class MessageEventFactory<MESSAGE> implements EventFactory<MessageEvent<MESSAGE>> {
+	private MESSAGE message;
 
-	@Override
-	public MessageEvent<MESSAGE> newInstance() {
-		return new MessageEvent<MESSAGE>();
+	public MESSAGE getMessage() {
+		return message;
+	}
+
+	public void setMessage(MESSAGE message) {
+		this.message = message;
 	}
 
 }

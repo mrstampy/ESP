@@ -16,7 +16,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * 
  */
-package com.github.mrstampy.esp.mutliconnectionsocket;
+package com.github.mrstampy.esp.multiconnectionsocket;
 
 import java.io.IOException;
 

@@ -16,25 +16,25 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * 
  */
-package com.github.mrstampy.esp.mutliconnectionsocket;
+package com.github.mrstampy.esp.multiconnectionsocket;
+
+import java.util.EventListener;
 
 /**
- * Disruptor event to pass EEG device messages from the device to the
- * {@link MultiConnectionSocket}'s message processing.
+ * Implement and add to
+ * {@link AbstractMultiConnectionSocket#addConnectionEventListener(ConnectionEventListener)}
+ * to receive connected state events
  * 
  * @author burton
- * 
  */
-public class MessageEvent<MESSAGE> {
+public interface ConnectionEventListener extends EventListener {
 
-	private MESSAGE message;
-
-	public MESSAGE getMessage() {
-		return message;
-	}
-
-	public void setMessage(MESSAGE message) {
-		this.message = message;
-	}
+	/**
+	 * Invoked when the connected state of the
+	 * {@link AbstractMultiConnectionSocket} changes
+	 * 
+	 * @param e
+	 */
+	void connectionEventPerformed(ConnectionEvent e);
 
 }

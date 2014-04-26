@@ -31,9 +31,9 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.mrstampy.esp.mutliconnectionsocket.AbstractMultiConnectionSocket;
-import com.github.mrstampy.esp.mutliconnectionsocket.ConnectionEvent;
-import com.github.mrstampy.esp.mutliconnectionsocket.ConnectionEventListener;
+import com.github.mrstampy.esp.multiconnectionsocket.AbstractMultiConnectionSocket;
+import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEvent;
+import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener;
 
 /**
  * Abstract template for a DSP implementation. When connected the EspDSP will

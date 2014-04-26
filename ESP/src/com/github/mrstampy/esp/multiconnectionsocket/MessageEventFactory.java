@@ -16,25 +16,15 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * 
  */
-package com.github.mrstampy.esp.mutliconnectionsocket;
+package com.github.mrstampy.esp.multiconnectionsocket;
 
-import java.util.EventListener;
+import com.lmax.disruptor.EventFactory;
 
-/**
- * Implement and add to
- * {@link AbstractMultiConnectionSocket#addConnectionEventListener(ConnectionEventListener)}
- * to receive connected state events
- * 
- * @author burton
- */
-public interface ConnectionEventListener extends EventListener {
+public class MessageEventFactory<MESSAGE> implements EventFactory<MessageEvent<MESSAGE>> {
 
-	/**
-	 * Invoked when the connected state of the
-	 * {@link AbstractMultiConnectionSocket} changes
-	 * 
-	 * @param e
-	 */
-	void connectionEventPerformed(ConnectionEvent e);
+	@Override
+	public MessageEvent<MESSAGE> newInstance() {
+		return new MessageEvent<MESSAGE>();
+	}
 
 }
