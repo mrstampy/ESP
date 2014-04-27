@@ -13,7 +13,7 @@
   <packaging>jar</packaging>
   <version>$ESP.version</version>
   <description>ESP - An EEG Signal Processing Library</description>
-  <url>http://mrstampy.github.com/ESP/</url>
+  <url>http://mrstampy.github.io/ESP/</url>
   <licenses>
     <license>
       <name>GNU Lesser General Public License</name>

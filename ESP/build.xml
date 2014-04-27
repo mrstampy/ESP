@@ -102,7 +102,7 @@
 			<manifest id="ESP.javadoc.manifest">
 				<attribute name="Built-By" value="Burton Alexander" />
 				<attribute name="Email-Address" value="burton@users.sourceforge.net" />
-				<attribute name="Project-Website" value="http://mrstampy.github.com/ESP/" />
+				<attribute name="Project-Website" value="http://mrstampy.github.io/ESP/" />
 				<attribute name="Release-Number" value="&ESP.version;" />
 				<attribute name="Release-Description" value="Integration" />
 			</manifest>
@@ -147,7 +147,7 @@
 			<manifest id="ESP.javadoc.manifest">
 				<attribute name="Built-By" value="Burton Alexander" />
 				<attribute name="Email-Address" value="burton@users.sourceforge.net" />
-				<attribute name="Project-Website" value="http://mrstampy.github.com/ESP/" />
+				<attribute name="Project-Website" value="http://mrstampy.github.io/ESP/" />
 				<attribute name="Release-Number" value="&ESP.version;" />
 				<attribute name="Release-Description" value="Integration" />
 			</manifest>
