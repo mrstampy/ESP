@@ -18,7 +18,7 @@ This library provides the ability to connect to the [NeuroSky](http://www.neuros
            <groupId>com.github.mrstampy</groupId>
            <!-- for the Nia implementation -->
            <artifactId>esp-nia</artifactId>
-           <version>1.3</version>
+           <version>1.4</version>
        </dependency>
        
        <dependency>
