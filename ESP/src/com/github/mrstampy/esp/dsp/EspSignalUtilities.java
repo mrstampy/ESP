@@ -317,6 +317,8 @@ public abstract class EspSignalUtilities {
 
 			weight++;
 		}
+		
+		if(divisor == 0) return 0;
 
 		return new BigDecimal(total).divide(new BigDecimal(divisor), 10, RoundingMode.HALF_UP).doubleValue();
 	}
