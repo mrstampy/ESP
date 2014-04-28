@@ -22,6 +22,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import rx.Observable;
+import rx.functions.Action1;
+
 /**
  * Abstract superclass for aggregating raw signal arrays (ultimately for FFT'ing).
  * 
@@ -40,9 +43,15 @@ public abstract class RawSignalAggregator {
 	}
 
 	public void addSample(double... sample) {
-		if (queue.remainingCapacity() == 0) queue.remove();
+		Observable.from(sample).subscribe(new Action1<double[]>() {
 
-		queue.add(sample);
+			@Override
+			public void call(double[] t1) {
+				if (queue.remainingCapacity() == 0) queue.remove();
+				
+				queue.add(t1);
+			}
+		});
 	}
 
 	public void clear() {

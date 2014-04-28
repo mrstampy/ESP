@@ -35,6 +35,9 @@ import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rx.Observable;
+import rx.functions.Action1;
+
 import com.github.mrstampy.esp.multiconnectionsocket.event.AbstractMultiConnectionEvent;
 import com.github.mrstampy.esp.multiconnectionsocket.subscription.MultiConnectionSubscriptionRequest;
 
@@ -104,19 +107,25 @@ public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS
 	 * @see AbstractSocketConnector
 	 */
 	public void sendMultiConnectionEvent(AbstractMultiConnectionEvent<E> event) {
-		List<HostPort> list = null;
-		readLock.lock();
-		try {
-			List<HostPort> tmp = subscriptions.get(event.getEventType());
-			if (tmp != null) list = new FastList<HostPort>(tmp);
-		} finally {
-			readLock.unlock();
-		}
+		Observable.from(event).subscribe(new Action1<AbstractMultiConnectionEvent<E>>() {
 
-		if (list == null) return;
-		for (HostPort hp : list) {
-			sendMultiConnectionEvent(hp, event);
-		}
+			@Override
+			public void call(AbstractMultiConnectionEvent<E> t1) {
+				List<HostPort> list = null;
+				readLock.lock();
+				try {
+					List<HostPort> tmp = subscriptions.get(t1.getEventType());
+					if (tmp != null) list = new FastList<HostPort>(tmp);
+				} finally {
+					readLock.unlock();
+				}
+				
+				if (list == null) return;
+				for (HostPort hp : list) {
+					sendMultiConnectionEvent(hp, t1);
+				}
+			}
+		});
 	}
 
 	protected void subscribe(IoSession session, MCSR message) {

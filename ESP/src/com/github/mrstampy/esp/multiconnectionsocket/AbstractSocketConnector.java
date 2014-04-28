@@ -33,13 +33,16 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rx.Observable;
+import rx.functions.Action1;
+
 import com.github.mrstampy.esp.multiconnectionsocket.event.AbstractMultiConnectionEvent;
 import com.github.mrstampy.esp.multiconnectionsocket.subscription.MultiConnectionSubscriptionRequest;
 
 /**
  * This class connects to the {@link AbstractMultiConnectionSocket} and receives
- * {@link AbstractMultiConnectionEvent} updates. Many instances of this class running
- * in separate processes can connect to the single instance of
+ * {@link AbstractMultiConnectionEvent} updates. Many instances of this class
+ * running in separate processes can connect to the single instance of
  * {@link AbstractMultiConnectionSocket}, allowing separately running programs
  * to deal with Neurosky output simultaneously. <br>
  * <br>
@@ -139,9 +142,8 @@ public abstract class AbstractSocketConnector<E extends Enum<E>> {
 	}
 
 	/**
-	 * Subscribes to the specified event types, all registered
-	 * listeners will receive updates for these event types.
-	 * Returns true if successful.
+	 * Subscribes to the specified event types, all registered listeners will
+	 * receive updates for these event types. Returns true if successful.
 	 * 
 	 * @param types
 	 */
@@ -176,8 +178,16 @@ public abstract class AbstractSocketConnector<E extends Enum<E>> {
 		connector.setHandler(new IoHandlerAdapter() {
 			@SuppressWarnings("unchecked")
 			public void messageReceived(IoSession session, Object message) throws Exception {
-				if (message instanceof AbstractMultiConnectionEvent<?>)
-					processEvent((AbstractMultiConnectionEvent<E>) message);
+				if (message instanceof AbstractMultiConnectionEvent<?>) {
+					AbstractMultiConnectionEvent<E> event = (AbstractMultiConnectionEvent<E>) message;
+					Observable.from(event).subscribe(new Action1<AbstractMultiConnectionEvent<E>>() {
+
+						@Override
+						public void call(AbstractMultiConnectionEvent<E> t1) {
+							processEvent(t1);
+						}
+					});
+				}
 			}
 		});
 	}

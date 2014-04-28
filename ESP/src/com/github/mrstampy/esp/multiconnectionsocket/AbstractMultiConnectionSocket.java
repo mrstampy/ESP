@@ -36,6 +36,9 @@ import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rx.Observable;
+import rx.functions.Action1;
+
 import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEvent.State;
 import com.github.mrstampy.esp.multiconnectionsocket.event.AbstractMultiConnectionEvent;
 import com.lmax.disruptor.EventHandler;
@@ -68,8 +71,6 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	private Disruptor<MessageEvent<MESSAGE>> disruptor;
 
 	private RingBuffer<MessageEvent<MESSAGE>> rb;
-
-	private Executor processExecutor = Executors.newSingleThreadExecutor();
 
 	protected AbstractMultiConnectionSocket(boolean broadcasting) throws IOException {
 		this.broadcasting = broadcasting;
@@ -259,11 +260,11 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 
 			@Override
 			public void onEvent(final MessageEvent<MESSAGE> event, long sequence, boolean endOfBatch) throws Exception {
-				processExecutor.execute(new Runnable() {
+				Observable.from(event).subscribe(new Action1<MessageEvent<MESSAGE>>() {
 
 					@Override
-					public void run() {
-						parseMessage(event.getMessage());
+					public void call(MessageEvent<MESSAGE> t1) {
+						parseMessage(t1.getMessage());
 					}
 				});
 			}

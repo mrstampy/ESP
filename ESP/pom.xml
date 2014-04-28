@@ -57,6 +57,12 @@
       <version>2.0.7</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>com.netflix.rxjava</groupId>
+      <artifactId>rxjava-core</artifactId>
+      <version>0.17.5</version>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
   <name>ESP - An EEG Signal Processing Library</name>
 </project>
