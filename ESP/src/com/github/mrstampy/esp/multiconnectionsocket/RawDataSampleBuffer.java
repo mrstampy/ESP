@@ -21,6 +21,7 @@ package com.github.mrstampy.esp.multiconnectionsocket;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -55,6 +56,8 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 	private Disruptor<MessageEvent<double[]>> disruptor;
 
 	private RingBuffer<MessageEvent<double[]>> rb;
+	
+	private CountDownLatch latch = new CountDownLatch(1);
 
 	protected RawDataSampleBuffer(int bufferSize, int fftSize) {
 		setBufferSize(bufferSize);
@@ -69,9 +72,11 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 		switch (e.getState()) {
 		case STARTED:
 			initDisruptor();
+			latch.countDown();
 			break;
 		case STOPPED:
 			disruptor.shutdown();
+			latch = new CountDownLatch(1);
 			break;
 		default:
 			break;
@@ -81,6 +86,11 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 	public abstract void addSample(SAMPLE sample);
 
 	protected void addSampleImpl(double... sample) {
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+		}
+		
 		long seq = rb.next();
 		MessageEvent<double[]> be = rb.get(seq);
 		be.setMessage(sample);
