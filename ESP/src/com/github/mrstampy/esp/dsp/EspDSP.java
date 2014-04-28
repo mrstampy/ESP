@@ -18,18 +18,24 @@
  */
 package com.github.mrstampy.esp.dsp;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import rx.Scheduler;
+import rx.Scheduler.Inner;
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 import com.github.mrstampy.esp.multiconnectionsocket.AbstractMultiConnectionSocket;
 import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEvent;
@@ -68,8 +74,8 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	protected int numSamplesPerCycle;
 	protected int numCyclesPerSecond = 5;
 
-	protected ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
-	protected ScheduledFuture<?> sf;
+	protected Scheduler scheduler = Schedulers.executor(Executors.newScheduledThreadPool(5));
+	protected Subscription subscription;
 
 	protected List<RawProcessedListener> listeners = new ArrayList<RawProcessedListener>();
 
@@ -294,18 +300,37 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	}
 
 	private void stopAggregationProcessing() {
-		if (sf != null) sf.cancel(true);
+		if (subscription != null) subscription.unsubscribe();
 	}
 
 	private void startAggregationProcessing() {
-		long snooze = 1000 / getNumCyclesPerSecond();
+		int numCycles = getNumCyclesPerSecond();
 
-		sf = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+		TimeUnit tu = null;
+		int numerator = 0;
+		if (numCycles <= AbstractDSPValues.ONE_THOUSAND) {
+			numerator = AbstractDSPValues.ONE_THOUSAND;
+			tu = TimeUnit.MILLISECONDS;
+		} else if (numCycles <= AbstractDSPValues.ONE_MILLION) {
+			numerator = AbstractDSPValues.ONE_MILLION;
+			tu = TimeUnit.MICROSECONDS;
+		} else {
+			numerator = AbstractDSPValues.ONE_BILLION;
+			tu = TimeUnit.NANOSECONDS;
+		}
+
+		long snooze = calculateSleep(numCycles, numerator);
+
+		subscription = scheduler.schedulePeriodically(new Action1<Scheduler.Inner>() {
 
 			@Override
-			public void run() {
+			public void call(Inner t1) {
 				process();
 			}
-		}, snooze * 4, snooze, TimeUnit.MILLISECONDS);
+		}, snooze * 4, snooze, tu);
+	}
+
+	private long calculateSleep(int numCycles, int numerator) {
+		return new BigDecimal(numerator).divide(new BigDecimal(numCycles), 0, RoundingMode.HALF_UP).longValue();
 	}
 }
