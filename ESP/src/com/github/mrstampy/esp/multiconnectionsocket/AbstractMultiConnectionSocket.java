@@ -21,7 +21,6 @@ package com.github.mrstampy.esp.multiconnectionsocket;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import javolution.util.FastList;
@@ -93,14 +92,13 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 
 		try {
 			startImpl();
+			notifyConnectionEventListeners(State.STARTED);
 		} catch (MultiConnectionSocketException e) {
 			disruptor.shutdown();
 			throw e;
 		}
 
 		log.info("AbstractMultiConnectionSocket started");
-
-		notifyConnectionEventListeners(State.STARTED);
 	}
 
 	/**
@@ -240,11 +238,17 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	 * @param message
 	 */
 	protected void publishMessage(MESSAGE message) {
-		long seq = rb.next();
-		log.trace("Publishing message {} for sequence {}", message, seq);
-		MessageEvent<MESSAGE> be = rb.get(seq);
-		be.setMessage(message);
-		rb.publish(seq);
+		Observable.from(message).subscribe(new Action1<MESSAGE>() {
+
+			@Override
+			public void call(MESSAGE t1) {
+				long seq = rb.next();
+				log.trace("Publishing message {} for sequence {}", t1, seq);
+				MessageEvent<MESSAGE> be = rb.get(seq);
+				be.setMessage(t1);
+				rb.publish(seq);
+			}
+		});
 	}
 
 	@SuppressWarnings("unchecked")

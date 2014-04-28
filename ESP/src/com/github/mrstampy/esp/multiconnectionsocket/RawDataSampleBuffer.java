@@ -21,12 +21,25 @@ package com.github.mrstampy.esp.multiconnectionsocket;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class RawDataSampleBuffer<SAMPLE> {
+import com.lmax.disruptor.EventHandler;
+import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.dsl.Disruptor;
+
+/**
+ * This class uses Disruptor internally. Add as a
+ * {@link ConnectionEventListener} to the {@link AbstractMultiConnectionSocket}.
+ * 
+ * @author burton
+ * 
+ * @param <SAMPLE>
+ */
+public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventListener {
 	private static final Logger log = LoggerFactory.getLogger(RawDataSampleBuffer.class);
 
 	private int bufferSize;
@@ -39,22 +52,39 @@ public abstract class RawDataSampleBuffer<SAMPLE> {
 
 	private volatile boolean tuning;
 
+	private Disruptor<MessageEvent<double[]>> disruptor;
+
+	private RingBuffer<MessageEvent<double[]>> rb;
+
 	protected RawDataSampleBuffer(int bufferSize, int fftSize) {
 		setBufferSize(bufferSize);
 		setFftSize(fftSize);
 		queue = new ArrayBlockingQueue<Double>(bufferSize);
 	}
 
-	public abstract void addSample(SAMPLE sample);
-	
-	protected void addSampleImpl(double... sample) {
-		if (tuning) totalForTuning.addAndGet(sample.length);
-		
-		for (int i = 0; i < sample.length; i++) {
-			if (queue.remainingCapacity() == 0) queue.remove();
-			
-			queue.add(sample[i]);
+	/**
+	 * Implementation starts/stops disruptor
+	 */
+	public void connectionEventPerformed(ConnectionEvent e) {
+		switch (e.getState()) {
+		case STARTED:
+			initDisruptor();
+			break;
+		case STOPPED:
+			disruptor.shutdown();
+			break;
+		default:
+			break;
 		}
+	}
+
+	public abstract void addSample(SAMPLE sample);
+
+	protected void addSampleImpl(double... sample) {
+		long seq = rb.next();
+		MessageEvent<double[]> be = rb.get(seq);
+		be.setMessage(sample);
+		rb.publish(seq);
 	}
 
 	public double[] getSnapshot() {
@@ -115,6 +145,30 @@ public abstract class RawDataSampleBuffer<SAMPLE> {
 		synchronized (queue) {
 			queue = new ArrayBlockingQueue<Double>(newBufSize);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void initDisruptor() {
+		disruptor = new Disruptor<MessageEvent<double[]>>(new MessageEventFactory<double[]>(), 16,
+				Executors.newCachedThreadPool());
+
+		disruptor.handleEventsWith(new EventHandler<MessageEvent<double[]>>() {
+
+			@Override
+			public void onEvent(MessageEvent<double[]> event, long sequence, boolean endOfBatch) throws Exception {
+				double[] t1 = event.getMessage();
+				if (tuning) totalForTuning.addAndGet(t1.length);
+
+				for (int i = 0; i < t1.length; i++) {
+					if (queue.remainingCapacity() == 0) queue.remove();
+
+					queue.add(t1[i]);
+				}
+			}
+
+		});
+
+		rb = disruptor.start();
 	}
 
 	public int getBufferSize() {
