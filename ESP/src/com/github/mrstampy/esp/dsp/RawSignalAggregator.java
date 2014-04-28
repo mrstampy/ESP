@@ -43,7 +43,7 @@ public abstract class RawSignalAggregator {
 	}
 
 	public void addSample(double... sample) {
-		Observable.from(sample).subscribe(new Action1<double[]>() {
+		Observable.just(sample).subscribe(new Action1<double[]>() {
 
 			@Override
 			public void call(double[] t1) {

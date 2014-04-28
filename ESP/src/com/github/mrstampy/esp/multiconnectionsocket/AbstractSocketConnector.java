@@ -180,7 +180,7 @@ public abstract class AbstractSocketConnector<E extends Enum<E>> {
 			public void messageReceived(IoSession session, Object message) throws Exception {
 				if (message instanceof AbstractMultiConnectionEvent<?>) {
 					AbstractMultiConnectionEvent<E> event = (AbstractMultiConnectionEvent<E>) message;
-					Observable.from(event).subscribe(new Action1<AbstractMultiConnectionEvent<E>>() {
+					Observable.just(event).subscribe(new Action1<AbstractMultiConnectionEvent<E>>() {
 
 						@Override
 						public void call(AbstractMultiConnectionEvent<E> t1) {

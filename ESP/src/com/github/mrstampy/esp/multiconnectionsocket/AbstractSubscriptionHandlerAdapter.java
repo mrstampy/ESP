@@ -107,7 +107,7 @@ public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS
 	 * @see AbstractSocketConnector
 	 */
 	public void sendMultiConnectionEvent(AbstractMultiConnectionEvent<E> event) {
-		Observable.from(event).subscribe(new Action1<AbstractMultiConnectionEvent<E>>() {
+		Observable.just(event).subscribe(new Action1<AbstractMultiConnectionEvent<E>>() {
 
 			@Override
 			public void call(AbstractMultiConnectionEvent<E> t1) {

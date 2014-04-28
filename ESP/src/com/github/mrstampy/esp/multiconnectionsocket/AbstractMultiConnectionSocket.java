@@ -238,7 +238,7 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	 * @param message
 	 */
 	protected void publishMessage(MESSAGE message) {
-		Observable.from(message).subscribe(new Action1<MESSAGE>() {
+		Observable.just(message).subscribe(new Action1<MESSAGE>() {
 
 			@Override
 			public void call(MESSAGE t1) {
@@ -264,7 +264,7 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 
 			@Override
 			public void onEvent(final MessageEvent<MESSAGE> event, long sequence, boolean endOfBatch) throws Exception {
-				Observable.from(event).subscribe(new Action1<MessageEvent<MESSAGE>>() {
+				Observable.just(event).subscribe(new Action1<MessageEvent<MESSAGE>>() {
 
 					@Override
 					public void call(MessageEvent<MESSAGE> t1) {
