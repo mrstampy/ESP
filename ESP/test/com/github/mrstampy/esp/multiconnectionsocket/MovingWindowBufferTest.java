@@ -1,4 +1,4 @@
-package com.github.mrstampy.esp.dsp.multiconnectionsocket;
+package com.github.mrstampy.esp.multiconnectionsocket;
 
 import static org.junit.Assert.*;
 
