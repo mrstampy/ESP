@@ -44,7 +44,7 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 
 	private int bufferSize;
 	private int fftSize;
-	private volatile MovingWindowBuffer movingWindow;
+	private MovingWindowBuffer movingWindow;
 
 	private AtomicInteger totalForTuning = new AtomicInteger();
 
