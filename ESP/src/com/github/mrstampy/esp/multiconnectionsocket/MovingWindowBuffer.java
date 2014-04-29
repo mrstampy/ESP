@@ -60,7 +60,10 @@ public class MovingWindowBuffer {
 
 		System.arraycopy(buffer, offset, newBuf, 0, Math.min(capacity, newSize));
 
-		buffer = newBuf;
+		synchronized (buffer) {
+			buffer = newBuf;
+		}
+		
 		capacity = newSize;
 
 		idx = Math.min(idx, newSize - 1);
