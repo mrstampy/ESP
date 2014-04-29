@@ -98,7 +98,7 @@
 	<target name="create deployables impl" depends="create jar, create source jar, create javadoc jar" />
 
 	<target name="create jar">
-		<jar destfile="${maven-jar}" basedir="${basedir}/bin">
+		<jar destfile="${maven-jar}" basedir="${basedir}/bin" excludes="**/*Test.class">
 			<manifest id="ESP.javadoc.manifest">
 				<attribute name="Built-By" value="Burton Alexander" />
 				<attribute name="Email-Address" value="burton@users.sourceforge.net" />

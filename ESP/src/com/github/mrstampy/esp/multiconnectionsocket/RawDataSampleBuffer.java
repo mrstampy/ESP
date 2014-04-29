@@ -20,7 +20,6 @@ package com.github.mrstampy.esp.multiconnectionsocket;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,7 +44,7 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 
 	private int bufferSize;
 	private int fftSize;
-	private ArrayBlockingQueue<Double> queue;
+	private volatile MovingWindowBuffer movingWindow;
 
 	private AtomicInteger totalForTuning = new AtomicInteger();
 
@@ -56,13 +55,13 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 	private Disruptor<MessageEvent<double[]>> disruptor;
 
 	private RingBuffer<MessageEvent<double[]>> rb;
-	
+
 	private CountDownLatch latch = new CountDownLatch(1);
 
 	protected RawDataSampleBuffer(int bufferSize, int fftSize) {
 		setBufferSize(bufferSize);
 		setFftSize(fftSize);
-		queue = new ArrayBlockingQueue<Double>(bufferSize);
+		movingWindow = new MovingWindowBuffer(bufferSize);
 	}
 
 	/**
@@ -90,7 +89,7 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 			latch.await();
 		} catch (InterruptedException e) {
 		}
-		
+
 		long seq = rb.next();
 		MessageEvent<double[]> be = rb.get(seq);
 		be.setMessage(sample);
@@ -98,7 +97,7 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 	}
 
 	public double[] getSnapshot() {
-		Double[] snap = queue.toArray(new Double[] {});
+		double[] snap = movingWindow.snapshot();
 
 		double[] shot = new double[getFftSize()];
 
@@ -115,7 +114,7 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 	}
 
 	public void clear() {
-		queue.clear();
+		movingWindow.clear();
 	}
 
 	/**
@@ -152,9 +151,7 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 
 		setBufferSize(newBufSize);
 
-		synchronized (queue) {
-			queue = new ArrayBlockingQueue<Double>(newBufSize);
-		}
+		movingWindow.resize(newBufSize);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -169,11 +166,7 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 				double[] t1 = event.getMessage();
 				if (tuning) totalForTuning.addAndGet(t1.length);
 
-				for (int i = 0; i < t1.length; i++) {
-					if (queue.remainingCapacity() == 0) queue.remove();
-
-					queue.add(t1[i]);
-				}
+				movingWindow.addAll(t1);
 			}
 
 		});
