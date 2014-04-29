@@ -54,6 +54,8 @@ public class MovingWindowBuffer {
 	}
 
 	public void resize(int newSize) {
+		if(newSize == capacity) return;
+		
 		double[] newBuf = new double[newSize];
 
 		int offset = newSize < capacity ? capacity - newSize : 0;
