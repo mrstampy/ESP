@@ -22,11 +22,11 @@ import java.util.Arrays;
 
 public class MovingWindowBuffer {
 
-	private double[] buffer;
+	private volatile double[] buffer;
 
-	private int idx;
+	private volatile int idx;
 
-	private int capacity;
+	private volatile int capacity;
 
 	public MovingWindowBuffer(int capacity) {
 		this.capacity = capacity;
@@ -78,7 +78,9 @@ public class MovingWindowBuffer {
 
 		System.arraycopy(buffer, howMuch, newBuf, 0, capacity - howMuch);
 
-		buffer = newBuf;
+		synchronized (buffer) {
+			buffer = newBuf;
+		}
 	}
 
 }
