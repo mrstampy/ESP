@@ -20,6 +20,8 @@ package com.github.mrstampy.esp.multiconnectionsocket;
 
 import java.util.Arrays;
 
+import javolution.util.ReentrantLock;
+
 public class MovingWindowBuffer {
 
 	private volatile double[] buffer;
@@ -27,6 +29,8 @@ public class MovingWindowBuffer {
 	private volatile int idx;
 
 	private volatile int capacity;
+	
+	private ReentrantLock lock = new ReentrantLock();
 
 	public MovingWindowBuffer(int capacity) {
 		this.capacity = capacity;
@@ -62,8 +66,11 @@ public class MovingWindowBuffer {
 
 		System.arraycopy(buffer, offset, newBuf, 0, Math.min(capacity, newSize));
 
-		synchronized (buffer) {
+		lock.lock();
+		try {
 			buffer = newBuf;
+		} finally {
+			lock.unlock();
 		}
 		
 		capacity = newSize;
@@ -80,8 +87,11 @@ public class MovingWindowBuffer {
 
 		System.arraycopy(buffer, howMuch, newBuf, 0, capacity - howMuch);
 
-		synchronized (buffer) {
+		lock.lock();
+		try {
 			buffer = newBuf;
+		} finally {
+			lock.unlock();
 		}
 	}
 
