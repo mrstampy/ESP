@@ -35,9 +35,6 @@ import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rx.Observable;
-import rx.functions.Action1;
-
 import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEvent.State;
 import com.github.mrstampy.esp.multiconnectionsocket.event.AbstractMultiConnectionEvent;
 import com.lmax.disruptor.EventHandler;
@@ -238,17 +235,11 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	 * @param message
 	 */
 	protected void publishMessage(MESSAGE message) {
-		Observable.just(message).subscribe(new Action1<MESSAGE>() {
-
-			@Override
-			public void call(MESSAGE t1) {
-				long seq = rb.next();
-				log.trace("Publishing message {} for sequence {}", t1, seq);
-				MessageEvent<MESSAGE> be = rb.get(seq);
-				be.setMessage(t1);
-				rb.publish(seq);
-			}
-		});
+		long seq = rb.next();
+		log.trace("Publishing message {} for sequence {}", message, seq);
+		MessageEvent<MESSAGE> be = rb.get(seq);
+		be.setMessage(message);
+		rb.publish(seq);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -264,13 +255,7 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 
 			@Override
 			public void onEvent(final MessageEvent<MESSAGE> event, long sequence, boolean endOfBatch) throws Exception {
-				Observable.just(event).subscribe(new Action1<MessageEvent<MESSAGE>>() {
-
-					@Override
-					public void call(MessageEvent<MESSAGE> t1) {
-						parseMessage(t1.getMessage());
-					}
-				});
+				parseMessage(event.getMessage());
 			}
 		};
 	}
