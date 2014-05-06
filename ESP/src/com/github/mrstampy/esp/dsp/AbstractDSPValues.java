@@ -20,6 +20,8 @@ package com.github.mrstampy.esp.dsp;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractDSPValues {
@@ -33,6 +35,8 @@ public abstract class AbstractDSPValues {
 
 	private int sampleSize;
 
+	private List<DSPValueListener> listeners = new ArrayList<DSPValueListener>();
+
 	/**
 	 * Call this constructor from subclasses
 	 */
@@ -41,6 +45,14 @@ public abstract class AbstractDSPValues {
 	}
 
 	protected abstract void initialize();
+
+	public void addDSPValueListener(DSPValueListener l) {
+		if (l != null && !listeners.contains(l)) listeners.add(l);
+	}
+
+	public void removeDSPValueListener(DSPValueListener l) {
+		listeners.remove(l);
+	}
 
 	public int getSampleRate() {
 		return sampleRate;
@@ -52,6 +64,14 @@ public abstract class AbstractDSPValues {
 		}
 		this.sampleRate = sampleRate;
 		setSampleRateUnits();
+
+		notifySampleRateChange();
+	}
+
+	private void notifySampleRateChange() {
+		for (DSPValueListener l : listeners) {
+			l.sampleRateChanged();
+		}
 	}
 
 	public TimeUnit getSampleRateUnits() {
@@ -80,8 +100,15 @@ public abstract class AbstractDSPValues {
 		if ((sampleSize & (sampleSize - 1)) != 0) {
 			throw new IllegalArgumentException("Sample size must be a power of two: " + sampleSize);
 		}
-		
+
 		this.sampleSize = sampleSize;
+		notifySampleSizeChange();
+	}
+
+	private void notifySampleSizeChange() {
+		for (DSPValueListener l : listeners) {
+			l.sampleSizeChanged();
+		}
 	}
 
 	public long getSampleRateSleepTime() {

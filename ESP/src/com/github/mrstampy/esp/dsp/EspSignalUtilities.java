@@ -44,6 +44,18 @@ public abstract class EspSignalUtilities {
 
 	protected EspSignalUtilities(WindowFunction window) {
 		setWindow(window);
+		getDSPValues().addDSPValueListener(new DSPValueListener() {
+			
+			@Override
+			public void sampleSizeChanged() {
+				fft = new FFT(getFFTSize(), getSampleRate());
+			}
+			
+			@Override
+			public void sampleRateChanged() {
+				fft = new FFT(getFFTSize(), getSampleRate());
+			}
+		});
 	}
 
 	/**
