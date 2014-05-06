@@ -20,6 +20,7 @@ package com.github.mrstampy.esp.dsp;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -224,7 +225,8 @@ public abstract class EspSignalUtilities {
 		assert lowerCutoffHz >= 1 && lowerCutoffHz < upperCutoffHz && upperCutoffHz < getUpperMeasurableFrequency();
 		assert fftd.length > upperCutoffHz;
 
-		double[] normalized = new double[upperCutoffHz + 1];
+		double[] normalized = new double[fftd.length];
+		Arrays.fill(normalized, 0);
 
 		double min = getMin(fftd, lowerCutoffHz, upperCutoffHz);
 		double max = getMax(fftd, lowerCutoffHz, upperCutoffHz);
@@ -359,6 +361,21 @@ public abstract class EspSignalUtilities {
 	public LowPassFilter getEspLowPassFilter() {
 		return createLowPassFilter(getUpperMeasurableFrequency() - 0.1);
 	}
+	
+	/**
+	 * Returns the absolute (positive) values of the given array
+	 * @param array
+	 * @return
+	 */
+	public double[] absolute(double[] array) {
+		double[] copy = new double[array.length];
+		for (int i = 0; i < array.length; i++) {
+			copy[i] = Math.abs(array[i]);
+		}
+		return copy;
+	}
+	
+	public abstract AbstractDSPValues getDSPValues();
 
 	protected double getUpperMeasurableFrequency() {
 		return getSampleRate() / 2;
@@ -408,13 +425,8 @@ public abstract class EspSignalUtilities {
 	private void normalize(double[] fftd, double min, double max, double[] normalized, int lowerCutoffHz,
 			int upperCutoffHz) {
 		BigDecimal divisor = new BigDecimal(max - min);
-
 		for (int i = lowerCutoffHz; i <= upperCutoffHz; i++) {
-			normalized[i] = normalize(fftd[i], divisor);
+			normalized[i] = new BigDecimal(fftd[i] - min).divide(divisor, 3, RoundingMode.HALF_UP).doubleValue();
 		}
-	}
-
-	private double normalize(double d, BigDecimal divisor) {
-		return new BigDecimal(d).divide(divisor, 3, RoundingMode.HALF_UP).doubleValue();
 	}
 }
