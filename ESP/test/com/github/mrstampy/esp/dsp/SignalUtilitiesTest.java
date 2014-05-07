@@ -82,4 +82,9 @@ public class SignalUtilitiesTest extends EspSignalUtilities {
 		return BigDecimal.TEN;
 	}
 
+	@Override
+	public AbstractDSPValues getDSPValues() {
+		return null;
+	}
+
 }
