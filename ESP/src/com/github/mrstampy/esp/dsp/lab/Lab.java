@@ -18,7 +18,6 @@
  */
 package com.github.mrstampy.esp.dsp.lab;
 
-import com.github.mrstampy.esp.multiconnectionsocket.RawEspConnection;
 
 // TODO: Auto-generated Javadoc
 /**

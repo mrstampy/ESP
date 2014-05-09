@@ -16,7 +16,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * 
  */
-package com.github.mrstampy.esp.multiconnectionsocket;
+package com.github.mrstampy.esp.dsp.lab;
 
 import ddf.minim.analysis.WindowFunction;
 

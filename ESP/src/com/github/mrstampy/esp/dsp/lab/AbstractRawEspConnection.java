@@ -16,9 +16,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * 
  */
-package com.github.mrstampy.esp.multiconnectionsocket;
+package com.github.mrstampy.esp.dsp.lab;
 
 import java.io.IOException;
+
+import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener;
+import com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket;
+import com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocketException;
 
 import ddf.minim.analysis.BartlettHannWindow;
 import ddf.minim.analysis.BartlettWindow;

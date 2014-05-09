@@ -16,10 +16,11 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * 
  */
-package com.github.mrstampy.esp.multiconnectionsocket;
+package com.github.mrstampy.esp.dsp.lab;
 
 import com.github.mrstampy.esp.dsp.AbstractDSPValues;
 import com.github.mrstampy.esp.dsp.EspSignalUtilities;
+import com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket;
 
 /**
  * Interface defining the encapsulation of a {@link MultiConnectionSocket} and

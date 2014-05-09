@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.github.mrstampy.esp.dsp.EspSignalUtilities;
-import com.github.mrstampy.esp.multiconnectionsocket.RawEspConnection;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -34,7 +33,7 @@ public class DefaultLab implements Lab {
 	private PreFFTProcessor preFFTProcessor = new PreFFTProcessor();
 	private PostFFTProcessor postFFTProcessor = new PostFFTProcessor();
 	private RawEspConnection connection;
-	private FFTType fftType;
+	private FFTType fftType = FFTType.no_fft;
 	private EspSignalUtilities utilities;
 
 	private AtomicBoolean calcBaseline = new AtomicBoolean(false);
@@ -182,8 +181,8 @@ public class DefaultLab implements Lab {
 
 	private void setUtilities(EspSignalUtilities utilities) {
 		this.utilities = utilities;
-		preFFTProcessor.setUtilities(utilities);
-		postFFTProcessor.setUtilities(utilities);
+		getPreFFTProcessor().setUtilities(utilities);
+		getPostFFTProcessor().setUtilities(utilities);
 	}
 
 	private double[] applyFft(double[] d) {
@@ -210,11 +209,11 @@ public class DefaultLab implements Lab {
 	}
 
 	private double[] postFFT(double[] fftd) {
-		return postFFTProcessor.process(fftd);
+		return getPostFFTProcessor().process(fftd);
 	}
 
 	private double[] preFFT(double[] sample) {
-		return preFFTProcessor.process(sample);
+		return getPreFFTProcessor().process(sample);
 	}
 
 	/* (non-Javadoc)
