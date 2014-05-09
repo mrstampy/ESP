@@ -356,9 +356,24 @@ public class DefaultLab implements Lab {
 		values.setHighPassFrequency(getHighPassFrequency());
 		values.setLowPassFrequency(getLowPassFrequency());
 		values.setNormalizeFft(isNormalizeFft());
+		values.setNormalizeSignal(isNormalizeSignal());
 		values.setNumBands(getNumBands());
 		values.setPassFilter(getPassFilter());
 
 		return values;
+	}
+
+	@Override
+	public void setLabValues(LabValues values) {
+		setAbsoluteValues(values.isAbsoluteValues());
+		setFftType(values.getFftType());
+		setHighNormalizeFftFrequency(values.getHighNormalizeFftFrequency());
+		setLowNormalizeFftFrequency(values.getLowNormalizeFftFrequency());
+		setHighPassFrequency(values.getHighPassFrequency());
+		setLowPassFrequency(values.getLowPassFrequency());
+		setNormalizeFft(values.isNormalizeFft());
+		setNormalizeSignal(values.isNormalizeSignal());
+		setNumBands(values.getNumBands());
+		setPassFilter(values.getPassFilter());
 	}
 }

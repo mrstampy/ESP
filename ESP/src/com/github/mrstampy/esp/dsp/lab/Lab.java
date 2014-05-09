@@ -70,4 +70,11 @@ public interface Lab extends LabValues {
 	 */
 	LabValues getLabValues();
 
+	/**
+	 * Initialization of a lab with values
+	 * 
+	 * @param values
+	 */
+	void setLabValues(LabValues values);
+
 }
