@@ -29,7 +29,8 @@ import com.github.mrstampy.esp.dsp.EspSignalUtilities;
  * The Class DefaultLab.
  */
 public class DefaultLab implements Lab {
-
+	private static final long serialVersionUID = 1L;
+	
 	private PreFFTProcessor preFFTProcessor = new PreFFTProcessor();
 	private PostFFTProcessor postFFTProcessor = new PostFFTProcessor();
 	private RawEspConnection connection;
@@ -169,6 +170,8 @@ public class DefaultLab implements Lab {
 	@Override
 	public void setNumBands(int numBands) {
 		this.numBands = numBands;
+		getPreFFTProcessor().setHighFrequency(numBands);
+		getPostFFTProcessor().setHighFrequency(numBands);
 	}
 
 	private PreFFTProcessor getPreFFTProcessor() {
@@ -340,5 +343,22 @@ public class DefaultLab implements Lab {
 	@Override
 	public double getLowNormalizeFftFrequency() {
 		return getPostFFTProcessor().getLowFrequency();
+	}
+
+	@Override
+	public LabValues getLabValues() {
+		DefaultLabValues values = new DefaultLabValues();
+		
+		values.setAbsoluteValues(isAbsoluteValues());
+		values.setFftType(getFftType());
+		values.setHighNormalizeFftFrequency(getHighNormalizeFftFrequency());
+		values.setLowNormalizeFftFrequency(getLowNormalizeFftFrequency());
+		values.setHighPassFrequency(getHighPassFrequency());
+		values.setLowPassFrequency(getLowPassFrequency());
+		values.setNormalizeFft(isNormalizeFft());
+		values.setNumBands(getNumBands());
+		values.setPassFilter(getPassFilter());
+
+		return values;
 	}
 }

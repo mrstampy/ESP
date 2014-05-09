@@ -45,7 +45,7 @@ import ddf.minim.analysis.WindowFunction;
  */
 public abstract class AbstractRawEspConnection<SOCKET extends MultiConnectionSocket> implements RawEspConnection {
 
-	private EspWindowFunction function = EspWindowFunction.HAMMING;
+	private EspWindowFunction function = EspWindowFunction.RECTANGULAR;
 
 	@Override
 	public void addConnectionEventListener(ConnectionEventListener listener) {

@@ -42,6 +42,7 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 	 * Instantiates a new pre fft processor.
 	 */
 	public PreFFTProcessor() {
+		super();
 		setLowFrequency(1);
 	}
 
