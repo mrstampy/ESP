@@ -193,7 +193,7 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 		return canBroadcast() && socketBroadcaster.isActive();
 	}
 
-	private void notifyConnectionEventListeners(State state) {
+	protected void notifyConnectionEventListeners(State state) {
 		if (connectionListeners.isEmpty()) return;
 
 		ConnectionEvent e = new ConnectionEvent(this, state);
