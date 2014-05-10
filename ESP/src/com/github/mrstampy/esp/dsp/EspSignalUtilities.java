@@ -31,6 +31,7 @@ import de.dfki.lt.signalproc.filter.BandPassFilter;
 import de.dfki.lt.signalproc.filter.HighPassFilter;
 import de.dfki.lt.signalproc.filter.LowPassFilter;
 
+// TODO: Auto-generated Javadoc
 /**
  * A collection of utility methods which may or may not be useful when analysing
  * a raw signal.
@@ -42,6 +43,11 @@ public abstract class EspSignalUtilities {
 
 	private FFT fft = new FFT(getFFTSize(), getSampleRate());
 
+	/**
+	 * Instantiates a new esp signal utilities.
+	 *
+	 * @param window the window
+	 */
 	protected EspSignalUtilities(WindowFunction window) {
 		setWindow(window);
 		getDSPValues().addDSPValueListener(new DSPValueListener() {
@@ -60,8 +66,8 @@ public abstract class EspSignalUtilities {
 
 	/**
 	 * Sets the windowing function within the FFT instance.
-	 * 
-	 * @param window
+	 *
+	 * @param window the new window
 	 */
 	public void setWindow(WindowFunction window) {
 		fft.window(window);
@@ -70,10 +76,10 @@ public abstract class EspSignalUtilities {
 	/**
 	 * Returns a map of frequency / log power pairs from the given sample. This
 	 * method is not thread safe.
-	 * 
-	 * @param sample
-	 * @param frequencies
-	 * @return
+	 *
+	 * @param sample the sample
+	 * @param frequencies the frequencies
+	 * @return the log powers for
 	 */
 	public Map<Double, Double> getLogPowersFor(double[] sample, double... frequencies) {
 		assert sample != null && sample.length > 0;
@@ -99,9 +105,9 @@ public abstract class EspSignalUtilities {
 	/**
 	 * Returns the real half of the fft transform of the given time domain sample.
 	 * This method is not thread safe.
-	 * 
-	 * @param sample
-	 * @return
+	 *
+	 * @param sample the sample
+	 * @return the double[]
 	 */
 	public double[] fftRealSpectrum(double[] sample) {
 		assert sample != null && sample.length > 0;
@@ -114,9 +120,9 @@ public abstract class EspSignalUtilities {
 	/**
 	 * Returns the log of the power spectrum of the given time domain sample. This
 	 * method is not thread safe.
-	 * 
-	 * @param sample
-	 * @return
+	 *
+	 * @param sample the sample
+	 * @return the double[]
 	 * @see #getLogPower(double[], double)
 	 * @see #getLogPower(double[], int, int)
 	 */
@@ -136,17 +142,14 @@ public abstract class EspSignalUtilities {
 	 * For range i to i + 1, weights 1, 1<br>
 	 * For range i to i + 2, weights 1, 2, 1<br>
 	 * For range i to i + 3, weights 1, 2, 2, 1<br>
-	 * For range i to i + 4, weights 1, 2, 3, 2, 1<br>
-	 * 
-	 * @param logFftd
-	 *          the frequency-domain shifted sample
-	 * @param lowerFreqHz
-	 *          > 0 Hz
-	 * @param upperFreqHz
-	 *          < {@link #getUpperMeasurableFrequency()} Hz
+	 * For range i to i + 4, weights 1, 2, 3, 2, 1<br>.
+	 *
+	 * @param logFftd          the frequency-domain shifted sample
+	 * @param lowerFreqHz          > 0 Hz
+	 * @param upperFreqHz          < {@link #getUpperMeasurableFrequency()} Hz
+	 * @return the log power
 	 * @see #fftLogPowerSpectrum(double[])
 	 * @see #createBandPassFilter(double, double)
-	 * @return
 	 */
 	public double getLogPower(double[] logFftd, int lowerFreqHz, int upperFreqHz) {
 		assert logFftd != null && logFftd.length > 0;
@@ -180,13 +183,11 @@ public abstract class EspSignalUtilities {
 	 * Linearly estimates the signal power at the specified frequency, between the
 	 * surrounding two fft data points (non-integer value between 1 Hz and (
 	 * {@link #getUpperMeasurableFrequency()} - 1) Hz exclusive).
-	 * 
-	 * @param logFftd
-	 *          the frequency-domain shifted sample
-	 * @param frequency
-	 *          non-integer, > 1 && < ({@link #getUpperMeasurableFrequency()} - 1)
+	 *
+	 * @param logFftd          the frequency-domain shifted sample
+	 * @param frequency          non-integer, > 1 && < ({@link #getUpperMeasurableFrequency()} - 1)
+	 * @return the log power
 	 * @see #fftLogPowerSpectrum(double[])
-	 * @return
 	 */
 	public double getLogPower(double[] logFftd, double frequency) {
 		assert logFftd != null && logFftd.length > 0;
@@ -222,15 +223,12 @@ public abstract class EspSignalUtilities {
 	 * Returns an array of size upperCutoffHz + 1, containing the normalized
 	 * values in the specified array from index lower thru upperCutoffHz
 	 * inclusive. Indexes outside of the range will have a zero value.
-	 * 
-	 * @param fftd
-	 *          the specified array of frequency domain values
-	 * @param lowerCutoffHz
-	 *          the minimum index to use for normalization, >= 1
-	 * @param upperCutoffHz
-	 *          the maximum index to use for normalization, <
+	 *
+	 * @param fftd          the specified array of frequency domain values
+	 * @param lowerCutoffHz          the minimum index to use for normalization, >= 1
+	 * @param upperCutoffHz          the maximum index to use for normalization, <
 	 *          {@link #getUpperMeasurableFrequency()}
-	 * @return
+	 * @return the double[]
 	 */
 	public double[] normalize(double[] fftd, int lowerCutoffHz, int upperCutoffHz) {
 		assert fftd != null && fftd.length > 0;
@@ -249,22 +247,21 @@ public abstract class EspSignalUtilities {
 	}
 
 	/**
-	 * Normalizes the raw signal to values between 0 and 1;
-	 * 
-	 * @param sample
-	 * @return
+	 * Normalizes the raw signal to values between 0 and 1;.
+	 *
+	 * @param sample the sample
+	 * @return the double[]
 	 */
 	public double[] normalize(double[] sample) {
 		return normalize(sample, 1);
 	}
 
 	/**
-	 * Normalizes the raw signal to values between 0 and scale;
-	 * 
-	 * @param sample
-	 * @param scale
-	 *          the scale amount
-	 * @return
+	 * Normalizes the raw signal to values between 0 and scale;.
+	 *
+	 * @param sample the sample
+	 * @param scale          the scale amount
+	 * @return the double[]
 	 */
 	public double[] normalize(double[] sample, double scale) {
 		assert sample != null && sample.length > 0;
@@ -313,9 +310,9 @@ public abstract class EspSignalUtilities {
 	/**
 	 * Returns the weighted moving average of the given inputs. The first element
 	 * is considered to be the least weight (or oldest value).
-	 * 
-	 * @param powers
-	 * @return
+	 *
+	 * @param powers the powers
+	 * @return the double
 	 */
 	public double wma(double... powers) {
 		assert powers != null && powers.length > 0;
@@ -337,6 +334,13 @@ public abstract class EspSignalUtilities {
 		return new BigDecimal(total).divide(new BigDecimal(divisor), 10, RoundingMode.HALF_UP).doubleValue();
 	}
 
+	/**
+	 * Creates the band pass filter.
+	 *
+	 * @param lowerCutoffHz the lower cutoff hz
+	 * @param upperCutoffHz the upper cutoff hz
+	 * @return the band pass filter
+	 */
 	public BandPassFilter createBandPassFilter(double lowerCutoffHz, double upperCutoffHz) {
 		assert lowerCutoffHz > 0 && lowerCutoffHz < upperCutoffHz && upperCutoffHz < getUpperMeasurableFrequency();
 
@@ -348,6 +352,12 @@ public abstract class EspSignalUtilities {
 		return bpf;
 	}
 
+	/**
+	 * Creates the high pass filter.
+	 *
+	 * @param cutoffHz the cutoff hz
+	 * @return the high pass filter
+	 */
 	public HighPassFilter createHighPassFilter(double cutoffHz) {
 		assert cutoffHz > 0 && cutoffHz < getUpperMeasurableFrequency();
 
@@ -356,6 +366,12 @@ public abstract class EspSignalUtilities {
 		return hpf;
 	}
 
+	/**
+	 * Creates the low pass filter.
+	 *
+	 * @param cutoffHz the cutoff hz
+	 * @return the low pass filter
+	 */
 	public LowPassFilter createLowPassFilter(double cutoffHz) {
 		assert cutoffHz > 0 && cutoffHz < getUpperMeasurableFrequency();
 
@@ -367,17 +383,18 @@ public abstract class EspSignalUtilities {
 	/**
 	 * Convenience method to create an esp - specific low pass filter, filtering
 	 * out signals above {@link #getUpperMeasurableFrequency()} - 0.1.
-	 * 
-	 * @return
+	 *
+	 * @return the esp low pass filter
 	 */
 	public LowPassFilter getEspLowPassFilter() {
 		return createLowPassFilter(getUpperMeasurableFrequency() - 0.1);
 	}
 	
 	/**
-	 * Returns the absolute (positive) values of the given array
-	 * @param array
-	 * @return
+	 * Returns the absolute (positive) values of the given array.
+	 *
+	 * @param array the array
+	 * @return the double[]
 	 */
 	public double[] absolute(double[] array) {
 		double[] copy = new double[array.length];
@@ -387,30 +404,40 @@ public abstract class EspSignalUtilities {
 		return copy;
 	}
 	
+	/**
+	 * Gets the DSP values.
+	 *
+	 * @return the DSP values
+	 */
 	public abstract AbstractDSPValues getDSPValues();
 
+	/**
+	 * Gets the upper measurable frequency.
+	 *
+	 * @return the upper measurable frequency
+	 */
 	protected double getUpperMeasurableFrequency() {
 		return getSampleRate() / 2;
 	}
 
 	/**
 	 * Return the size of the sample arrays. Must be a power of 2;
-	 * 
-	 * @return
+	 *
+	 * @return the FFT size
 	 */
 	protected abstract int getFFTSize();
 
 	/**
-	 * Return the sample rate
-	 * 
-	 * @return
+	 * Return the sample rate.
+	 *
+	 * @return the sample rate
 	 */
 	protected abstract double getSampleRate();
 
 	/**
-	 * Return the range of the raw signal values (max - min)
-	 * 
-	 * @return
+	 * Return the range of the raw signal values (max - min).
+	 *
+	 * @return the raw signal breadth
 	 */
 	protected abstract BigDecimal getRawSignalBreadth();
 

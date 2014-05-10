@@ -31,10 +31,15 @@ package de.dfki.lt.signalproc.filter;
 
 import de.dfki.lt.signalproc.util.MathUtils;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class BandRejectFilter.
+ *
  * @author Marc Schr&ouml;der
  */
 public class BandRejectFilter extends FIRFilter {
+	
+	/** The default transitionbandwidth. */
 	public static double DEFAULT_TRANSITIONBANDWIDTH = 0.01;
 
 	/**
@@ -90,27 +95,21 @@ public class BandRejectFilter extends FIRFilter {
 	/**
 	 * Create a new band reject filter with the given normalised cutoff
 	 * frequencies and a default transition band width.
-	 * 
-	 * @param lowerNormalisedCutoffFrequency
-	 *          the cutoff frequency corresponding to the lower end of the band,
+	 *
+	 * @param lowerNormalisedCutoffFrequency          the cutoff frequency corresponding to the lower end of the band,
 	 *          expressed as a fraction of the sampling rate. It must be in the
 	 *          range ]0, 0.5[. For example, with a sampling rate of 16000 Hz and
 	 *          a desired cutoff frequency of 4000 Hz, the
 	 *          lowerNormalisedCutoffFrequency would have to be 0.25.
-	 * @param upperNormalisedCutoffFrequency
-	 *          the cutoff frequency corresponding to the upper end of the band,
+	 * @param upperNormalisedCutoffFrequency          the cutoff frequency corresponding to the upper end of the band,
 	 *          expressed as a fraction of the sampling rate. It must be in the
 	 *          range ]0, 0.5[. For example, with a sampling rate of 16000 Hz and
 	 *          a desired cutoff frequency of 6000 Hz, the
 	 *          upperNormalisedCutoffFrequency would have to be 0.375.
-	 * @param kernelLength
-	 *          length of the filter kernel (the impulse response). The kernel
+	 * @param kernelLength          length of the filter kernel (the impulse response). The kernel
 	 *          length must be an odd number. The longer the kernel, the sharper
 	 *          the cutoff, i.e. the narrower the transition band. Typical lengths
 	 *          are in the range of 10-1000.
-	 * @throws IllegalArgumentException
-	 *           if the kernel length is not a positive, odd number, or if
-	 *           normalisedCutoffFrequency is not in the range between 0 and 0.5.
 	 */
 	public BandRejectFilter(double lowerNormalisedCutoffFrequency, double upperNormalisedCutoffFrequency, int kernelLength) {
 		super();
@@ -133,9 +132,9 @@ public class BandRejectFilter extends FIRFilter {
 	/**
 	 * For a given sampling rate, return the width of the transition band for this
 	 * filter, in Hertz.
-	 * 
-	 * @param samplingRate
-	 *          the sampling rate, in Hertz.
+	 *
+	 * @param samplingRate          the sampling rate, in Hertz.
+	 * @return the transition band width
 	 */
 	public double getTransitionBandWidth(int samplingRate) {
 		return samplingRate * kernelLength2bandwidth(impulseResponseLength);
@@ -144,6 +143,11 @@ public class BandRejectFilter extends FIRFilter {
 	/**
 	 * Compute the band-reject filter kernel, as the sum of a low-pass filter
 	 * kernel and a high-pass filter kernel.
+	 *
+	 * @param lowerNormalisedCutoffFrequency the lower normalised cutoff frequency
+	 * @param upperNormalisedCutoffFrequency the upper normalised cutoff frequency
+	 * @param kernelLength the kernel length
+	 * @return the kernel
 	 */
 	protected static double[] getKernel(double lowerNormalisedCutoffFrequency, double upperNormalisedCutoffFrequency,
 			int kernelLength) {
@@ -159,8 +163,8 @@ public class BandRejectFilter extends FIRFilter {
 	/**
 	 * Convert from normalisedTransitionBandwidth to filter kernel length, using
 	 * the approximate formula l = 4/bw.
-	 * 
-	 * @param normalisedTransitionBandwidth
+	 *
+	 * @param normalisedTransitionBandwidth the normalised transition bandwidth
 	 * @return the corresponding filter kernel length (guaranteed to be an odd
 	 *         number).
 	 */
@@ -175,8 +179,8 @@ public class BandRejectFilter extends FIRFilter {
 	/**
 	 * Convert from filter kernel length to normalisedTransitionBandwidth, using
 	 * the approximate formula l = 4/bw.
-	 * 
-	 * @param kernelLength
+	 *
+	 * @param kernelLength the kernel length
 	 * @return the corresponding normalised transition bandwidth.
 	 */
 	protected static double kernelLength2bandwidth(int kernelLength) {
@@ -184,6 +188,9 @@ public class BandRejectFilter extends FIRFilter {
 		return bw;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return "Band reject filter";
 	}

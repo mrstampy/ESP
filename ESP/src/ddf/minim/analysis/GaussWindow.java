@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Gauss window function.
  * 
@@ -27,9 +28,15 @@ package ddf.minim.analysis;
  *      Gauss Window</a>
  */
 public class GaussWindow extends WindowFunction {
+  
+  /** The alpha. */
   double alpha;
 
-  /** Constructs a Gauss window function. */
+  /**
+   *  Constructs a Gauss window function.
+   *
+   * @param alpha the alpha
+   */
   public GaussWindow(double alpha) {
     if (alpha < 0.0 || alpha > 0.5) {
       throw new RuntimeException("Range for GaussWindow out of bounds. Value must be <= 0.5");
@@ -42,6 +49,9 @@ public class GaussWindow extends WindowFunction {
     this(0.25);
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     return (double) Math.pow(Math.E,
         -0.5 * Math.pow((index - (length - 1) / (double) 2) / (this.alpha * (length - 1) / (double) 2), (double) 2));

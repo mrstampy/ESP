@@ -29,12 +29,21 @@
 
 package de.dfki.lt.signalproc.window;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GaussWindow.
+ *
  * @author Marc Schr&ouml;der
  */
 public class GaussWindow extends Window {
+	
+	/** The Constant DEFAULT_SIGMA. */
 	public static final double DEFAULT_SIGMA = 100;
+	
+	/** The sigma. */
 	protected double sigma;
+	
+	/** The sigmasquare. */
 	protected double sigmasquare;
 
 	/**
@@ -50,9 +59,9 @@ public class GaussWindow extends Window {
 	/**
 	 * Crate a Gauss window with the given length and a default sigma, and apply a
 	 * prescaling factor to each sample in the window.
-	 * 
-	 * @param length
-	 *          the length of the window, in samples (must be an odd number)
+	 *
+	 * @param length          the length of the window, in samples (must be an odd number)
+	 * @param prescalingFactor the prescaling factor
 	 */
 	public GaussWindow(int length, double prescalingFactor) {
 		this(length, DEFAULT_SIGMA, prescalingFactor);
@@ -60,12 +69,11 @@ public class GaussWindow extends Window {
 
 	/**
 	 * Create a Gauss window with the given length and sigma.
-	 * 
-	 * @param length
-	 *          the length of the window, in samples (should be an odd number)
-	 * @param sigma
-	 *          the sigma coefficient in the Gauss curve. A good starting point is
+	 *
+	 * @param length          the length of the window, in samples (should be an odd number)
+	 * @param sigma          the sigma coefficient in the Gauss curve. A good starting point is
 	 *          100.
+	 * @param prescalingFactor the prescaling factor
 	 */
 	public GaussWindow(int length, double sigma, double prescalingFactor) {
 		window = new double[length];
@@ -75,6 +83,9 @@ public class GaussWindow extends Window {
 		initialise();
 	}
 
+	/* (non-Javadoc)
+	 * @see de.dfki.lt.signalproc.window.Window#initialise()
+	 */
 	protected void initialise() {
 		int mid = window.length / 2 + 1;
 		for (int i = 0; i < window.length; i++) {
@@ -83,6 +94,9 @@ public class GaussWindow extends Window {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return "Gauss window";
 	}

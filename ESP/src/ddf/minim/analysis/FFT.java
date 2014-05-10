@@ -19,6 +19,7 @@
 package ddf.minim.analysis;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * FFT stands for Fast Fourier Transform. It is an efficient way to calculate
  * the Complex Discrete Fourier Transform. There is not much to say about this
@@ -28,13 +29,11 @@ package ddf.minim.analysis;
  * is a power of two. If you try to construct an FFT with a
  * <code>timeSize</code> that is not a power of two, an IllegalArgumentException
  * will be thrown.
- * 
+ *
+ * @author Damien Di Fede
  * @see FourierTransform
  * @see <a href="http://www.dspguide.com/ch12.htm">The Fast Fourier
  *      Transform</a>
- * 
- * @author Damien Di Fede
- * 
  */
 public class FFT extends FourierTransform {
   /**
@@ -55,12 +54,18 @@ public class FFT extends FourierTransform {
     buildTrigTables();
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.FourierTransform#allocateArrays()
+   */
   protected void allocateArrays() {
     spectrum = new double[timeSize / 2 + 1];
     real = new double[timeSize];
     imag = new double[timeSize];
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.FourierTransform#scaleBand(int, double)
+   */
   public void scaleBand(int i, double s) {
     if (s < 0) {
       throw new RuntimeException("Can't scale a frequency band by a negative value.");
@@ -76,6 +81,9 @@ public class FFT extends FourierTransform {
     }
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.FourierTransform#setBand(int, double)
+   */
   public void setBand(int i, double a) {
     if (a < 0) {
       throw new RuntimeException("Can't set a frequency band to a negative value.");
@@ -127,6 +135,9 @@ public class FFT extends FourierTransform {
     }
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.FourierTransform#forward(double[])
+   */
   public void forward(double[] buffer) {
     if (buffer.length != timeSize) {
       throw new RuntimeException("FFT.forward: The length of the passed sample buffer must be equal to timeSize().");
@@ -140,6 +151,9 @@ public class FFT extends FourierTransform {
     fillSpectrum();
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.FourierTransform#forward(double[], int)
+   */
   @Override
   public void forward(double[] buffer, int startAt) {
     if (buffer.length - startAt < timeSize) {
@@ -171,6 +185,9 @@ public class FFT extends FourierTransform {
     fillSpectrum();
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.FourierTransform#inverse(double[])
+   */
   public void inverse(double[] buffer) {
     if (buffer.length > real.length) {
       throw new RuntimeException("FFT.inverse: the passed array's length must equal FFT.timeSize().");

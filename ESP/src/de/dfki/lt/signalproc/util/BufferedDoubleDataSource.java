@@ -31,21 +31,44 @@ package de.dfki.lt.signalproc.util;
 
 import de.dfki.lt.signalproc.process.InlineDataProcessor;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Marc Schr&ouml;der
+ * The Class BufferedDoubleDataSource.
  *
+ * @author Marc Schr&ouml;der
  */
 public class BufferedDoubleDataSource extends BaseDoubleDataSource {
+    
+    /** The Constant DEFAULT_BUFFERSIZE. */
     public static final int DEFAULT_BUFFERSIZE = 8192;
+    
+    /** The buf. */
     protected double[] buf;
+    
+    /** The read pos. */
     protected int readPos = 0;
+    
+    /** The write pos. */
     protected int writePos = 0;
+    
+    /** The data processor. */
     protected InlineDataProcessor dataProcessor = null;
 
+    /**
+     * Instantiates a new buffered double data source.
+     *
+     * @param inputData the input data
+     */
     public BufferedDoubleDataSource(double[] inputData) {
         this(inputData, null);
     }
 
+    /**
+     * Instantiates a new buffered double data source.
+     *
+     * @param inputData the input data
+     * @param dataProcessor the data processor
+     */
     public BufferedDoubleDataSource(double[] inputData, InlineDataProcessor dataProcessor) {
         super();
         buf = new double[inputData.length];
@@ -57,10 +80,21 @@ public class BufferedDoubleDataSource extends BaseDoubleDataSource {
             dataProcessor.applyInline(buf, 0, writePos);
     }
 
+    /**
+     * Instantiates a new buffered double data source.
+     *
+     * @param inputSource the input source
+     */
     public BufferedDoubleDataSource(DoubleDataSource inputSource) {
         this(inputSource, null);
     }
     
+    /**
+     * Instantiates a new buffered double data source.
+     *
+     * @param inputSource the input source
+     * @param dataProcessor the data processor
+     */
     public BufferedDoubleDataSource(DoubleDataSource inputSource, InlineDataProcessor dataProcessor) {
         super(inputSource);
         buf = new double[DEFAULT_BUFFERSIZE];
@@ -103,6 +137,11 @@ public class BufferedDoubleDataSource extends BaseDoubleDataSource {
         return available;
     }
     
+    /**
+     * Buffer space left.
+     *
+     * @return the int
+     */
     protected int bufferSpaceLeft()
     {
         return buf.length - currentlyInBuffer();
@@ -164,7 +203,8 @@ public class BufferedDoubleDataSource extends BaseDoubleDataSource {
 
     /**
      * Increase the underlying buffer array in size, so that the new size is
-     * at least minSize
+     * at least minSize.
+     *
      * @param minSize the minimum new size of the array.
      */
     protected void increaseBufferSize(int minSize) {

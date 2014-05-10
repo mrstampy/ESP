@@ -20,6 +20,7 @@ package com.github.mrstampy.esp.dsp;
 
 import java.util.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Processed listeners are notified when the {@link EspDSP} has finished processing the 
  * current cycle.
@@ -30,5 +31,8 @@ import java.util.EventListener;
  */
 public interface RawProcessedListener extends EventListener {
 
+	/**
+	 * Signal processed.
+	 */
 	void signalProcessed();
 }

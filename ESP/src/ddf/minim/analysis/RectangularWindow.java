@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Rectangular window function A Rectangular window is equivalent to using no
  * window at all.
@@ -33,6 +34,9 @@ public class RectangularWindow extends WindowFunction {
   public RectangularWindow() {
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     return 1f;
   }

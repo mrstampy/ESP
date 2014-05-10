@@ -29,18 +29,36 @@
 
 package de.dfki.lt.signalproc.window;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class HammingWindow.
+ *
  * @author Marc Schr&ouml;der
  */
 public class HammingWindow extends Window {
+	
+	/**
+	 * Instantiates a new hamming window.
+	 *
+	 * @param length the length
+	 */
 	public HammingWindow(int length) {
 		super(length);
 	}
 
+	/**
+	 * Instantiates a new hamming window.
+	 *
+	 * @param length the length
+	 * @param prescalingFactor the prescaling factor
+	 */
 	public HammingWindow(int length, double prescalingFactor) {
 		super(length, prescalingFactor);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.dfki.lt.signalproc.window.Window#initialise()
+	 */
 	protected void initialise() {
 		boolean prescale = (prescalingFactor != 1.);
 		for (int i = 0; i < window.length; i++) {
@@ -50,6 +68,9 @@ public class HammingWindow extends Window {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return "Hamming window";
 	}

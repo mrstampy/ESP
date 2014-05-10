@@ -31,13 +31,13 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class uses Disruptor internally. Add as a
  * {@link ConnectionEventListener} to the {@link AbstractMultiConnectionSocket}.
- * 
+ *
  * @author burton
- * 
- * @param <SAMPLE>
+ * @param <SAMPLE> the generic type
  */
 public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventListener {
 	private static final Logger log = LoggerFactory.getLogger(RawDataSampleBuffer.class);
@@ -58,6 +58,12 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 
 	private CountDownLatch latch = new CountDownLatch(1);
 
+	/**
+	 * Instantiates a new raw data sample buffer.
+	 *
+	 * @param bufferSize the buffer size
+	 * @param fftSize the fft size
+	 */
 	protected RawDataSampleBuffer(int bufferSize, int fftSize) {
 		setBufferSize(bufferSize);
 		setFftSize(fftSize);
@@ -65,7 +71,9 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 	}
 
 	/**
-	 * Implementation starts/stops disruptor
+	 * Implementation starts/stops disruptor.
+	 *
+	 * @param e the e
 	 */
 	public void connectionEventPerformed(ConnectionEvent e) {
 		switch (e.getState()) {
@@ -82,8 +90,18 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 		}
 	}
 
+	/**
+	 * Adds the sample.
+	 *
+	 * @param sample the sample
+	 */
 	public abstract void addSample(SAMPLE sample);
 
+	/**
+	 * Adds the sample impl.
+	 *
+	 * @param sample the sample
+	 */
 	protected void addSampleImpl(double... sample) {
 		try {
 			latch.await();
@@ -96,6 +114,11 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 		rb.publish(seq);
 	}
 
+	/**
+	 * Gets the snapshot.
+	 *
+	 * @return the snapshot
+	 */
 	public double[] getSnapshot() {
 		double[] snap = movingWindow.snapshot();
 
@@ -113,6 +136,9 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 		return shot;
 	}
 
+	/**
+	 * Clear.
+	 */
 	public void clear() {
 		movingWindow.clear();
 	}
@@ -174,18 +200,38 @@ public abstract class RawDataSampleBuffer<SAMPLE> implements ConnectionEventList
 		rb = disruptor.start();
 	}
 
+	/**
+	 * Gets the buffer size.
+	 *
+	 * @return the buffer size
+	 */
 	public int getBufferSize() {
 		return bufferSize;
 	}
 
+	/**
+	 * Sets the buffer size.
+	 *
+	 * @param bufferSize the new buffer size
+	 */
 	public void setBufferSize(int bufferSize) {
 		this.bufferSize = bufferSize;
 	}
 
+	/**
+	 * Gets the fft size.
+	 *
+	 * @return the fft size
+	 */
 	public int getFftSize() {
 		return fftSize;
 	}
 
+	/**
+	 * Sets the fft size.
+	 *
+	 * @param fftSize the new fft size
+	 */
 	public void setFftSize(int fftSize) {
 		this.fftSize = fftSize;
 	}

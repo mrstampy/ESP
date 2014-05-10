@@ -20,19 +20,35 @@ package com.github.mrstampy.esp.multiconnectionsocket;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface MultiConnectionSocket.
+ */
 public interface MultiConnectionSocket {
 
+	/**
+	 * Adds the connection event listener.
+	 *
+	 * @param listener the listener
+	 */
 	public abstract void addConnectionEventListener(ConnectionEventListener listener);
 
+	/**
+	 * Removes the connection event listener.
+	 *
+	 * @param listener the listener
+	 */
 	public abstract void removeConnectionEventListener(ConnectionEventListener listener);
 
+	/**
+	 * Clear connection event listeners.
+	 */
 	public abstract void clearConnectionEventListeners();
 
 	/**
-	 * Connects to the socket
-	 * 
-	 * @throws MultiConnectionSocketException
-	 *           if already connected or an unexpected error occurs
+	 * Connects to the socket.
+	 *
+	 * @throws MultiConnectionSocketException           if already connected or an unexpected error occurs
 	 */
 	public abstract void start() throws MultiConnectionSocketException;
 
@@ -43,17 +59,17 @@ public interface MultiConnectionSocket {
 
 	/**
 	 * Returns true if connected to the {@link AbstractMultiConnectionSocket}
-	 * socket
-	 * 
+	 * socket.
+	 *
 	 * @return true if connected
 	 */
 	public abstract boolean isConnected();
 
 	/**
 	 * Binds the broadcaster to the local host and the broadcaster port in
-	 * {@link AbstractSocketConnector}
-	 * 
-	 * @throws IOException
+	 * {@link AbstractSocketConnector}.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @see AbstractSocketConnector
 	 */
 	public abstract void bindBroadcaster() throws IOException;
@@ -67,16 +83,16 @@ public interface MultiConnectionSocket {
 
 	/**
 	 * Returns true if the broadcaster is bound.
-	 * 
-	 * @return
+	 *
+	 * @return true, if is bound
 	 * @see AbstractSocketConnector
 	 */
 	public abstract boolean isBound();
 
 	/**
 	 * Returns true if this instance has been configured for broadcasting.
-	 * 
-	 * @return
+	 *
+	 * @return true, if successful
 	 */
 	public abstract boolean canBroadcast();
 

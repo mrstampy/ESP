@@ -25,10 +25,19 @@ import org.junit.Test;
 
 import com.github.mrstampy.esp.multiconnectionsocket.MovingWindowBuffer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MovingWindowBufferTest.
+ */
 public class MovingWindowBufferTest {
 
 	private MovingWindowBuffer buf = new MovingWindowBuffer(5);
 	
+	/**
+	 * Before.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void before() throws Exception {
 		buf = new MovingWindowBuffer(5);
@@ -40,6 +49,9 @@ public class MovingWindowBufferTest {
 		confirm(first, snap);
 	}
 	
+	/**
+	 * Test buffer.
+	 */
 	@Test
 	public void testBuffer() {
 		double[] second = {5, 6, 7};
@@ -57,6 +69,9 @@ public class MovingWindowBufferTest {
 		confirm(expected2, snap);
 	}
 	
+	/**
+	 * Test resize smaller.
+	 */
 	@Test
 	public void testResizeSmaller() {
 		buf.resize(3);
@@ -69,6 +84,9 @@ public class MovingWindowBufferTest {
 		confirm(expected, snap);
 	}
 	
+	/**
+	 * Test resize larger.
+	 */
 	@Test
 	public void testResizeLarger() {
 		buf.resize(8);

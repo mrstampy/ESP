@@ -36,71 +36,107 @@ import ddf.minim.analysis.RectangularWindow;
 import ddf.minim.analysis.TriangularWindow;
 import ddf.minim.analysis.WindowFunction;
 
+// TODO: Auto-generated Javadoc
 /**
  * Abstract implementation.
- * 
- * @author burton
  *
- * @param <SOCKET>
+ * @author burton
+ * @param <SOCKET> the generic type
  */
 public abstract class AbstractRawEspConnection<SOCKET extends MultiConnectionSocket> implements RawEspConnection {
 
 	private EspWindowFunction function = EspWindowFunction.RECTANGULAR;
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#addConnectionEventListener(com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener)
+	 */
 	@Override
 	public void addConnectionEventListener(ConnectionEventListener listener) {
 		getSocket().addConnectionEventListener(listener);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#removeConnectionEventListener(com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener)
+	 */
 	@Override
 	public void removeConnectionEventListener(ConnectionEventListener listener) {
 		getSocket().removeConnectionEventListener(listener);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#clearConnectionEventListeners()
+	 */
 	@Override
 	public void clearConnectionEventListeners() {
 		getSocket().clearConnectionEventListeners();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#start()
+	 */
 	@Override
 	public void start() throws MultiConnectionSocketException {
 		getSocket().start();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#stop()
+	 */
 	@Override
 	public void stop() {
 		getSocket().stop();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#isConnected()
+	 */
 	@Override
 	public boolean isConnected() {
 		return getSocket().isConnected();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#bindBroadcaster()
+	 */
 	@Override
 	public void bindBroadcaster() throws IOException {
 		getSocket().bindBroadcaster();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#unbindBroadcaster()
+	 */
 	@Override
 	public void unbindBroadcaster() {
 		getSocket().unbindBroadcaster();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#isBound()
+	 */
 	@Override
 	public boolean isBound() {
 		return getSocket().isBound();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#canBroadcast()
+	 */
 	@Override
 	public boolean canBroadcast() {
 		return getSocket().canBroadcast();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.RawEspConnection#getWindowFunction()
+	 */
 	public EspWindowFunction getWindowFunction() {
 		return function;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.RawEspConnection#setWindowFunction(com.github.mrstampy.esp.dsp.lab.EspWindowFunction)
+	 */
 	public void setWindowFunction(EspWindowFunction function) {
 		this.function = function;
 		getUtilities().setWindow(createWindow());
@@ -131,6 +167,11 @@ public abstract class AbstractRawEspConnection<SOCKET extends MultiConnectionSoc
 		}
 	}
 
+	/**
+	 * Gets the socket.
+	 *
+	 * @return the socket
+	 */
 	protected abstract SOCKET getSocket();
 
 }

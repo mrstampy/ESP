@@ -31,10 +31,15 @@ package de.dfki.lt.signalproc.filter;
 
 import de.dfki.lt.signalproc.util.MathUtils;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class HighPassFilter.
+ *
  * @author Marc Schr&ouml;der
  */
 public class HighPassFilter extends FIRFilter {
+	
+	/** The default transitionbandwidth. */
 	public static double DEFAULT_TRANSITIONBANDWIDTH = 0.01;
 
 	/**
@@ -76,21 +81,16 @@ public class HighPassFilter extends FIRFilter {
 	/**
 	 * Create a new highpass filter with the given normalised cutoff frequency and
 	 * the given length of the filter kernel.
-	 * 
-	 * @param normalisedCutoffFrequency
-	 *          the cutoff frequency of the highpass filter, expressed as a
+	 *
+	 * @param normalisedCutoffFrequency          the cutoff frequency of the highpass filter, expressed as a
 	 *          fraction of the sampling rate. It must be in the range ]0, 0.5[.
 	 *          For example, with a sampling rate of 16000 Hz and a desired cutoff
 	 *          frequency of 4000 Hz, the normalisedCutoffFrequency would have to
 	 *          be 0.25.
-	 * @param kernelLength
-	 *          length of the filter kernel (the impulse response). The kernel
+	 * @param kernelLength          length of the filter kernel (the impulse response). The kernel
 	 *          length must be an odd number. The longer the kernel, the sharper
 	 *          the cutoff, i.e. the narrower the transition band. Typical lengths
 	 *          are in the range of 10-1000.
-	 * @throws IllegalArgumentException
-	 *           if the kernel length is not a positive, odd number, or if
-	 *           normalisedCutoffFrequency is not in the range between 0 and 0.5.
 	 */
 	public HighPassFilter(double normalisedCutoffFrequency, int kernelLength) {
 		super();
@@ -112,9 +112,9 @@ public class HighPassFilter extends FIRFilter {
 	/**
 	 * For a given sampling rate, return the width of the transition band for this
 	 * filter, in Hertz.
-	 * 
-	 * @param samplingRate
-	 *          the sampling rate, in Hertz.
+	 *
+	 * @param samplingRate          the sampling rate, in Hertz.
+	 * @return the transition band width
 	 */
 	public double getTransitionBandWidth(int samplingRate) {
 		return samplingRate * kernelLength2bandwidth(impulseResponseLength);
@@ -123,6 +123,10 @@ public class HighPassFilter extends FIRFilter {
 	/**
 	 * Compute the high-pass filter kernel, as a spectrally inverted low-pass
 	 * filter kernel.
+	 *
+	 * @param normalisedCutoffFrequency the normalised cutoff frequency
+	 * @param kernelLength the kernel length
+	 * @return the kernel
 	 */
 	protected static double[] getKernel(double normalisedCutoffFrequency, int kernelLength) {
 		double[] lowPassKernel = LowPassFilter.getKernel(normalisedCutoffFrequency, kernelLength);
@@ -138,8 +142,8 @@ public class HighPassFilter extends FIRFilter {
 	/**
 	 * Convert from normalisedTransitionBandwidth to filter kernel length, using
 	 * the approximate formula l = 4/bw.
-	 * 
-	 * @param normalisedTransitionBandwidth
+	 *
+	 * @param normalisedTransitionBandwidth the normalised transition bandwidth
 	 * @return the corresponding filter kernel length (guaranteed to be an odd
 	 *         number).
 	 */
@@ -154,8 +158,8 @@ public class HighPassFilter extends FIRFilter {
 	/**
 	 * Convert from filter kernel length to normalisedTransitionBandwidth, using
 	 * the approximate formula l = 4/bw.
-	 * 
-	 * @param kernelLength
+	 *
+	 * @param kernelLength the kernel length
 	 * @return the corresponding normalised transition bandwidth.
 	 */
 	protected static double kernelLength2bandwidth(int kernelLength) {
@@ -163,6 +167,9 @@ public class HighPassFilter extends FIRFilter {
 		return bw;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return "Highpass filter";
 	}

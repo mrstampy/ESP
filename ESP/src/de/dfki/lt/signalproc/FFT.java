@@ -36,11 +36,18 @@ import javax.sound.sampled.AudioSystem;
 
 import de.dfki.lt.signalproc.util.MathUtils;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class FFT.
+ *
  * @author Marc Schr&ouml;der
  */
 public class FFT {
+	
+	/** The cos delta. */
 	static double[] cosDelta;
+	
+	/** The sin delta. */
 	static double[] sinDelta;
 
 	static {
@@ -462,8 +469,9 @@ public class FFT {
 	 * and data[2], respectively. n must be a power of 2. This routine also
 	 * calculates the inverse transform of a complex data array if it is the
 	 * transform of real data. (Result in this case must be multiplied by 2/n.)
-	 * 
-	 * @param data
+	 *
+	 * @param data the data
+	 * @param inverse the inverse
 	 */
 	public static void realTransform(double data[], boolean inverse) {
 		double c1 = 0.5;
@@ -532,11 +540,10 @@ public class FFT {
 	 * sampling rate). This method applies zero padding where necessary to ensure
 	 * that the result is not polluted because of assumed periodicity. The two
 	 * signals need not be of equal length.
-	 * 
-	 * @param signal1
-	 * @param signal2
-	 * @param deltaT
-	 *          , the time difference between two samples (= 1/samplingrate)
+	 *
+	 * @param signal1 the signal1
+	 * @param signal2 the signal2
+	 * @param deltaT          , the time difference between two samples (= 1/samplingrate)
 	 * @return the convolved signal, with length signal1.length+signal2.length
 	 */
 	public static double[] convolveWithZeroPadding(final double[] signal1, final double[] signal2, double deltaT) {
@@ -552,9 +559,9 @@ public class FFT {
 	 * domain. This method applies zero padding where necessary to ensure that the
 	 * result is not polluted because of assumed periodicity. The two signals need
 	 * not be of equal length.
-	 * 
-	 * @param signal1
-	 * @param signal2
+	 *
+	 * @param signal1 the signal1
+	 * @param signal2 the signal2
 	 * @return the convolved signal, with length signal1.length+signal2.length
 	 */
 	public static double[] convolveWithZeroPadding(final double[] signal1, final double[] signal2) {
@@ -580,14 +587,11 @@ public class FFT {
 	 * of the sampling rate). This is the core method, requiring two signals of
 	 * equal length, which must be a power of two, and not checking for pollution
 	 * arising from the assumed periodicity of both signals.
-	 * 
-	 * @param signal1
-	 * @param signal2
-	 * @param deltaT
-	 *          , the time difference between two samples (= 1/samplingrate)
+	 *
+	 * @param signal1 the signal1
+	 * @param signal2 the signal2
+	 * @param deltaT          , the time difference between two samples (= 1/samplingrate)
 	 * @return the convolved signal, of the same length as the two input signals
-	 * @throws IllegalArgumentException
-	 *           if the two input signals do not have the same length.
 	 */
 	public static double[] convolve(final double[] signal1, final double[] signal2, double deltaT) {
 		double[] result = convolve(signal1, signal2);
@@ -602,12 +606,10 @@ public class FFT {
 	 * frequency domain. This is the core method, requiring two signals of equal
 	 * length, which must be a power of two, and not checking for pollution
 	 * arising from the assumed periodicity of both signals.
-	 * 
-	 * @param signal1
-	 * @param signal2
+	 *
+	 * @param signal1 the signal1
+	 * @param signal2 the signal2
 	 * @return the convolved signal, of the same length as the two input signals
-	 * @throws IllegalArgumentException
-	 *           if the two input signals do not have the same length.
 	 */
 	public static double[] convolve(final double[] signal1, final double[] signal2) {
 		if (signal1 == null || signal2 == null)
@@ -644,18 +646,13 @@ public class FFT {
 	 * not checking for pollution arising from the assumed periodicity of both
 	 * signals. In this version, the first signal is provided in the time domain,
 	 * while the second is already transformed into the frequency domain.
-	 * 
-	 * @param signal1
-	 *          the first input signal, in the time domain
-	 * @param fft2
-	 *          the complex transform of the second signal, in the frequency
+	 *
+	 * @param signal1          the first input signal, in the time domain
+	 * @param fft2          the complex transform of the second signal, in the frequency
 	 *          domain fft[0] = real[0], fft[1] = real[N/2], fft[2*i] = real[i],
 	 *          fft[2*i+1] = imag[i] for 1<=i<N/2
-	 * @param deltaT
-	 *          , the time difference between two samples (= 1/samplingrate)
+	 * @param deltaT          , the time difference between two samples (= 1/samplingrate)
 	 * @return the convolved signal, of the same length as the two input signals
-	 * @throws IllegalArgumentException
-	 *           if the two input signals do not have the same length.
 	 */
 	public static double[] convolve_FD(final double[] signal1, final double[] fft2, double deltaT) {
 		double[] result = convolve_FD(signal1, fft2);
@@ -672,16 +669,12 @@ public class FFT {
 	 * not checking for pollution arising from the assumed periodicity of both
 	 * signals. In this version, the first signal is provided in the time domain,
 	 * while the second is already transformed into the frequency domain.
-	 * 
-	 * @param signal1
-	 *          the first input signal, in the time domain
-	 * @param fft2
-	 *          the complex transform of the second signal, in the frequency
+	 *
+	 * @param signal1          the first input signal, in the time domain
+	 * @param fft2          the complex transform of the second signal, in the frequency
 	 *          domain fft[0] = real[0], fft[1] = real[N/2], fft[2*i] = real[i],
 	 *          fft[2*i+1] = imag[i] for 1<=i<N/2
 	 * @return the convolved signal, of the same length as the two input signals
-	 * @throws IllegalArgumentException
-	 *           if the two input signals do not have the same length.
 	 */
 	public static double[] convolve_FD(final double[] signal1, final double[] fft2) {
 		if (signal1 == null || fft2 == null)
@@ -712,9 +705,9 @@ public class FFT {
 	 * domain. This method applies zero padding where necessary to ensure that the
 	 * result is not polluted because of assumed periodicity. The two signals need
 	 * not be of equal length.
-	 * 
-	 * @param signal1
-	 * @param signal2
+	 *
+	 * @param signal1 the signal1
+	 * @param signal2 the signal2
 	 * @return the correlation function, with length signal1.length+signal2.length
 	 */
 	public static double[] correlateWithZeroPadding(final double[] signal1, final double[] signal2) {
@@ -742,12 +735,10 @@ public class FFT {
 	 * This is the core method, requiring two signals of equal length, which must
 	 * be a power of two, and not checking for pollution arising from the assumed
 	 * periodicity of both signals.
-	 * 
-	 * @param signal1
-	 * @param signal2
+	 *
+	 * @param signal1 the signal1
+	 * @param signal2 the signal2
 	 * @return the correlated signal, of the same length as the two input signals
-	 * @throws IllegalArgumentException
-	 *           if the two input signals do not have the same length.
 	 */
 	public static double[] correlate(final double[] signal1, final double[] signal2) {
 		if (signal1 == null || signal2 == null)
@@ -781,8 +772,8 @@ public class FFT {
 	 * power spectrum. This is the core method, requiring a signal whose length
 	 * must be a power of two, and not checking for pollution arising from the
 	 * assumed periodicity of the signal.
-	 * 
-	 * @param signal
+	 *
+	 * @param signal the signal
 	 * @return the correlated signal, of the same length as the input signal
 	 */
 	public static double[] autoCorrelate(final double[] signal) {
@@ -811,8 +802,8 @@ public class FFT {
 	 * Compute the autocorrelation of a signal, by inverse transformation of its
 	 * power spectrum. This method applies zero padding where necessary to ensure
 	 * that the result is not polluted because of assumed periodicity.
-	 * 
-	 * @param signal
+	 *
+	 * @param signal the signal
 	 * @return the correlated signal, of the same length as the input signal
 	 */
 	public static double[] autoCorrelateWithZeroPadding(final double[] signal) {

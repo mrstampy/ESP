@@ -41,6 +41,7 @@ import com.github.mrstampy.esp.multiconnectionsocket.AbstractMultiConnectionSock
 import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEvent;
 import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Abstract template for a DSP implementation. When connected the EspDSP will
  * schedule a job to get the snapshot from the
@@ -58,37 +59,49 @@ import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener;
  * 
  * The logPowers are used for calculations. Should another type of processing be
  * required the {@link #process()} method can be overridden appropriately.
- * 
+ *
  * @author burton
- * 
- * @param <SOCKET>
+ * @param <SOCKET> the generic type
  */
 public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	private static final Logger log = LoggerFactory.getLogger(EspDSP.class);
 
+	/** The socket. */
 	protected SOCKET socket;
 
+	/** The connection event listener. */
 	protected ConnectionEventListener connectionEventListener;
+	
+	/** The frequencies. */
 	protected double[] frequencies;
 
+	/** The num samples per cycle. */
 	protected int numSamplesPerCycle;
+	
+	/** The num cycles per second. */
 	protected int numCyclesPerSecond = 5;
 
+	/** The scheduler. */
 	protected Scheduler scheduler = Schedulers.executor(Executors.newScheduledThreadPool(5));
+	
+	/** The subscription. */
 	protected Subscription subscription;
 
+	/** The listeners. */
 	protected List<RawProcessedListener> listeners = new ArrayList<RawProcessedListener>();
 
+	/** The sample rate. */
 	protected int sampleRate;
 
+	/** The queues. */
 	protected List<ArrayBlockingQueue<Double>> queues = new ArrayList<ArrayBlockingQueue<Double>>();
 
 	/**
-	 * Instantiate with the socket, sample rate and frequencies of interest
-	 * 
-	 * @param socket
-	 * @param sampleRate
-	 * @param frequencies
+	 * Instantiate with the socket, sample rate and frequencies of interest.
+	 *
+	 * @param socket the socket
+	 * @param sampleRate the sample rate
+	 * @param frequencies the frequencies
 	 */
 	protected EspDSP(SOCKET socket, int sampleRate, double... frequencies) {
 		assert socket != null;
@@ -105,28 +118,28 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	}
 
 	/**
-	 * Implement any takedown logic here
+	 * Implement any takedown logic here.
 	 */
 	protected abstract void destroyImpl();
 
 	/**
 	 * Return the aggregator for the raw signal.
-	 * 
-	 * @return
+	 *
+	 * @return the aggregator
 	 */
 	protected abstract RawSignalAggregator getAggregator();
 
 	/**
-	 * Return the utilities for the implementation
-	 * 
-	 * @return
+	 * Return the utilities for the implementation.
+	 *
+	 * @return the utilities
 	 */
 	protected abstract EspSignalUtilities getUtilities();
 
 	/**
-	 * Returns the snapshot of the current processed raw data
-	 * 
-	 * @return
+	 * Returns the snapshot of the current processed raw data.
+	 *
+	 * @return the snapshot
 	 */
 	public Map<Double, Double> getSnapshot() {
 		Map<Double, Double> map = new HashMap<Double, Double>();
@@ -146,18 +159,34 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 		return map;
 	}
 
+	/**
+	 * Adds the processed listener.
+	 *
+	 * @param l the l
+	 */
 	public void addProcessedListener(RawProcessedListener l) {
 		listeners.add(l);
 	}
 
+	/**
+	 * Removes the processed listener.
+	 *
+	 * @param l the l
+	 */
 	public void removeProcessedListener(RawProcessedListener l) {
 		listeners.remove(l);
 	}
 
+	/**
+	 * Clear processed listeners.
+	 */
 	public void clearProcessedListeners() {
 		listeners.clear();
 	}
 
+	/**
+	 * Destroy.
+	 */
 	public final void destroy() {
 		socket.removeConnectionEventListener(connectionEventListener);
 		destroyImpl();
@@ -192,8 +221,8 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 
 	/**
 	 * Applies the snapshot to the queue.
-	 * 
-	 * @param list
+	 *
+	 * @param list the list
 	 */
 	protected void processSamples(List<Map<Double, Double>> list) {
 		for (int i = 0; i < frequencies.length; i++) {
@@ -207,8 +236,8 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	}
 
 	/**
-	 * Notify listeners that the current sample has been processed
-	 * 
+	 * Notify listeners that the current sample has been processed.
+	 *
 	 * @see #process()
 	 */
 	protected void notifyListeners() {
@@ -218,11 +247,11 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	}
 
 	/**
-	 * Convenience method to return an array of powers for the specified frequency
-	 * 
-	 * @param frequency
-	 * @param list
-	 * @return
+	 * Convenience method to return an array of powers for the specified frequency.
+	 *
+	 * @param frequency the frequency
+	 * @param list the list
+	 * @return the powers
 	 */
 	protected double[] getPowers(Double frequency, List<Map<Double, Double>> list) {
 		double[] powers = new double[list.size()];
@@ -243,29 +272,52 @@ public abstract class EspDSP<SOCKET extends AbstractMultiConnectionSocket<?>> {
 	}
 
 	/**
-	 * Invoked when the {@link #numSamplesPerCycle} value changed;
+	 * Invoked when the {@link #numSamplesPerCycle} value changed;.
 	 */
 	protected void numSamplesPerCycleChanged() {
 		// override appropriately
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#finalize()
+	 */
 	public final void finalize() {
 		destroy();
 	}
 
+	/**
+	 * Gets the num samples per cycle.
+	 *
+	 * @return the num samples per cycle
+	 */
 	public int getNumSamplesPerCycle() {
 		return numSamplesPerCycle;
 	}
 
+	/**
+	 * Sets the num samples per cycle.
+	 *
+	 * @param numSamplesPerCycle the new num samples per cycle
+	 */
 	public void setNumSamplesPerCycle(int numSamplesPerCycle) {
 		this.numSamplesPerCycle = numSamplesPerCycle;
 		numSamplesPerCycleChanged();
 	}
 
+	/**
+	 * Gets the num cycles per second.
+	 *
+	 * @return the num cycles per second
+	 */
 	public int getNumCyclesPerSecond() {
 		return numCyclesPerSecond;
 	}
 
+	/**
+	 * Sets the num cycles per second.
+	 *
+	 * @param numCyclesPerSecond the new num cycles per second
+	 */
 	public void setNumCyclesPerSecond(int numCyclesPerSecond) {
 		this.numCyclesPerSecond = numCyclesPerSecond;
 		numCyclesChanged();

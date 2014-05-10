@@ -416,6 +416,9 @@ public class DefaultLab implements Lab {
 		return getPostFFTProcessor().getLowFrequency();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getLabValues()
+	 */
 	@Override
 	public LabValues getLabValues() {
 		DefaultLabValues values = new DefaultLabValues();
@@ -437,6 +440,9 @@ public class DefaultLab implements Lab {
 		return values;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setLabValues(com.github.mrstampy.esp.dsp.lab.LabValues)
+	 */
 	@Override
 	public void setLabValues(LabValues values) {
 		setAbsoluteValues(values.isAbsoluteValues());
@@ -454,44 +460,71 @@ public class DefaultLab implements Lab {
 		setHighPassFilterFactor(values.getHighPassFilterFactor());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.Lab#addSignalProcessedListener(com.github.mrstampy.esp.dsp.lab.SignalProcessedListener)
+	 */
 	@Override
 	public void addSignalProcessedListener(SignalProcessedListener l) {
 		if (l != null && !listeners.contains(l)) listeners.add(l);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.Lab#removeSignalProcessedListener(com.github.mrstampy.esp.dsp.lab.SignalProcessedListener)
+	 */
 	@Override
 	public void removeSignalProcessedListener(SignalProcessedListener l) {
 		if (l != null) listeners.remove(l);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.Lab#clearSignalProcessedListeners()
+	 */
 	@Override
 	public void clearSignalProcessedListeners() {
 		listeners.clear();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getBaseline()
+	 */
 	public double getBaseline() {
 		return baseline;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setBaseline(double)
+	 */
 	public void setBaseline(double baseline) {
 		this.baseline = baseline;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setLowPassFilterFactor(double)
+	 */
 	@Override
 	public void setLowPassFilterFactor(double factor) {
 		getPreFFTProcessor().setLowPassFilterFactor(factor);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getLowPassFilterFactor()
+	 */
 	@Override
 	public double getLowPassFilterFactor() {
 		return getPreFFTProcessor().getLowPassFilterFactor();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setHighPassFilterFactor(double)
+	 */
 	@Override
 	public void setHighPassFilterFactor(double factor) {
 		getPreFFTProcessor().setHighPassFilterFactor(factor);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getHighPassFilterFactor()
+	 */
 	@Override
 	public double getHighPassFilterFactor() {
 		return getPreFFTProcessor().getHighPassFilterFactor();

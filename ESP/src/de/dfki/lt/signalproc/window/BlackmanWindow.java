@@ -29,18 +29,36 @@
 
 package de.dfki.lt.signalproc.window;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class BlackmanWindow.
+ *
  * @author Marc Schr&ouml;der
  */
 public class BlackmanWindow extends Window {
+	
+	/**
+	 * Instantiates a new blackman window.
+	 *
+	 * @param length the length
+	 */
 	public BlackmanWindow(int length) {
 		super(length);
 	}
 
+	/**
+	 * Instantiates a new blackman window.
+	 *
+	 * @param length the length
+	 * @param prescalingFactor the prescaling factor
+	 */
 	public BlackmanWindow(int length, double prescalingFactor) {
 		super(length, prescalingFactor);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.dfki.lt.signalproc.window.Window#initialise()
+	 */
 	protected void initialise() {
 		boolean prescale = (prescalingFactor != 1.);
 		for (int i = 0; i < window.length; i++) {
@@ -51,6 +69,9 @@ public class BlackmanWindow extends Window {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return "Blackman window";
 	}

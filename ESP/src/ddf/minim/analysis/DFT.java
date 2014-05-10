@@ -19,6 +19,7 @@
 package ddf.minim.analysis;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * DFT stands for Discrete Fourier Transform and is the most widely used Fourier
  * Transform. You will never want to use this class due to the fact that it is a
@@ -53,6 +54,9 @@ public class DFT extends FourierTransform {
     buildTrigTables();
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.FourierTransform#allocateArrays()
+   */
   protected void allocateArrays() {
     spectrum = new double[timeSize / 2 + 1];
     real = new double[timeSize / 2 + 1];
@@ -61,16 +65,25 @@ public class DFT extends FourierTransform {
 
   /**
    * Not currently implemented.
+   *
+   * @param i the i
+   * @param s the s
    */
   public void scaleBand(int i, double s) {
   }
 
   /**
    * Not currently implemented.
+   *
+   * @param i the i
+   * @param a the a
    */
   public void setBand(int i, double a) {
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.FourierTransform#forward(double[])
+   */
   public void forward(double[] samples) {
     if (samples.length != timeSize) {
       throw new RuntimeException("DFT.forward: The length of the passed sample buffer must be equal to DFT.timeSize().");
@@ -88,6 +101,9 @@ public class DFT extends FourierTransform {
     fillSpectrum();
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.FourierTransform#inverse(double[])
+   */
   public void inverse(double[] buffer) {
     int N = buffer.length;
     real[0] /= N;

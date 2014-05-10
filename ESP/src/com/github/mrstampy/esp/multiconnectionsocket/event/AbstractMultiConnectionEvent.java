@@ -20,6 +20,12 @@ package com.github.mrstampy.esp.multiconnectionsocket.event;
 
 import java.io.Serializable;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AbstractMultiConnectionEvent.
+ *
+ * @param <E> the element type
+ */
 public abstract class AbstractMultiConnectionEvent<E extends Enum<E>> implements Serializable {
 	private static final long serialVersionUID = 8285549904986718450L;
 
@@ -29,10 +35,20 @@ public abstract class AbstractMultiConnectionEvent<E extends Enum<E>> implements
 
 	private final E eventType;
 
+	/**
+	 * Instantiates a new abstract multi connection event.
+	 *
+	 * @param type the type
+	 */
 	protected AbstractMultiConnectionEvent(E type) {
 		this.eventType = type;
 	}
 
+	/**
+	 * Gets the event type.
+	 *
+	 * @return the event type
+	 */
 	public E getEventType() {
 		return eventType;
 	}

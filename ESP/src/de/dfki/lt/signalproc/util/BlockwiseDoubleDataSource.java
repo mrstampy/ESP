@@ -29,15 +29,22 @@
 
 package de.dfki.lt.signalproc.util;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Marc Schr&ouml;der
+ * The Class BlockwiseDoubleDataSource.
  *
+ * @author Marc Schr&ouml;der
  */
 public class BlockwiseDoubleDataSource extends BufferedDoubleDataSource {
+    
+    /** The block size. */
     protected int blockSize;
     
     /**
-     * @param inputSource
+     * Instantiates a new blockwise double data source.
+     *
+     * @param inputSource the input source
+     * @param blockSize the block size
      */
     public BlockwiseDoubleDataSource(DoubleDataSource inputSource, int blockSize) {
         super(inputSource);
@@ -85,6 +92,7 @@ public class BlockwiseDoubleDataSource extends BufferedDoubleDataSource {
      * blocksize given in the constructor.
      * Subclasses may want to override this method.
      *
+     * @return the block size
      */
     protected int getBlockSize() { return blockSize; }
 
@@ -101,8 +109,9 @@ public class BlockwiseDoubleDataSource extends BufferedDoubleDataSource {
      * This implementation simply reads getBlockSize()
      * data from the inputSource given in the constructor.
      * Subclasses will want to override this method.
-     * @param target
-     * @param pos
+     *
+     * @param target the target
+     * @param pos the pos
      * @return number of values written into target from position pos
      */
     protected int readBlock(double[] target, int pos)

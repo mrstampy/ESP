@@ -22,6 +22,10 @@ import java.util.Arrays;
 
 import javolution.util.ReentrantLock;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MovingWindowBuffer.
+ */
 public class MovingWindowBuffer {
 
 	private volatile double[] buffer;
@@ -32,12 +36,22 @@ public class MovingWindowBuffer {
 	
 	private ReentrantLock lock = new ReentrantLock();
 
+	/**
+	 * Instantiates a new moving window buffer.
+	 *
+	 * @param capacity the capacity
+	 */
 	public MovingWindowBuffer(int capacity) {
 		this.capacity = capacity;
 		buffer = new double[capacity];
 		idx = 0;
 	}
 
+	/**
+	 * Adds the all.
+	 *
+	 * @param values the values
+	 */
 	public void addAll(double... values) {
 		if (idx > capacity - values.length) {
 			int offset = values.length - (capacity - idx);
@@ -50,6 +64,11 @@ public class MovingWindowBuffer {
 		idx += values.length;
 	}
 
+	/**
+	 * Snapshot.
+	 *
+	 * @return the double[]
+	 */
 	public double[] snapshot() {
 		double[] snap = new double[capacity];
 		System.arraycopy(buffer, 0, snap, 0, capacity);
@@ -57,6 +76,11 @@ public class MovingWindowBuffer {
 		return snap;
 	}
 
+	/**
+	 * Resize.
+	 *
+	 * @param newSize the new size
+	 */
 	public void resize(int newSize) {
 		if(newSize == capacity) return;
 		
@@ -78,6 +102,9 @@ public class MovingWindowBuffer {
 		idx = Math.min(idx, newSize - 1);
 	}
 	
+	/**
+	 * Clear.
+	 */
 	public void clear() {
 		Arrays.fill(buffer, 0);
 	}

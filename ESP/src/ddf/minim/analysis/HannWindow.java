@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Hann window function.
  * 
@@ -31,6 +32,9 @@ public class HannWindow extends WindowFunction {
   public HannWindow() {
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     return 0.5f * (1f - (double) Math.cos(TWO_PI * index / (length - 1f)));
   }

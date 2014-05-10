@@ -29,19 +29,33 @@
 
 package de.dfki.lt.signalproc.util;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Marc Schr&ouml;der
+ * The Class BaseDoubleDataSource.
  *
+ * @author Marc Schr&ouml;der
  */
 public class BaseDoubleDataSource implements DoubleDataSource
 {
+    
+    /** The input source. */
     protected DoubleDataSource inputSource = null;
+    
+    /** The data length. */
     protected long dataLength = DoubleDataSource.NOT_SPECIFIED;
     
+    /**
+     * Instantiates a new base double data source.
+     */
     public BaseDoubleDataSource()
     {
     }
     
+    /**
+     * Instantiates a new base double data source.
+     *
+     * @param inputSource the input source
+     */
     public BaseDoubleDataSource(DoubleDataSource inputSource) {
         this.inputSource = inputSource;
         if (inputSource != null)
@@ -85,12 +99,12 @@ public class BaseDoubleDataSource implements DoubleDataSource
     /**
      * Try to get length doubles from this DoubleDataSource, and copy them into target, starting from targetPos.
      * This is the core method getting the data. Subclasses may want to override this method.
+     *
      * @param target the double array to write into
      * @param targetPos position in target where to start writing
      * @param length the amount of data requested
      * @return the amount of data actually delivered. If the returned value is less than length,
      * only that many data items have been copied into target; further calls will return 0 and not copy anything.
-     * @throws IllegalArgumentException if there is not enough space in target after targetPos to hold length values.
      */
     public int getData(double[] target, int targetPos, int length)
     {
@@ -126,7 +140,7 @@ public class BaseDoubleDataSource implements DoubleDataSource
     /**
      * Get all the data that can be read from this data source, in a single
      * double array.
-     * @throws OutOfMemoryError if a sufficiently large double array cannot be created.
+     *
      * @return a double array of exactly the length required to contain all the data
      * that can be read from this source. Returns an array of length 0 if no data can be
      * read from this source.

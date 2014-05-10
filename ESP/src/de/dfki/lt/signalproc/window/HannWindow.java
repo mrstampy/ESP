@@ -29,18 +29,36 @@
 
 package de.dfki.lt.signalproc.window;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class HannWindow.
+ *
  * @author Marc Schr&ouml;der
  */
 public class HannWindow extends Window {
+	
+	/**
+	 * Instantiates a new hann window.
+	 *
+	 * @param length the length
+	 */
 	public HannWindow(int length) {
 		super(length);
 	}
 
+	/**
+	 * Instantiates a new hann window.
+	 *
+	 * @param length the length
+	 * @param prescalingFactor the prescaling factor
+	 */
 	public HannWindow(int length, double prescalingFactor) {
 		super(length, prescalingFactor);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.dfki.lt.signalproc.window.Window#initialise()
+	 */
 	protected void initialise() {
 		boolean prescale = (prescalingFactor != 1.);
 		for (int i = 0; i < window.length; i++) {
@@ -50,6 +68,9 @@ public class HannWindow extends Window {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return "Hann window";
 	}

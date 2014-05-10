@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Window function represents a curve which is applied to a sample buffer to
  * reduce the introduction of spectral leakage in the Fourier transform.
@@ -56,8 +57,13 @@ package ddf.minim.analysis;
 public abstract class WindowFunction {
   /** The double value of 2*PI. Provided as a convenience for subclasses. */
   protected static final double TWO_PI = (double) (2 * Math.PI);
+  
+  /** The length. */
   protected int length;
 
+  /**
+   * Instantiates a new window function.
+   */
   public WindowFunction() {
   }
 
@@ -78,6 +84,10 @@ public abstract class WindowFunction {
   /**
    * Apply the window to a portion of this sample buffer, given an offset from
    * the beginning of the buffer and the number of samples to be windowed.
+   *
+   * @param samples the samples
+   * @param offset the offset
+   * @param length the length
    */
   public void apply(double[] samples, int offset, int length) {
     this.length = length;
@@ -102,5 +112,12 @@ public abstract class WindowFunction {
     return samples;
   }
 
+  /**
+   * Value.
+   *
+   * @param length the length
+   * @param index the index
+   * @return the double
+   */
   protected abstract double value(int length, int index);
 }

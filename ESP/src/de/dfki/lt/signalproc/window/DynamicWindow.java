@@ -28,20 +28,33 @@
  */
 package de.dfki.lt.signalproc.window;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class DynamicWindow.
+ *
  * @author Marc Schr&ouml;der
  */
 public class DynamicWindow implements InlineDataProcessor {
+	
+	/** The window type. */
 	protected int windowType;
 
 	/**
 	 * An inline data processor applying a window of the requested type to the
 	 * data. The window length will always be equal to the data length.
+	 *
+	 * @param windowType the window type
 	 */
 	public DynamicWindow(int windowType) {
 		this.windowType = windowType;
 	}
 
+	/**
+	 * Values.
+	 *
+	 * @param len the len
+	 * @return the double[]
+	 */
 	public double[] values(int len) {
 		Window w = Window.get(windowType, len);
 		return w.window;
@@ -49,6 +62,10 @@ public class DynamicWindow implements InlineDataProcessor {
 
 	/**
 	 * apply a window of the specified type, with length len, to the data.
+	 *
+	 * @param data the data
+	 * @param off the off
+	 * @param len the len
 	 */
 	public void applyInline(double[] data, int off, int len) {
 		Window w = Window.get(windowType, len);

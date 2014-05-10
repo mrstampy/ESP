@@ -20,6 +20,7 @@ package com.github.mrstampy.esp.dsp.lab;
 
 import ddf.minim.analysis.WindowFunction;
 
+// TODO: Auto-generated Javadoc
 /**
  * Enums representing the various {@link WindowFunction}s.
  * 
@@ -27,5 +28,25 @@ import ddf.minim.analysis.WindowFunction;
  *
  */
 public enum EspWindowFunction {
-	BARTLETT, BARTLETT_HANN, BLACKMAN, COSINE, GAUSS, HAMMING, HANN, LANCZOS, RECTANGULAR, TRIANGULAR;
+	
+	/** The bartlett. */
+	BARTLETT, 
+ /** The bartlett hann. */
+ BARTLETT_HANN, 
+ /** The blackman. */
+ BLACKMAN, 
+ /** The cosine. */
+ COSINE, 
+ /** The gauss. */
+ GAUSS, 
+ /** The hamming. */
+ HAMMING, 
+ /** The hann. */
+ HANN, 
+ /** The lanczos. */
+ LANCZOS, 
+ /** The rectangular. */
+ RECTANGULAR, 
+ /** The triangular. */
+ TRIANGULAR;
 }

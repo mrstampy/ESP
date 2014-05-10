@@ -168,15 +168,28 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 		this.normalizeSignal = normalize;
 	}
 
+	/**
+	 * Gets the low pass filter factor.
+	 *
+	 * @return the low pass filter factor
+	 */
 	public double getLowPassFilterFactor() {
 		return lowPassFilterFactor;
 	}
 
+	/**
+	 * Sets the low pass filter factor.
+	 *
+	 * @param passFilterFactor the new low pass filter factor
+	 */
 	public void setLowPassFilterFactor(double passFilterFactor) {
 		this.lowPassFilterFactor = passFilterFactor;
 		calculateFactor();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.AbstractFFTProcessor#utilitiesSet()
+	 */
 	protected void utilitiesSet() {
 		calculateFactor();
 	}
@@ -190,10 +203,20 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 		calculatedHighFactor = bd.divide(new BigDecimal(getHighPassFilterFactor()), 10, RoundingMode.HALF_UP);
 	}
 
+	/**
+	 * Gets the high pass filter factor.
+	 *
+	 * @return the high pass filter factor
+	 */
 	public double getHighPassFilterFactor() {
 		return highPassFilterFactor;
 	}
 
+	/**
+	 * Sets the high pass filter factor.
+	 *
+	 * @param highPassFilterFactor the new high pass filter factor
+	 */
 	public void setHighPassFilterFactor(double highPassFilterFactor) {
 		this.highPassFilterFactor = highPassFilterFactor;
 	}

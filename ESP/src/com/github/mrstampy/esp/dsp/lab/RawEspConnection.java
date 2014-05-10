@@ -22,6 +22,7 @@ import com.github.mrstampy.esp.dsp.AbstractDSPValues;
 import com.github.mrstampy.esp.dsp.EspSignalUtilities;
 import com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket;
 
+// TODO: Auto-generated Javadoc
 /**
  * Interface defining the encapsulation of a {@link MultiConnectionSocket} and
  * associated ESP objects for raw signal processing.
@@ -32,54 +33,54 @@ import com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket;
 public interface RawEspConnection extends MultiConnectionSocket {
 
 	/**
-	 * Return the utilities
-	 * 
-	 * @return
+	 * Return the utilities.
+	 *
+	 * @return the utilities
 	 */
 	EspSignalUtilities getUtilities();
 
 	/**
-	 * Return the window function
-	 * 
-	 * @return
+	 * Return the window function.
+	 *
+	 * @return the window function
 	 * @see EspSignalUtilities#setWindow(ddf.minim.analysis.WindowFunction)
 	 */
 	EspWindowFunction getWindowFunction();
 
 	/**
-	 * Set the window function
-	 * 
-	 * @param function
+	 * Set the window function.
+	 *
+	 * @param function the new window function
 	 * @see EspSignalUtilities#setWindow(ddf.minim.analysis.WindowFunction)
 	 */
 	void setWindowFunction(EspWindowFunction function);
 
 	/**
-	 * Return the DSP values
-	 * 
-	 * @return
+	 * Return the DSP values.
+	 *
+	 * @return the DSP values
 	 */
 	AbstractDSPValues getDSPValues();
 
 	/**
-	 * Return the current second's worth of samples
-	 * 
-	 * @return
+	 * Return the current second's worth of samples.
+	 *
+	 * @return the current
 	 */
 	double[][] getCurrent();
 
 	/**
-	 * Return the specified number of the current second's worth of samples
-	 * 
-	 * @param numSamples
-	 * @return
+	 * Return the specified number of the current second's worth of samples.
+	 *
+	 * @param numSamples the num samples
+	 * @return the current
 	 */
 	double[][] getCurrent(int numSamples);
 
 	/**
-	 * Return a name identifier
-	 * 
-	 * @return
+	 * Return a name identifier.
+	 *
+	 * @return the name
 	 */
 	String getName();
 }

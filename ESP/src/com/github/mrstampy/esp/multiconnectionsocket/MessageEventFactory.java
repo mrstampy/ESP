@@ -20,8 +20,17 @@ package com.github.mrstampy.esp.multiconnectionsocket;
 
 import com.lmax.disruptor.EventFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * A factory for creating MessageEvent objects.
+ *
+ * @param <MESSAGE> the generic type
+ */
 public class MessageEventFactory<MESSAGE> implements EventFactory<MessageEvent<MESSAGE>> {
 
+	/* (non-Javadoc)
+	 * @see com.lmax.disruptor.EventFactory#newInstance()
+	 */
 	@Override
 	public MessageEvent<MESSAGE> newInstance() {
 		return new MessageEvent<MESSAGE>();

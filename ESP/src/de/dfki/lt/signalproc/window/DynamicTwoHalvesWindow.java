@@ -18,14 +18,31 @@
  */
 package de.dfki.lt.signalproc.window;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DynamicTwoHalvesWindow.
+ */
 public class DynamicTwoHalvesWindow extends DynamicWindow {
+	
+	/** The prescale. */
 	protected double prescale;
 
+	/**
+	 * Instantiates a new dynamic two halves window.
+	 *
+	 * @param windowType the window type
+	 */
 	public DynamicTwoHalvesWindow(int windowType) {
 		super(windowType);
 		prescale = 1.;
 	}
 
+	/**
+	 * Instantiates a new dynamic two halves window.
+	 *
+	 * @param windowType the window type
+	 * @param prescale the prescale
+	 */
 	public DynamicTwoHalvesWindow(int windowType, double prescale) {
 		super(windowType);
 		this.prescale = prescale;
@@ -34,6 +51,10 @@ public class DynamicTwoHalvesWindow extends DynamicWindow {
 	/**
 	 * apply the left half of a window of the specified type to the data. The left
 	 * half will be as long as the given len.
+	 *
+	 * @param data the data
+	 * @param off the off
+	 * @param len the len
 	 */
 	public void applyInlineLeftHalf(double[] data, int off, int len) {
 		Window w = Window.get(windowType, 2 * len, prescale);
@@ -43,6 +64,10 @@ public class DynamicTwoHalvesWindow extends DynamicWindow {
 	/**
 	 * apply the right half of a window of the specified type to the data. The
 	 * right half will be as long as the given len.
+	 *
+	 * @param data the data
+	 * @param off the off
+	 * @param len the len
 	 */
 	public void applyInlineRightHalf(double[] data, int off, int len) {
 		Window w = Window.get(windowType, 2 * len, prescale);

@@ -29,18 +29,36 @@
 
 package de.dfki.lt.signalproc.window;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class BartlettWindow.
+ *
  * @author Marc Schr&ouml;der
  */
 public class BartlettWindow extends Window {
+	
+	/**
+	 * Instantiates a new bartlett window.
+	 *
+	 * @param length the length
+	 */
 	public BartlettWindow(int length) {
 		super(length);
 	}
 
+	/**
+	 * Instantiates a new bartlett window.
+	 *
+	 * @param length the length
+	 * @param prescalingFactor the prescaling factor
+	 */
 	public BartlettWindow(int length, double prescalingFactor) {
 		super(length, prescalingFactor);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.dfki.lt.signalproc.window.Window#initialise()
+	 */
 	protected void initialise() {
 		int halfN = window.length / 2;
 		window[halfN] = prescalingFactor;
@@ -51,6 +69,9 @@ public class BartlettWindow extends Window {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return "Bartlett window";
 	}

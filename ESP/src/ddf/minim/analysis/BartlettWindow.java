@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Bartlett window function.
  * 
@@ -32,6 +33,9 @@ public class BartlettWindow extends WindowFunction {
   public BartlettWindow() {
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     return 2f / (length - 1) * ((length - 1) / 2f - Math.abs(index - (length - 1) / 2f));
   }

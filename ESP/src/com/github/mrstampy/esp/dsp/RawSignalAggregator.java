@@ -25,6 +25,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import rx.Observable;
 import rx.functions.Action1;
 
+// TODO: Auto-generated Javadoc
 /**
  * Abstract superclass for aggregating raw signal arrays (ultimately for FFT'ing).
  * 
@@ -33,15 +34,26 @@ import rx.functions.Action1;
  */
 public abstract class RawSignalAggregator {
 
+	/** The queue. */
 	protected ArrayBlockingQueue<double[]> queue;
 
 	private final int sampleRate;
 
+	/**
+	 * Instantiates a new raw signal aggregator.
+	 *
+	 * @param sampleRate the sample rate
+	 */
 	protected RawSignalAggregator(int sampleRate) {
 		queue = new ArrayBlockingQueue<double[]>(sampleRate);
 		this.sampleRate = sampleRate;
 	}
 
+	/**
+	 * Adds the sample.
+	 *
+	 * @param sample the sample
+	 */
 	public void addSample(double... sample) {
 		Observable.just(sample).subscribe(new Action1<double[]>() {
 
@@ -54,6 +66,9 @@ public abstract class RawSignalAggregator {
 		});
 	}
 
+	/**
+	 * Clear.
+	 */
 	public void clear() {
 		queue.clear();
 	}
@@ -61,8 +76,8 @@ public abstract class RawSignalAggregator {
 	/**
 	 * Returns a snapshot of ~ sampleRate samples, each of length fftSize
 	 * representing the current seconds' raw signal sampled.
-	 * 
-	 * @return
+	 *
+	 * @return the current second of sampled data
 	 * @see EspSignalUtilities
 	 */
 	public double[][] getCurrentSecondOfSampledData() {
@@ -73,11 +88,10 @@ public abstract class RawSignalAggregator {
 	 * Returns the requested number of samples from the current one seconds' worth
 	 * of samples (~ {@link #sampleRate}), evenly spaced over the size of the
 	 * samples.
-	 * 
-	 * @param numSamples
-	 *          a fraction of the {@link #sampleRate} current seconds' samples, >
+	 *
+	 * @param numSamples          a fraction of the {@link #sampleRate} current seconds' samples, >
 	 *          0 && < {@link #sampleRate} ie. 50, 25, 10
-	 * @return
+	 * @return the current second of sampled data
 	 * @see EspSignalUtilities
 	 */
 	public double[][] getCurrentSecondOfSampledData(int numSamples) {

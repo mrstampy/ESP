@@ -29,14 +29,23 @@
 
 package de.dfki.lt.signalproc.window;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Marc Schr&ouml;der
+ * The Interface CopyingDataProcessor.
  *
+ * @author Marc Schr&ouml;der
  */
 public interface CopyingDataProcessor
 {
+    
     /**
      * Perform some processing on the input data while copying it to the output location.
+     *
+     * @param src the src
+     * @param srcOff the src off
+     * @param dest the dest
+     * @param destOff the dest off
+     * @param len the len
      */
     public void apply(final double[] src, int srcOff, double[] dest, int destOff, int len);
 }

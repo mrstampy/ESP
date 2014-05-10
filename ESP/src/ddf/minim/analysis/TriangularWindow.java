@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Triangular window function.
  * 
@@ -32,6 +33,9 @@ public class TriangularWindow extends WindowFunction {
   public TriangularWindow() {
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     return 2f / length * (length / 2f - Math.abs(index - (length - 1) / 2f));
   }

@@ -31,22 +31,43 @@ package de.dfki.lt.signalproc.window;
 
 import java.util.Arrays;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class RectWindow.
+ *
  * @author Marc Schr&ouml;der
  */
 public class RectWindow extends Window {
+	
+	/**
+	 * Instantiates a new rect window.
+	 *
+	 * @param length the length
+	 */
 	public RectWindow(int length) {
 		super(length);
 	}
 
+	/**
+	 * Instantiates a new rect window.
+	 *
+	 * @param length the length
+	 * @param prescalingFactor the prescaling factor
+	 */
 	public RectWindow(int length, double prescalingFactor) {
 		super(length, prescalingFactor);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.dfki.lt.signalproc.window.Window#initialise()
+	 */
 	protected void initialise() {
 		Arrays.fill(window, prescalingFactor);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return "Rect window";
 	}

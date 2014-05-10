@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Lanczos window function.
  * 
@@ -32,6 +33,9 @@ public class LanczosWindow extends WindowFunction {
   public LanczosWindow() {
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     double x = 2 * index / (double) (length - 1) - 1;
     return (double) (Math.sin(Math.PI * x) / (Math.PI * x));

@@ -86,6 +86,9 @@ public abstract class AbstractFFTProcessor implements DoubleArrayProcessor {
 		utilitiesSet();
 	}
 	
+	/**
+	 * Utilities set.
+	 */
 	protected void utilitiesSet() {
 		
 	}

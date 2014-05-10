@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Cosine window function.
  * 
@@ -31,6 +32,9 @@ public class CosineWindow extends WindowFunction {
   public CosineWindow() {
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     return (double) (Math.cos(Math.PI * index / (length - 1) - Math.PI / 2));
   }

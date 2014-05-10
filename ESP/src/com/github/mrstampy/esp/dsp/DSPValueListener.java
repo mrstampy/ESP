@@ -18,6 +18,7 @@
  */
 package com.github.mrstampy.esp.dsp;
 
+// TODO: Auto-generated Javadoc
 /**
  * Interface to receive notifications of changes to {@link AbstractDSPValues}.
  * 
@@ -26,7 +27,13 @@ package com.github.mrstampy.esp.dsp;
  */
 public interface DSPValueListener {
 
+	/**
+	 * Sample rate changed.
+	 */
 	void sampleRateChanged();
 
+	/**
+	 * Sample size changed.
+	 */
 	void sampleSizeChanged();
 }

@@ -29,17 +29,21 @@
 
 package de.dfki.lt.signalproc.window;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Marc Schr&ouml;der
+ * The Interface InlineDataProcessor.
  *
+ * @author Marc Schr&ouml;der
  */
 public interface InlineDataProcessor
 {
+    
     /**
      * Perform some in-place processing on the given data.
-     * @param data
-     * @param off
-     * @param len
+     *
+     * @param data the data
+     * @param off the off
+     * @param len the len
      */
     public void applyInline(double[] data, int off, int len);
 }

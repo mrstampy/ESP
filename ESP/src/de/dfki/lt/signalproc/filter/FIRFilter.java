@@ -37,14 +37,23 @@ import de.dfki.lt.signalproc.util.DoubleDataSource;
 import de.dfki.lt.signalproc.util.MathUtils;
 import de.dfki.lt.signalproc.util.SequenceDoubleDataSource;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class FIRFilter.
+ *
  * @author Marc Schr&ouml;der A filter corresponding to a
  *         finite-impulse-response LTI system. The filtering of the input signal
  *         corresponds to a convolution with the impulse response of the system.
  */
 public class FIRFilter {
+	
+	/** The transformed ir. */
 	protected double[] transformedIR;
+	
+	/** The impulse response length. */
 	protected int impulseResponseLength;
+	
+	/** The slice length. */
 	protected int sliceLength;
 
 	/**
@@ -67,22 +76,21 @@ public class FIRFilter {
 		initialise(impulseResponse, sliceLen);
 	}
 
+	/**
+	 * Instantiates a new FIR filter.
+	 *
+	 * @param impulseResponse the impulse response
+	 * @param len the len
+	 */
 	public FIRFilter(double[] impulseResponse, int len) {
 		initialise(impulseResponse, len);
 	}
 
 	/**
 	 * Initialise the Finite Impulse Response filter.
-	 * 
-	 * @param impulseResponse
-	 *          the impulse response signal
-	 * @param sliceLength
-	 *          the length of the slices in which to process the input data.
-	 *          IMPORTANT: impulseResponse.length+sliceLength must be a power of
-	 *          two (256, 512, etc.)
-	 * @throws IllegalArgumentException
-	 *           if the slice length is shorter than the impulse response length,
-	 *           or it the sum of both lengths is not a power of two.
+	 *
+	 * @param impulseResponse          the impulse response signal
+	 * @param sliceLen the slice len
 	 */
 	protected void initialise(double[] impulseResponse, int sliceLen) {
 		if (!MathUtils.isPowerOfTwo(impulseResponse.length + sliceLen))
@@ -122,9 +130,19 @@ public class FIRFilter {
 		return new FIROutput(new BufferedDoubleDataSource(signal)).getAllData();
 	}
 
+	/**
+	 * The Class FIROutput.
+	 */
 	public class FIROutput extends BlockwiseDoubleDataSource {
+		
+		/** The frame provider. */
 		protected FrameProvider frameProvider;
 
+		/**
+		 * Instantiates a new FIR output.
+		 *
+		 * @param inputSource the input source
+		 */
 		public FIROutput(DoubleDataSource inputSource) {
 			super(null, sliceLength);
 			int frameLength = sliceLength + impulseResponseLength;
@@ -135,6 +153,9 @@ public class FIRFilter {
 			this.frameProvider = new FrameProvider(paddedSource, null, frameLength, sliceLength, 1, false);
 		}
 
+		/* (non-Javadoc)
+		 * @see de.dfki.lt.signalproc.util.BufferedDoubleDataSource#hasMoreData()
+		 */
 		public boolean hasMoreData() {
 			return frameProvider.hasMoreData();
 		}
@@ -142,16 +163,12 @@ public class FIRFilter {
 		/**
 		 * Try to get a block of getBlockSize() doubles from this DoubleDataSource,
 		 * and copy them into target, starting from targetPos.
-		 * 
-		 * @param target
-		 *          the double array to write into
-		 * @param targetPos
-		 *          position in target where to start writing
+		 *
+		 * @param target          the double array to write into
+		 * @param targetPos          position in target where to start writing
 		 * @return the amount of data actually delivered, which will be either
 		 *         length or 0. If 0 is returned, all further calls will also return
 		 *         0 and not copy anything.
-		 * @throws IllegalArgumentException
-		 *           if length!=getBlockSize();
 		 */
 		protected int readBlock(double[] target, int targetPos) {
 			double[] frame = frameProvider.getNextFrame();
@@ -174,6 +191,13 @@ public class FIRFilter {
 		}
 	}
 
+	/**
+	 * Apply inline.
+	 *
+	 * @param data the data
+	 * @param off the off
+	 * @param len the len
+	 */
 	public void applyInline(double[] data, int off, int len) {
 		double[] dataOut = apply(data);
 

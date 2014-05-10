@@ -20,10 +20,27 @@ package com.github.mrstampy.esp.multiconnectionsocket.subscription;
 
 import java.io.Serializable;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface MultiConnectionSubscriptionRequest.
+ *
+ * @param <E> the element type
+ */
 public interface MultiConnectionSubscriptionRequest<E extends Enum<E>> extends Serializable {
 
+	/**
+	 * Gets the event types.
+	 *
+	 * @return the event types
+	 */
 	E[] getEventTypes();
 
+	/**
+	 * Contains event type.
+	 *
+	 * @param eventType the event type
+	 * @return true, if successful
+	 */
 	boolean containsEventType(E eventType);
 
 }

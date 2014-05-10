@@ -24,9 +24,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class StringUtils.
+ */
 public class StringUtils {
 
 	// Removes blanks in the beginning and at the end of a string
+	/**
+	 * Deblank.
+	 *
+	 * @param str the str
+	 * @return the string
+	 */
 	public static String deblank(String str) {
 		StringTokenizer s = new StringTokenizer(str, " ", false);
 		String strRet = "";
@@ -38,21 +48,48 @@ public class StringUtils {
 	}
 
 	// Converts a String to a float
+	/**
+	 * String2 float.
+	 *
+	 * @param str the str
+	 * @return the float
+	 */
 	public static float String2Float(String str) {
 		return Float.valueOf(str).floatValue();
 	}
 
 	// Converts a String to a double
+	/**
+	 * String2 double.
+	 *
+	 * @param str the str
+	 * @return the double
+	 */
 	public static double String2Double(String str) {
 		return Double.valueOf(str).doubleValue();
 	}
 
 	// Converts a String to an int
+	/**
+	 * String2 int.
+	 *
+	 * @param str the str
+	 * @return the int
+	 */
 	public static int String2Int(String str) {
 		return Integer.valueOf(str).intValue();
 	}
 
 	// Find indices of multiple occurrences of a character in a String
+	/**
+	 * Find.
+	 *
+	 * @param str the str
+	 * @param ch the ch
+	 * @param stInd the st ind
+	 * @param enInd the en ind
+	 * @return the int[]
+	 */
 	public static int[] find(String str, char ch, int stInd, int enInd) {
 		int[] indices = null;
 		int i;
@@ -84,15 +121,36 @@ public class StringUtils {
 		return indices;
 	}
 
+	/**
+	 * Find.
+	 *
+	 * @param str the str
+	 * @param ch the ch
+	 * @param stInd the st ind
+	 * @return the int[]
+	 */
 	public static int[] find(String str, char ch, int stInd) {
 		return find(str, ch, stInd, str.length() - 1);
 	}
 
+	/**
+	 * Find.
+	 *
+	 * @param str the str
+	 * @param ch the ch
+	 * @return the int[]
+	 */
 	public static int[] find(String str, char ch) {
 		return find(str, ch, 0, str.length() - 1);
 	}
 
 	// Check last folder separator character and append it if it does not exist
+	/**
+	 * Check last slash.
+	 *
+	 * @param strIn the str in
+	 * @return the string
+	 */
 	public static String checkLastSlash(String strIn) {
 		String strOut = strIn;
 
@@ -106,6 +164,12 @@ public class StringUtils {
 
 	// Check first file extension separator character and add it if it does not
 	// exist
+	/**
+	 * Check first dot.
+	 *
+	 * @param strIn the str in
+	 * @return the string
+	 */
 	public static String checkFirstDot(String strIn) {
 		String strOut = strIn;
 
@@ -120,18 +184,52 @@ public class StringUtils {
 	}
 
 	// Default start index is 1
+	/**
+	 * Indexed name generator.
+	 *
+	 * @param preName the pre name
+	 * @param numFiles the num files
+	 * @return the string[]
+	 */
 	public static String[] indexedNameGenerator(String preName, int numFiles) {
 		return indexedNameGenerator(preName, numFiles, 1);
 	}
 
+	/**
+	 * Indexed name generator.
+	 *
+	 * @param preName the pre name
+	 * @param numFiles the num files
+	 * @param startIndex the start index
+	 * @return the string[]
+	 */
 	public static String[] indexedNameGenerator(String preName, int numFiles, int startIndex) {
 		return indexedNameGenerator(preName, numFiles, startIndex, "");
 	}
 
+	/**
+	 * Indexed name generator.
+	 *
+	 * @param preName the pre name
+	 * @param numFiles the num files
+	 * @param startIndex the start index
+	 * @param postName the post name
+	 * @return the string[]
+	 */
 	public static String[] indexedNameGenerator(String preName, int numFiles, int startIndex, String postName) {
 		return indexedNameGenerator(preName, numFiles, startIndex, postName, ".tmp");
 	}
 
+	/**
+	 * Indexed name generator.
+	 *
+	 * @param preName the pre name
+	 * @param numFiles the num files
+	 * @param startIndex the start index
+	 * @param postName the post name
+	 * @param extension the extension
+	 * @return the string[]
+	 */
 	public static String[] indexedNameGenerator(String preName, int numFiles, int startIndex, String postName,
 			String extension) {
 		int numDigits = 0;
@@ -151,6 +249,17 @@ public class StringUtils {
 	// index
 	// The minimum value of startIndex is 0 (negative values are converted to
 	// zero)
+	/**
+	 * Indexed name generator.
+	 *
+	 * @param preName the pre name
+	 * @param numFiles the num files
+	 * @param startIndex the start index
+	 * @param postName the post name
+	 * @param extension the extension
+	 * @param numDigits the num digits
+	 * @return the string[]
+	 */
 	public static String[] indexedNameGenerator(String preName, int numFiles, int startIndex, String postName,
 			String extension, int numDigits) {
 		String[] fileList = null;
@@ -182,6 +291,13 @@ public class StringUtils {
 		return fileList;
 	}
 
+	/**
+	 * Modify extension.
+	 *
+	 * @param strFilename the str filename
+	 * @param desiredExtension the desired extension
+	 * @return the string
+	 */
 	public static String modifyExtension(String strFilename, String desiredExtension) {
 		String strNewname = strFilename;
 		String desiredExtension2 = checkFirstDot(desiredExtension);
@@ -195,10 +311,27 @@ public class StringUtils {
 	// This version assumes that there can only be insertions and deletions but no
 	// substitutions
 	// (i.e. text based alignment with possible differences in pauses only)
+	/**
+	 * Align labels.
+	 *
+	 * @param seq1 the seq1
+	 * @param seq2 the seq2
+	 * @return the int[][]
+	 */
 	public static int[][] alignLabels(ESTLabel[] seq1, ESTLabel[] seq2) {
 		return alignLabels(seq1, seq2, 0.05, 0.05, 0.05);
 	}
 
+	/**
+	 * Align labels.
+	 *
+	 * @param labs1 the labs1
+	 * @param labs2 the labs2
+	 * @param PDeletion the p deletion
+	 * @param PInsertion the p insertion
+	 * @param PSubstitution the p substitution
+	 * @return the int[][]
+	 */
 	public static int[][] alignLabels(ESTLabel[] labs1, ESTLabel[] labs2, double PDeletion, double PInsertion,
 			double PSubstitution) {
 		double PCorrect = 1.0 - (PDeletion + PInsertion + PSubstitution);
@@ -333,6 +466,13 @@ public class StringUtils {
 		return labelMap;
 	}
 
+	/**
+	 * Find in map.
+	 *
+	 * @param map the map
+	 * @param ind1 the ind1
+	 * @return the int
+	 */
 	public static int findInMap(int[][] map, int ind1) {
 		for (int i = 0; i < map.length; i++) {
 			if (map[i][0] == ind1)
@@ -342,6 +482,12 @@ public class StringUtils {
 		return -1;
 	}
 
+	/**
+	 * Checks if is numeric.
+	 *
+	 * @param str the str
+	 * @return true, if is numeric
+	 */
 	public static boolean isNumeric(String str) {
 		for (int i = 0; i < str.length(); i++) {
 			char ch = str.charAt(i);
@@ -354,6 +500,13 @@ public class StringUtils {
 
 	// Retrieves filename from fullpathname
 	// Also works for removing file extension from a filename with extension
+	/**
+	 * Gets the file name.
+	 *
+	 * @param fullpathFilename the fullpath filename
+	 * @param bRemoveExtension the b remove extension
+	 * @return the file name
+	 */
 	public static String getFileName(String fullpathFilename, boolean bRemoveExtension) {
 		String filename = "";
 
@@ -374,10 +527,22 @@ public class StringUtils {
 		return filename;
 	}
 
+	/**
+	 * Gets the file name.
+	 *
+	 * @param fullpathFilename the fullpath filename
+	 * @return the file name
+	 */
 	public static String getFileName(String fullpathFilename) {
 		return getFileName(fullpathFilename, true);
 	}
 
+	/**
+	 * Gets the folder name.
+	 *
+	 * @param fullpathFilename the fullpath filename
+	 * @return the folder name
+	 */
 	public static String getFolderName(String fullpathFilename) {
 		String foldername = "";
 
@@ -392,6 +557,15 @@ public class StringUtils {
 		return foldername;
 	}
 
+	/**
+	 * Parses the from lines.
+	 *
+	 * @param lines the lines
+	 * @param minimumItemsInOneLine the minimum items in one line
+	 * @param startLine the start line
+	 * @param endLine the end line
+	 * @return the string[][]
+	 */
 	public static String[][] parseFromLines(String[] lines, int minimumItemsInOneLine, int startLine, int endLine) {
 		String[][] labels = null;
 		String[][] labelsRet = null;
@@ -462,6 +636,12 @@ public class StringUtils {
 		return labelsRet;
 	}
 
+	/**
+	 * Gets the different items list.
+	 *
+	 * @param items the items
+	 * @return the different items list
+	 */
 	public static int[] getDifferentItemsList(int[] items) {
 		int[] differentItems = null;
 		int[] indices = getDifferentItemsIndices(items);
@@ -475,6 +655,12 @@ public class StringUtils {
 		return differentItems;
 	}
 
+	/**
+	 * Gets the different items indices.
+	 *
+	 * @param items the items
+	 * @return the different items indices
+	 */
 	public static int[] getDifferentItemsIndices(int[] items) {
 		String[] strItems = new String[items.length];
 
@@ -484,6 +670,12 @@ public class StringUtils {
 		return getDifferentItemsIndices(strItems);
 	}
 
+	/**
+	 * Gets the different items list.
+	 *
+	 * @param items the items
+	 * @return the different items list
+	 */
 	public static String[] getDifferentItemsList(String[] items) {
 		String[] differentItems = null;
 		int[] indices = getDifferentItemsIndices(items);
@@ -497,6 +689,12 @@ public class StringUtils {
 		return differentItems;
 	}
 
+	/**
+	 * Gets the different items indices.
+	 *
+	 * @param items the items
+	 * @return the different items indices
+	 */
 	public static int[] getDifferentItemsIndices(String[] items) {
 		int[] differentItemIndices = null;
 
@@ -531,10 +729,25 @@ public class StringUtils {
 		return differentItemIndices;
 	}
 
+	/**
+	 * Checks if is desired.
+	 *
+	 * @param currentFeature the current feature
+	 * @param desiredFeatures the desired features
+	 * @return true, if is desired
+	 */
 	public static boolean isDesired(int currentFeature, int desiredFeatures) {
 		return isDesired(currentFeature, desiredFeatures, 0);
 	}
 
+	/**
+	 * Checks if is desired.
+	 *
+	 * @param currentFeature the current feature
+	 * @param desiredFeatures the desired features
+	 * @param maxFeatureStringLen the max feature string len
+	 * @return true, if is desired
+	 */
 	public static boolean isDesired(int currentFeature, int desiredFeatures, int maxFeatureStringLen) {
 		boolean bRet;
 
@@ -561,6 +774,12 @@ public class StringUtils {
 		return bRet;
 	}
 
+	/**
+	 * Write text file.
+	 *
+	 * @param textInRows the text in rows
+	 * @param textFile the text file
+	 */
 	public static void writeTextFile(String[] textInRows, String textFile) {
 		PrintWriter out = null;
 		try {

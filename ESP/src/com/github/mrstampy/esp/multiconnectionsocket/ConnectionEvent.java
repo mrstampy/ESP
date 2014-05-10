@@ -20,6 +20,7 @@ package com.github.mrstampy.esp.multiconnectionsocket;
 
 import java.util.EventObject;
 
+// TODO: Auto-generated Javadoc
 /**
  * Event object created when the connected state of the
  * {@link AbstractMultiConnectionSocket} changes.
@@ -31,18 +32,44 @@ import java.util.EventObject;
 public class ConnectionEvent extends EventObject {
 	private static final long serialVersionUID = 4998624451690389607L;
 
+	/**
+	 * The Enum State.
+	 */
 	public enum State {
-		STARTED, STOPPED, BOUND, UNBOUND, ERROR_STOPPED, ERROR_UNBOUND;
+		
+		/** The started. */
+		STARTED, 
+ /** The stopped. */
+ STOPPED, 
+ /** The bound. */
+ BOUND, 
+ /** The unbound. */
+ UNBOUND, 
+ /** The error stopped. */
+ ERROR_STOPPED, 
+ /** The error unbound. */
+ ERROR_UNBOUND;
 	}
 
 	private final State state;
 
+	/**
+	 * Instantiates a new connection event.
+	 *
+	 * @param source the source
+	 * @param state the state
+	 */
 	public ConnectionEvent(Object source, State state) {
 		super(source);
 
 		this.state = state;
 	}
 
+	/**
+	 * Gets the state.
+	 *
+	 * @return the state
+	 */
 	public State getState() {
 		return state;
 	}

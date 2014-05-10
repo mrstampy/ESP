@@ -29,11 +29,15 @@
 
 package de.dfki.lt.signalproc.util;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Marc Schr&ouml;der
+ * The Interface DoubleDataSource.
  *
+ * @author Marc Schr&ouml;der
  */
 public interface DoubleDataSource {
+    
+    /** The not specified. */
     public int NOT_SPECIFIED = -1;
     /**
      * Request to get the specified amount of data in a new double array.
@@ -77,7 +81,7 @@ public interface DoubleDataSource {
     /**
      * Get all the data that can be read from this data source, in a single
      * double array.
-     * @throws OutOfMemoryError if a sufficiently large double array cannot be created.
+     *
      * @return a double array of exactly the length required to contain all the data
      * that can be read from this source.  Returns an array of length 0 if no data can be
      * read from this source.

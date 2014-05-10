@@ -20,6 +20,7 @@ package com.github.mrstampy.esp.multiconnectionsocket;
 
 import java.io.Serializable;
 
+// TODO: Auto-generated Javadoc
 /**
  * Convenience class to identify connected subscribers.
  * 
@@ -34,19 +35,38 @@ public class HostPort implements Serializable {
 	private final String host;
 	private final int port;
 
+	/**
+	 * Instantiates a new host port.
+	 *
+	 * @param host the host
+	 * @param port the port
+	 */
 	public HostPort(String host, int port) {
 		this.host = host;
 		this.port = port;
 	}
 
+	/**
+	 * Gets the host.
+	 *
+	 * @return the host
+	 */
 	public String getHost() {
 		return host;
 	}
 
+	/**
+	 * Gets the port.
+	 *
+	 * @return the port
+	 */
 	public int getPort() {
 		return port;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	public boolean equals(Object o) {
 		if (!(o instanceof HostPort)) return false;
 
@@ -55,10 +75,16 @@ public class HostPort implements Serializable {
 		return that.port == port && that.host.equals(host);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	public int hashCode() {
 		return host.hashCode() + (17 * port);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return host + ":" + port;
 	}

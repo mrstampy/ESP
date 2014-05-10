@@ -41,6 +41,7 @@ import rx.functions.Action1;
 import com.github.mrstampy.esp.multiconnectionsocket.event.AbstractMultiConnectionEvent;
 import com.github.mrstampy.esp.multiconnectionsocket.subscription.MultiConnectionSubscriptionRequest;
 
+// TODO: Auto-generated Javadoc
 /**
  * Abstract {@link IoHandler} implementation to receive subscriptions and
  * publish {@link AbstractMultiConnectionEvent}s on a socket.
@@ -68,6 +69,11 @@ public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS
 	private WriteLock writeLock = requestsLock.writeLock();
 	private ReadLock readLock = requestsLock.readLock();
 
+	/**
+	 * Instantiates a new abstract subscription handler adapter.
+	 *
+	 * @param socket the socket
+	 */
 	protected AbstractSubscriptionHandlerAdapter(AMCS socket) {
 		setSocket(socket);
 	}
@@ -75,12 +81,18 @@ public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS
 	/**
 	 * Implement to deal with subscription requests & any other message types the
 	 * subclass must deal with.
-	 * 
+	 *
+	 * @param session the session
+	 * @param message the message
+	 * @throws Exception the exception
 	 * @see AbstractSubscriptionHandlerAdapter#subscribe(IoSession,
 	 *      MultiConnectionSubscriptionRequest)
 	 */
 	public abstract void messageReceived(IoSession session, Object message) throws Exception;
 
+	/* (non-Javadoc)
+	 * @see org.apache.mina.core.service.IoHandlerAdapter#sessionClosed(org.apache.mina.core.session.IoSession)
+	 */
 	public void sessionClosed(IoSession session) throws Exception {
 		HostPort hostPort = createHostPort(session);
 
@@ -101,8 +113,8 @@ public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS
 	/**
 	 * Sends the specified {@link AbstractMultiConnectionEvent} to all interested
 	 * subscribers.
-	 * 
-	 * @param event
+	 *
+	 * @param event the event
 	 * @see AbstractMultiConnectionSocket
 	 * @see AbstractSocketConnector
 	 */
@@ -128,6 +140,12 @@ public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS
 		});
 	}
 
+	/**
+	 * Subscribe.
+	 *
+	 * @param session the session
+	 * @param message the message
+	 */
 	protected void subscribe(IoSession session, MCSR message) {
 		HostPort hostPort = createHostPort(session);
 
@@ -163,14 +181,30 @@ public abstract class AbstractSubscriptionHandlerAdapter<E extends Enum<E>, AMCS
 		session.write(event);
 	}
 
+	/**
+	 * Gets the socket.
+	 *
+	 * @return the socket
+	 */
 	public AMCS getSocket() {
 		return socket;
 	}
 
+	/**
+	 * Sets the socket.
+	 *
+	 * @param socket the new socket
+	 */
 	protected void setSocket(AMCS socket) {
 		this.socket = socket;
 	}
 
+	/**
+	 * Creates the host port.
+	 *
+	 * @param session the session
+	 * @return the host port
+	 */
 	protected HostPort createHostPort(IoSession session) {
 		InetSocketAddress remote = (InetSocketAddress) session.getRemoteAddress();
 

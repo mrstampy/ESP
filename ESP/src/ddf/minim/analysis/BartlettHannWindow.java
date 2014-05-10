@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Bartlett-Hann window function.
  * 
@@ -32,6 +33,9 @@ public class BartlettHannWindow extends WindowFunction {
   public BartlettHannWindow() {
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     return (double) (0.62 - 0.48 * Math.abs(index / (length - 1) - 0.5) - 0.38 * Math
         .cos(TWO_PI * index / (length - 1)));

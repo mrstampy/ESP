@@ -31,18 +31,36 @@ package de.dfki.lt.signalproc.window;
 
 import java.util.Arrays;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class Window.
+ *
  * @author Marc Schr&ouml;der Interface for windowing functions.
  */
 public abstract class Window implements CopyingDataProcessor, InlineDataProcessor {
+	
+	/** The Constant RECT. */
 	public static final int RECT = 0;
+	
+	/** The Constant HAMMING. */
 	public static final int HAMMING = 1;
+	
+	/** The Constant BLACKMAN. */
 	public static final int BLACKMAN = 2;
+	
+	/** The Constant HANN. */
 	public static final int HANN = 3;
+	
+	/** The Constant GAUSS. */
 	public static final int GAUSS = 4;
+	
+	/** The Constant BARTLETT. */
 	public static final int BARTLETT = 5;
 
+	/** The prescaling factor. */
 	protected double prescalingFactor;
+	
+	/** The even length. */
 	protected boolean evenLength;
 
 	/**
@@ -98,16 +116,11 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 	 * This method returns the resulting data in a new array of the same length as
 	 * this window (@see getLength()). If src has less than getLength() data
 	 * points left at pos, zeros are added at the end.
-	 * 
-	 * @param src
-	 *          the source data array to apply the windowing function to.
-	 * @param pos
-	 *          the position from which to apply the windowing function
+	 *
+	 * @param src          the source data array to apply the windowing function to.
+	 * @param pos          the position from which to apply the windowing function
 	 * @return an array of the same length as this window, computed by applying
 	 *         this window to the source data.
-	 * @throws IllegalArgumentException
-	 *           if targetLength is smaller than this window's length as returned
-	 *           by #getLength().
 	 */
 	public double[] apply(final double[] src, int pos) {
 		double target[] = new double[window.length];
@@ -117,17 +130,13 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 
 	/**
 	 * Apply the window function in-line, i.e. by modifying the original data.
-	 * 
-	 * @param data
-	 * @param pos
-	 *          the position in the data array where to start applying the window
+	 *
+	 * @param data the data
+	 * @param pos          the position in the data array where to start applying the window
 	 *          function.
-	 * @param len
-	 *          the amount of data after position pos to process. len must be less
+	 * @param len          the amount of data after position pos to process. len must be less
 	 *          than or equal to getLength(). If it is less than getLength(), a
 	 *          truncated window will be applied.
-	 * @throws IllegalArgumentException
-	 *           if len != getLength().
 	 */
 	public void applyInline(double[] data, int pos, int len) {
 		apply(data, pos, data, pos, len);
@@ -138,20 +147,15 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 	 * This method returns the resulting data in the given target array, at the
 	 * target position given by targetPos. If src has less than getLength() data
 	 * points left at pos, zeros are added at the end.
-	 * 
-	 * @param src
-	 *          the source data array to apply the windowing function to.
-	 * @param srcPos
-	 *          the position in the source array from which to apply the windowing
+	 *
+	 * @param src          the source data array to apply the windowing function to.
+	 * @param srcPos          the position in the source array from which to apply the windowing
 	 *          function
-	 * @param target
-	 *          an array to receive the target data, computed by applying this
+	 * @param target          an array to receive the target data, computed by applying this
 	 *          window to the source data. The target array must be long enough to
 	 *          receive getLength() bytes after targetPos. if target == source and
 	 *          targetPos == srcPos, then the window function is applied in-place.
-	 * @throws IllegalArgumentException
-	 *           if target.length-targetPos is smaller than this window's length
-	 *           as returned by #getLength().
+	 * @param targetPos the target pos
 	 */
 	public void apply(final double[] src, int srcPos, double[] target, int targetPos) {
 		apply(src, srcPos, target, targetPos, 0, window.length);
@@ -162,27 +166,21 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 	 * This method returns the resulting data in the given target array, at the
 	 * target position given by targetPos. If src has less than getLength() data
 	 * points left at pos, zeros are added at the end.
-	 * 
-	 * @param src
-	 *          the source data array to apply the windowing function to.
-	 * @param srcPos
-	 *          the position in the source array from which to apply the windowing
+	 *
+	 * @param src          the source data array to apply the windowing function to.
+	 * @param srcPos          the position in the source array from which to apply the windowing
 	 *          function. If srcPos is negative, abs(srcPos) zeroes will be
 	 *          pre-pended before the first data from src is taken into account;
 	 *          if it is greater than src.length-getLength(), the result will be
 	 *          filled up with trailing zeroes behind the last data.
-	 * @param target
-	 *          an array to receive the target data, computed by applying this
+	 * @param target          an array to receive the target data, computed by applying this
 	 *          window to the source data. The target array must be long enough to
 	 *          receive getLength() bytes after targetPos. if target == source and
 	 *          targetPos == srcPos, then the window function is applied in-place.
-	 * @param len
-	 *          the number of samples of the window to apply; this must be less
+	 * @param targetPos the target pos
+	 * @param len          the number of samples of the window to apply; this must be less
 	 *          than or equal getLength(). If it is less than getLength(), a
 	 *          truncated window will be applied.
-	 * @throws IllegalArgumentException
-	 *           if target.length-targetPos is smaller than this window's length
-	 *           as returned by #getLength(), or if len >= getLength.
 	 */
 	public void apply(final double[] src, int srcPos, double[] target, int targetPos, int len) {
 		apply(src, srcPos, target, targetPos, 0, len);
@@ -195,29 +193,22 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 	 * method returns the resulting data in the given target array, at the target
 	 * position given by targetPos. If src has less than len data points left at
 	 * srcPos, zeros are added at the end.
-	 * 
-	 * @param src
-	 *          the source data array to apply the windowing function to.
-	 * @param srcPos
-	 *          the position in the source array from which to apply the windowing
+	 *
+	 * @param src          the source data array to apply the windowing function to.
+	 * @param srcPos          the position in the source array from which to apply the windowing
 	 *          function. If srcPos is negative, abs(srcPos) zeroes will be
 	 *          pre-pended before the first data from src is taken into account;
 	 *          if it is greater than src.length-getLength(), the result will be
 	 *          filled up with trailing zeroes behind the last data.
-	 * @param target
-	 *          an array to receive the target data, computed by applying this
+	 * @param target          an array to receive the target data, computed by applying this
 	 *          window to the source data. The target array must be long enough to
 	 *          receive getLength() bytes after targetPos. if target == source and
 	 *          targetPos == srcPos, then the window function is applied in-place.
-	 * @param off
-	 *          the offset from the start of the window from where on the window
+	 * @param targetPos the target pos
+	 * @param off          the offset from the start of the window from where on the window
 	 *          is to be applied.
-	 * @param len
-	 *          the number of samples of the window to apply; off+len must be less
+	 * @param len          the number of samples of the window to apply; off+len must be less
 	 *          than or equal getLength().
-	 * @throws IllegalArgumentException
-	 *           if target.length-targetPos is smaller than this window's length
-	 *           as returned by #getLength(), or if len >= getLength.
 	 */
 	public void apply(final double[] src, int srcPos, double[] target, int targetPos, int off, int len) {
 		if (len < 0 || off < 0 || off + len > window.length)
@@ -252,9 +243,8 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 
 	/**
 	 * Return the length of this window, in samples.
-	 * 
-	 * @throws NullPointerException
-	 *           if the window has not yet been initialised.
+	 *
+	 * @return the length
 	 */
 	public int getLength() {
 		if (window == null) {
@@ -264,15 +254,10 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 	}
 
 	/**
-	 * Get the value of the window function at index position i
-	 * 
-	 * @param i
-	 *          the index position in the window for which to return the value
+	 * Get the value of the window function at index position i.
+	 *
+	 * @param i          the index position in the window for which to return the value
 	 * @return the value of the window function, between 0 and 1.
-	 * @throws IllegalArgumentException
-	 *           if i<0 or i>getLength().
-	 * @throws NullPointerException
-	 *           if the window has not yet been initialised.
 	 */
 	public double value(int i) {
 		if (window == null) {
@@ -287,8 +272,8 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 	/**
 	 * Return this window's type, as defined by the constants in Window, or -1 if
 	 * the window is not of a known type.
-	 * 
-	 * @return
+	 *
+	 * @return the int
 	 */
 	public int type() {
 		if (this instanceof RectWindow)
@@ -309,15 +294,10 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 
 	/**
 	 * Convenience method for requesting a window of the requested type.
-	 * 
-	 * @param windowType
-	 *          one of the constants defined in Window.
-	 * @param length
-	 *          window length (should be an odd number)
+	 *
+	 * @param windowType          one of the constants defined in Window.
+	 * @param length          window length (should be an odd number)
 	 * @return a window of the requested type and length
-	 * @throws IllegalArgumentException
-	 *           if windowType is not a valid window type, or if length is an even
-	 *           number
 	 */
 	public static Window get(int windowType, int length) {
 		return get(windowType, length, 1.);
@@ -325,17 +305,11 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 
 	/**
 	 * Convenience method for requesting a window of the requested type.
-	 * 
-	 * @param windowType
-	 *          one of the constants defined in Window.
-	 * @param length
-	 *          window length (should be an odd number)
-	 * @param prescale
-	 *          a prescaling factor applied to all points in the window
+	 *
+	 * @param windowType          one of the constants defined in Window.
+	 * @param length          window length (should be an odd number)
+	 * @param prescale          a prescaling factor applied to all points in the window
 	 * @return a window of the requested type and length
-	 * @throws IllegalArgumentException
-	 *           if windowType is not a valid window type, or if length is an even
-	 *           number
 	 */
 	public static Window get(int windowType, int length, double prescale) {
 		switch (windowType) {
@@ -357,8 +331,8 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 	}
 
 	/**
-	 * List all available window types
-	 * 
+	 * List all available window types.
+	 *
 	 * @return an integer corresponding to the constants defined in Window.
 	 */
 	public static int[] getAvailableTypes() {
@@ -394,12 +368,9 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 
 	/**
 	 * Get the type name of a window type.
-	 * 
-	 * @param windowType
-	 *          a valid window type
+	 *
+	 * @param windowType          a valid window type
 	 * @return a string representing the type name
-	 * @throws IllegalArgumentException
-	 *           if windowType is not a valid window type
 	 */
 	public static String getTypeName(int windowType) {
 		Window w = get(windowType, 1);
@@ -407,11 +378,19 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 	}
 
 	// Normalize window coefficients to sum up to unity
+	/**
+	 * Normalize.
+	 */
 	public void normalize() {
 		normalize(1.0f);
 	}
 
 	// Normalize window coefficients to sum up to val
+	/**
+	 * Normalize.
+	 *
+	 * @param val the val
+	 */
 	public void normalize(float val) {
 		float total = 0.0f;
 		int i;
@@ -424,6 +403,11 @@ public abstract class Window implements CopyingDataProcessor, InlineDataProcesso
 			window[i] *= scale;
 	}
 
+	/**
+	 * Gets the coeffs.
+	 *
+	 * @return the coeffs
+	 */
 	public double[] getCoeffs() {
 		return window;
 	}

@@ -64,22 +64,35 @@ public interface Lab extends LabValues {
 
 	/**
 	 * Returns a serializable {@link LabValues} object for lab values persistence.
-	 * 
-	 * @return
+	 *
+	 * @return the lab values
 	 */
 	LabValues getLabValues();
 
 	/**
-	 * Initialization of a lab with values
-	 * 
-	 * @param values
+	 * Initialization of a lab with values.
+	 *
+	 * @param values the new lab values
 	 */
 	void setLabValues(LabValues values);
 	
+	/**
+	 * Adds the signal processed listener.
+	 *
+	 * @param l the l
+	 */
 	void addSignalProcessedListener(SignalProcessedListener l);
 	
+	/**
+	 * Removes the signal processed listener.
+	 *
+	 * @param l the l
+	 */
 	void removeSignalProcessedListener(SignalProcessedListener l);
 	
+	/**
+	 * Clear signal processed listeners.
+	 */
 	void clearSignalProcessedListeners();
 
 }

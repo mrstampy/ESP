@@ -39,6 +39,7 @@ import rx.functions.Action1;
 import com.github.mrstampy.esp.multiconnectionsocket.event.AbstractMultiConnectionEvent;
 import com.github.mrstampy.esp.multiconnectionsocket.subscription.MultiConnectionSubscriptionRequest;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class connects to the {@link AbstractMultiConnectionSocket} and receives
  * {@link AbstractMultiConnectionEvent} updates. Many instances of this class
@@ -46,8 +47,9 @@ import com.github.mrstampy.esp.multiconnectionsocket.subscription.MultiConnectio
  * {@link AbstractMultiConnectionSocket}, allowing separately running programs
  * to deal with Neurosky output simultaneously. <br>
  * <br>
- * 
+ *
  * @author burton
+ * @param <E> the element type
  */
 public abstract class AbstractSocketConnector<E extends Enum<E>> {
 	private static final Logger log = LoggerFactory.getLogger(AbstractSocketConnector.class);
@@ -59,6 +61,7 @@ public abstract class AbstractSocketConnector<E extends Enum<E>> {
 	 */
 	public static final String SOCKET_BROADCASTER_KEY = "socket.broadcaster.port";
 
+	/** The broadcaster port. */
 	public static int BROADCASTER_PORT;
 	static {
 		try {
@@ -69,14 +72,15 @@ public abstract class AbstractSocketConnector<E extends Enum<E>> {
 		}
 	}
 
+	/** The connector. */
 	protected NioSocketConnector connector;
 	private String socketBroadcasterHost;
 
 	/**
 	 * Instantiate with the name of the host that the
 	 * {@link AbstractMultiConnectionSocket} is running on.
-	 * 
-	 * @param socketBroadcasterHost
+	 *
+	 * @param socketBroadcasterHost the socket broadcaster host
 	 */
 	public AbstractSocketConnector(String socketBroadcasterHost) {
 		this.socketBroadcasterHost = socketBroadcasterHost;
@@ -144,8 +148,9 @@ public abstract class AbstractSocketConnector<E extends Enum<E>> {
 	/**
 	 * Subscribes to the specified event types, all registered listeners will
 	 * receive updates for these event types. Returns true if successful.
-	 * 
-	 * @param types
+	 *
+	 * @param request the request
+	 * @return true, if successful
 	 */
 	protected boolean subscribe(MultiConnectionSubscriptionRequest<?> request) {
 		if (!isConnected()) {
@@ -163,6 +168,8 @@ public abstract class AbstractSocketConnector<E extends Enum<E>> {
 	/**
 	 * Subscribes to all {@link EventType}s, barring
 	 * {@link EventType#signalProcessed}.
+	 *
+	 * @return true, if successful
 	 */
 	public abstract boolean subscribeAll();
 
@@ -192,6 +199,11 @@ public abstract class AbstractSocketConnector<E extends Enum<E>> {
 		});
 	}
 
+	/**
+	 * Process event.
+	 *
+	 * @param message the message
+	 */
 	protected abstract void processEvent(AbstractMultiConnectionEvent<E> message);
 
 }

@@ -29,35 +29,79 @@
 
 package de.dfki.lt.signalproc.util;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author oytun.turk
+ * The Class ESTLabel.
  *
- * A class to keep all information on a single EST format label
+ * @author oytun.turk
  * 
+ * A class to keep all information on a single EST format label
  */
 public class ESTLabel {
+    
+    /** The time. */
     public double time; //Ending time of phonetic label
+    
+    /** The status. */
     public int status; //Status
+    
+    /** The phn. */
     public String phn; //Phoneme
+    
+    /** The ll. */
     public double ll; //log likelihood
+    
+    /** The rest. */
     public String[] rest; //If the label contains more fields, get them as text
+    
+    /** The values rest. */
     public double[] valuesRest; //If some of the <rest> are numbers, convert them to doubles and keep
     
+    /**
+     * Instantiates a new EST label.
+     *
+     * @param newTime the new time
+     * @param newStatus the new status
+     * @param newPhn the new phn
+     * @param newll the newll
+     */
     public ESTLabel(double newTime, int newStatus, String newPhn, double newll)
     {
         this(newTime, newStatus, newPhn, newll, null, null);
     }
     
+    /**
+     * Instantiates a new EST label.
+     */
     public ESTLabel()
     {
         this(-1.0, 0, "", Double.NEGATIVE_INFINITY, null, null);
     }
     
+    /**
+     * Instantiates a new EST label.
+     *
+     * @param newTime the new time
+     * @param newStatus the new status
+     * @param newPhn the new phn
+     * @param newll the newll
+     * @param restIn the rest in
+     */
     public ESTLabel(double newTime, int newStatus, String newPhn, double newll, String[] restIn)
     {
         this(newTime, newStatus, newPhn, newll, restIn, null);
     }
     
+    /**
+     * Instantiates a new EST label.
+     *
+     * @param newTime the new time
+     * @param newStatus the new status
+     * @param newPhn the new phn
+     * @param newll the newll
+     * @param restIn the rest in
+     * @param valuesRestIn the values rest in
+     */
     public ESTLabel(double newTime, int newStatus, String newPhn, double newll, String[] restIn, double[] valuesRestIn)
     {
         time = newTime;
@@ -84,11 +128,21 @@ public class ESTLabel {
             valuesRest = null;
     }
     
+    /**
+     * Instantiates a new EST label.
+     *
+     * @param lab the lab
+     */
     public ESTLabel(ESTLabel lab)
     {
         copyFrom(lab);
     }
     
+    /**
+     * Copy from.
+     *
+     * @param lab the lab
+     */
     public void copyFrom(ESTLabel lab)
     {
         time = lab.time;
@@ -115,6 +169,9 @@ public class ESTLabel {
     }
     
     //Display label entries
+    /**
+     * Prints the.
+     */
     public void print()
     {
         System.out.println("Time=" + String.valueOf(time) + " s. " + 

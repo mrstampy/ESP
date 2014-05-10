@@ -24,10 +24,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AbstractDSPValues.
+ */
 public abstract class AbstractDSPValues {
 
+	/** The Constant ONE_THOUSAND. */
 	public static final int ONE_THOUSAND = 1000;
+	
+	/** The Constant ONE_MILLION. */
 	public static final int ONE_MILLION = 1000000;
+	
+	/** The Constant ONE_BILLION. */
 	public static final int ONE_BILLION = 1000000000;
 
 	private int sampleRate;
@@ -38,26 +47,49 @@ public abstract class AbstractDSPValues {
 	private List<DSPValueListener> listeners = new ArrayList<DSPValueListener>();
 
 	/**
-	 * Call this constructor from subclasses
+	 * Call this constructor from subclasses.
 	 */
 	protected AbstractDSPValues() {
 		initialize();
 	}
 
+	/**
+	 * Initialize.
+	 */
 	protected abstract void initialize();
 
+	/**
+	 * Adds the dsp value listener.
+	 *
+	 * @param l the l
+	 */
 	public void addDSPValueListener(DSPValueListener l) {
 		if (l != null && !listeners.contains(l)) listeners.add(l);
 	}
 
+	/**
+	 * Removes the dsp value listener.
+	 *
+	 * @param l the l
+	 */
 	public void removeDSPValueListener(DSPValueListener l) {
 		listeners.remove(l);
 	}
 
+	/**
+	 * Gets the sample rate.
+	 *
+	 * @return the sample rate
+	 */
 	public int getSampleRate() {
 		return sampleRate;
 	}
 
+	/**
+	 * Sets the sample rate.
+	 *
+	 * @param sampleRate the new sample rate
+	 */
 	public void setSampleRate(int sampleRate) {
 		if (sampleRate <= 0) {
 			throw new IllegalArgumentException("Sample rate must be greater than zero: " + sampleRate);
@@ -74,6 +106,11 @@ public abstract class AbstractDSPValues {
 		}
 	}
 
+	/**
+	 * Gets the sample rate units.
+	 *
+	 * @return the sample rate units
+	 */
 	public TimeUnit getSampleRateUnits() {
 		return sampleRateUnits;
 	}
@@ -92,10 +129,20 @@ public abstract class AbstractDSPValues {
 		this.sampleRateUnits = sampleRateUnits;
 	}
 
+	/**
+	 * Gets the sample size.
+	 *
+	 * @return the sample size
+	 */
 	public int getSampleSize() {
 		return sampleSize;
 	}
 
+	/**
+	 * Sets the sample size.
+	 *
+	 * @param sampleSize the new sample size
+	 */
 	public void setSampleSize(int sampleSize) {
 		if ((sampleSize & (sampleSize - 1)) != 0) {
 			throw new IllegalArgumentException("Sample size must be a power of two: " + sampleSize);
@@ -111,6 +158,11 @@ public abstract class AbstractDSPValues {
 		}
 	}
 
+	/**
+	 * Gets the sample rate sleep time.
+	 *
+	 * @return the sample rate sleep time
+	 */
 	public long getSampleRateSleepTime() {
 		TimeUnit tu = getSampleRateUnits();
 

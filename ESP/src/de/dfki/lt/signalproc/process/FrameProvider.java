@@ -33,6 +33,7 @@ import java.util.Arrays;
 
 import de.dfki.lt.signalproc.util.DoubleDataSource;
 
+// TODO: Auto-generated Javadoc
 /**
  * Cut frames out of a given signal, and provide them one by one, optionally
  * applying a processor to the frame. This base implementation provides frames
@@ -42,7 +43,11 @@ import de.dfki.lt.signalproc.util.DoubleDataSource;
  * @see PitchFrameProvider
  */
 public class FrameProvider {
+	
+	/** The signal. */
 	protected DoubleDataSource signal;
+	
+	/** The processor. */
 	protected InlineDataProcessor processor;
 
 	/**
@@ -54,12 +59,23 @@ public class FrameProvider {
 	 * The start time of the currently analysed frame.
 	 */
 	protected long frameStart;
+	
+	/** The next frame start. */
 	protected long nextFrameStart;
+	
+	/** The total read. */
 	protected int totalRead = 0;
+	
+	/** The frame. */
 	protected double[] frame;
+	
+	/** The valid samples in frame. */
 	protected int validSamplesInFrame;
 
+	/** The frame shift. */
 	protected int frameShift;
+	
+	/** The frame length. */
 	protected int frameLength;
 	/**
 	 * The part of the original signal to remember for the next overlapping frame.
@@ -120,8 +136,8 @@ public class FrameProvider {
 	}
 
 	/**
-	 * Start position of current frame, in seconds
-	 * 
+	 * Start position of current frame, in seconds.
+	 *
 	 * @return the start time of the last frame returned by getNextFrame(), or a
 	 *         small negative number if no frame has been served yet.
 	 */
@@ -130,8 +146,8 @@ public class FrameProvider {
 	}
 
 	/**
-	 * Start position of current frame, in samples
-	 * 
+	 * Start position of current frame, in samples.
+	 *
 	 * @return the start position of the last frame returned by getNextFrame(), or
 	 *         -1 if no frame has been served yet.
 	 */
@@ -139,12 +155,19 @@ public class FrameProvider {
 		return frameStart;
 	}
 
+	/**
+	 * Gets the sampling rate.
+	 *
+	 * @return the sampling rate
+	 */
 	public int getSamplingRate() {
 		return samplingRate;
 	}
 
 	/**
 	 * The amount of time by which one frame is shifted against the next.
+	 *
+	 * @return the frame shift time
 	 */
 	public double getFrameShiftTime() {
 		return (double) frameShift / samplingRate;
@@ -152,6 +175,8 @@ public class FrameProvider {
 
 	/**
 	 * The number of samples by which one frame is shifted against the next.
+	 *
+	 * @return the frame shift samples
 	 */
 	public int getFrameShiftSamples() {
 		return frameShift;
@@ -159,6 +184,8 @@ public class FrameProvider {
 
 	/**
 	 * The time length of a frame.
+	 *
+	 * @return the frame length time
 	 */
 	public double getFrameLengthTime() {
 		return (double) getFrameLengthSamples() / samplingRate;
@@ -166,8 +193,8 @@ public class FrameProvider {
 
 	/**
 	 * The number of samples in the current frame.
-	 * 
-	 * @return
+	 *
+	 * @return the frame length samples
 	 */
 	public int getFrameLengthSamples() {
 		return frameLength;
@@ -178,6 +205,8 @@ public class FrameProvider {
 	 * last input sample. When this returns true, the last frame will be the first
 	 * one including the last sample; when this returns false, the last frame will
 	 * be the last that still contains any data. Defaults to true.
+	 *
+	 * @return true, if successful
 	 */
 	public boolean stopWhenTouchingEnd() {
 		return stopWhenTouchingEnd;
@@ -185,6 +214,8 @@ public class FrameProvider {
 
 	/**
 	 * Whether or not this frameprovider can provide another frame.
+	 *
+	 * @return true, if successful
 	 */
 	public boolean hasMoreData() {
 		return signal.hasMoreData() || !stopWhenTouchingEnd && memoryFilled && posInMemory < memory.length;
@@ -193,6 +224,8 @@ public class FrameProvider {
 	/**
 	 * This tells how many valid samples have been read into the current frame
 	 * (before applying the optional data processor!).
+	 *
+	 * @return the int
 	 */
 	public int validSamplesInFrame() {
 		return validSamplesInFrame;
@@ -270,6 +303,11 @@ public class FrameProvider {
 		return frame;
 	}
 
+	/**
+	 * Gets the current frame.
+	 *
+	 * @return the current frame
+	 */
 	public double[] getCurrentFrame() {
 		return frame;
 	}

@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Hamming window function.
  * 
@@ -33,6 +34,9 @@ public class HammingWindow extends WindowFunction {
   public HammingWindow() {
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     return 0.54f - 0.46f * (double) Math.cos(TWO_PI * index / (length - 1));
   }

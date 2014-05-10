@@ -33,17 +33,21 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Create one DoubleDataSource from a sequence of DoubleDataSources.
  * @author Marc Schr&ouml;der
  */
 public class SequenceDoubleDataSource extends BaseDoubleDataSource
 {
+    
+    /** The sources. */
     protected LinkedList sources;
 
     /**
-     * 
-     * @param inputSource
+     * Instantiates a new sequence double data source.
+     *
+     * @param inputSources the input sources
      */
     public SequenceDoubleDataSource(DoubleDataSource[] inputSources) {
         super();
@@ -64,13 +68,17 @@ public class SequenceDoubleDataSource extends BaseDoubleDataSource
     }
 
     /**
-     * 
+     * Instantiates a new sequence double data source.
+     *
      * @param inputSources a list of DoubleDataSource objects.
      */
     public SequenceDoubleDataSource(List inputSources) {
         this((DoubleDataSource[]) inputSources.toArray(new DoubleDataSource[0]));
     }
 
+    /* (non-Javadoc)
+     * @see de.dfki.lt.signalproc.util.BaseDoubleDataSource#hasMoreData()
+     */
     public boolean hasMoreData()
     {
         while (!sources.isEmpty() && !((DoubleDataSource)sources.getFirst()).hasMoreData()) {
@@ -94,6 +102,9 @@ public class SequenceDoubleDataSource extends BaseDoubleDataSource
         return available();
     }
     
+    /* (non-Javadoc)
+     * @see de.dfki.lt.signalproc.util.BaseDoubleDataSource#getData(double[], int, int)
+     */
     public int getData(double[] target, int targetPos, int length)
     {
         if (target.length - targetPos < length) {

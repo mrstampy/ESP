@@ -18,21 +18,44 @@
  */
 package com.github.mrstampy.esp.multiconnectionsocket;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MultiConnectionSocketException.
+ */
 public class MultiConnectionSocketException extends Exception {
 	private static final long serialVersionUID = -570806954392312588L;
 
+	/**
+	 * Instantiates a new multi connection socket exception.
+	 */
 	public MultiConnectionSocketException() {
 		super();
 	}
 
+	/**
+	 * Instantiates a new multi connection socket exception.
+	 *
+	 * @param arg0 the arg0
+	 */
 	public MultiConnectionSocketException(String arg0) {
 		super(arg0);
 	}
 
+	/**
+	 * Instantiates a new multi connection socket exception.
+	 *
+	 * @param arg0 the arg0
+	 */
 	public MultiConnectionSocketException(Throwable arg0) {
 		super(arg0);
 	}
 
+	/**
+	 * Instantiates a new multi connection socket exception.
+	 *
+	 * @param arg0 the arg0
+	 * @param arg1 the arg1
+	 */
 	public MultiConnectionSocketException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 	}

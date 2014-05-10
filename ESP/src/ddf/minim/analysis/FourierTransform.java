@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Fourier Transform is an algorithm that transforms a signal in the time
  * domain, such as a sample buffer, into a signal in the frequency domain, often
@@ -199,21 +200,49 @@ public abstract class FourierTransform {
    */
   public static final WindowFunction GAUSS = new GaussWindow();
 
+  /** The Constant LINAVG. */
   protected static final int LINAVG = 1;
+  
+  /** The Constant LOGAVG. */
   protected static final int LOGAVG = 2;
+  
+  /** The Constant NOAVG. */
   protected static final int NOAVG = 3;
 
+  /** The Constant TWO_PI. */
   protected static final double TWO_PI = (double) (2 * Math.PI);
+  
+  /** The time size. */
   protected int timeSize;
+  
+  /** The sample rate. */
   protected int sampleRate;
+  
+  /** The band width. */
   protected double bandWidth;
+  
+  /** The window function. */
   protected WindowFunction windowFunction;
+  
+  /** The real. */
   protected double[] real;
+  
+  /** The imag. */
   protected double[] imag;
+  
+  /** The spectrum. */
   protected double[] spectrum;
+  
+  /** The averages. */
   protected double[] averages;
+  
+  /** The which average. */
   protected int whichAverage;
+  
+  /** The octaves. */
   protected int octaves;
+  
+  /** The avg per octave. */
   protected int avgPerOctave;
 
   /**
@@ -240,8 +269,17 @@ public abstract class FourierTransform {
   // classes
   // because the size of the arrays will depend on the implementation being used
   // this enforces that responsibility
+  /**
+   * Allocate arrays.
+   */
   protected abstract void allocateArrays();
 
+  /**
+   * Sets the complex.
+   *
+   * @param r the r
+   * @param i the i
+   */
   protected void setComplex(double[] r, double[] i) {
     if (real.length != r.length && imag.length != i.length) {
       throw new RuntimeException(
@@ -255,6 +293,9 @@ public abstract class FourierTransform {
   // fill the spectrum array with the amps of the data in real and imag
   // used so that this class can handle creating the average array
   // and also do spectrum shaping if necessary
+  /**
+   * Fill spectrum.
+   */
   protected void fillSpectrum() {
     for (int i = 0; i < spectrum.length; i++) {
       spectrum[i] = (double) Math.sqrt(real[i] * real[i] + imag[i] * imag[i]);
@@ -354,8 +395,8 @@ public abstract class FourierTransform {
    * Sets the window to use on the samples before taking the forward transform.
    * If an invalid window is asked for, an error will be reported and the
    * current window will not be changed.
-   * 
-   * @param windowFunction
+   *
+   * @param windowFunction the window function
    */
 
   public void window(WindowFunction windowFunction) {
@@ -366,6 +407,11 @@ public abstract class FourierTransform {
     }
   }
 
+  /**
+   * Do window.
+   *
+   * @param samples the samples
+   */
   protected void doWindow(double[] samples) {
     windowFunction.apply(samples);
   }
@@ -418,7 +464,9 @@ public abstract class FourierTransform {
    * Returns the bandwidth of the requested average band. Using this information
    * and the return value of getAverageCenterFrequency you can determine the
    * lower and upper frequency of any average band.
-   * 
+   *
+   * @param averageIndex the average index
+   * @return the average band width
    * @see #getAverageCenterFrequency(int)
    * @related getAverageCenterFrequency ( )
    */
@@ -495,9 +543,9 @@ public abstract class FourierTransform {
 
   /**
    * Returns the middle frequency of the i<sup>th</sup> band.
-   * 
-   * @param i
-   *          the index of the band you want to middle frequency of
+   *
+   * @param i          the index of the band you want to middle frequency of
+   * @return the double
    */
   public double indexToFreq(int i) {
     double bw = getBandWidth();
@@ -519,9 +567,9 @@ public abstract class FourierTransform {
 
   /**
    * Returns the center frequency of the i<sup>th</sup> average band.
-   * 
-   * @param i
-   *          which average band you want the center frequency of.
+   *
+   * @param i          which average band you want the center frequency of.
+   * @return the average center frequency
    */
   public double getAverageCenterFrequency(int i) {
     if (whichAverage == LINAVG) {
@@ -640,6 +688,8 @@ public abstract class FourierTransform {
 
   /**
    * Get the Real part of the Complex representation of the spectrum.
+   *
+   * @return the spectrum real
    */
   public double[] getSpectrumReal() {
     return real;
@@ -647,6 +697,8 @@ public abstract class FourierTransform {
 
   /**
    * Get the Imaginary part of the Complex representation of the spectrum.
+   *
+   * @return the spectrum imaginary
    */
   public double[] getSpectrumImaginary() {
     return imag;
@@ -709,6 +761,11 @@ public abstract class FourierTransform {
     inverse(buffer);
   }
 
+  /**
+   * Gets the log power spectrum.
+   *
+   * @return the log power spectrum
+   */
   public double[] getLogPowerSpectrum() {
     double[] logSpectrum = new double[spectrum.length];
     for (int i = 0; i < spectrum.length; i++) {

@@ -41,6 +41,7 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 
+// TODO: Auto-generated Javadoc
 /**
  * Abstract implementation of a {@link MultiConnectionSocket}. This superclass
  * uses Disruptor to pull EEG device messages off a socket and pass them to an
@@ -49,9 +50,9 @@ import com.lmax.disruptor.dsl.Disruptor;
  * Subclasses type the format of the raw data messages. Should multiple types
  * ie. double and byte arrays be received from the device then a serializable
  * wrapper can be created to contain the data.
- * 
+ *
  * @author burton
- * 
+ * @param <MESSAGE> the generic type
  */
 public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiConnectionSocket {
 	private static final Logger log = LoggerFactory.getLogger(AbstractMultiConnectionSocket.class);
@@ -68,6 +69,12 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 
 	private RingBuffer<MessageEvent<MESSAGE>> rb;
 
+	/**
+	 * Instantiates a new abstract multi connection socket.
+	 *
+	 * @param broadcasting the broadcasting
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	protected AbstractMultiConnectionSocket(boolean broadcasting) throws IOException {
 		this.broadcasting = broadcasting;
 		initMessageEventHandler();
@@ -75,6 +82,9 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 		if (broadcasting) initBroadCaster();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#start()
+	 */
 	@Override
 	public final void start() throws MultiConnectionSocketException {
 		if (isConnected()) {
@@ -102,12 +112,15 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	 * Implement to create a connection to the EEG device. Messages retrieved from
 	 * the device should be passed to the
 	 * {@link AbstractMultiConnectionSocket#publishMessage(String)} method.
-	 * 
+	 *
+	 * @throws MultiConnectionSocketException the multi connection socket exception
 	 * @see AbstractMultiConnectionSocket#publishMessage(String)
-	 * @throws MultiConnectionSocketException
 	 */
 	protected abstract void startImpl() throws MultiConnectionSocketException;
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#stop()
+	 */
 	public void stop() {
 		if (!isConnected()) {
 			log.error("AbstractMultiConnectionSocket already disconnected");
@@ -129,21 +142,33 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	 */
 	protected abstract void stopImpl();
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#addConnectionEventListener(com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener)
+	 */
 	@Override
 	public void addConnectionEventListener(ConnectionEventListener listener) {
 		connectionListeners.add(listener);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#removeConnectionEventListener(com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener)
+	 */
 	@Override
 	public void removeConnectionEventListener(ConnectionEventListener listener) {
 		connectionListeners.remove(listener);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#clearConnectionEventListeners()
+	 */
 	@Override
 	public void clearConnectionEventListeners() {
 		connectionListeners.clear();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#bindBroadcaster()
+	 */
 	@Override
 	public void bindBroadcaster() throws IOException {
 		if (!canBroadcast()) {
@@ -161,6 +186,9 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 		notifyConnectionEventListeners(State.BOUND);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#unbindBroadcaster()
+	 */
 	@Override
 	public void unbindBroadcaster() {
 		if (!canBroadcast()) {
@@ -178,6 +206,9 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 		notifyConnectionEventListeners(State.UNBOUND);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#canBroadcast()
+	 */
 	@Override
 	public boolean canBroadcast() {
 		return broadcasting;
@@ -193,6 +224,11 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 		return canBroadcast() && socketBroadcaster.isActive();
 	}
 
+	/**
+	 * Notify connection event listeners.
+	 *
+	 * @param state the state
+	 */
 	protected void notifyConnectionEventListeners(State state) {
 		if (connectionListeners.isEmpty()) return;
 
@@ -207,8 +243,8 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	 * Initialization of the broadcaster, to send
 	 * {@link AbstractMultiConnectionEvent}s to remote processes which have
 	 * registered for subscriptions. Invoke during object creation.
-	 * 
-	 * @throws IOException
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	protected void initBroadCaster() throws IOException {
 		socketBroadcaster = new NioSocketAcceptor();
@@ -225,14 +261,19 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 		bindBroadcaster();
 	}
 
+	/**
+	 * Gets the handler adapter.
+	 *
+	 * @return the handler adapter
+	 */
 	protected abstract IoHandler getHandlerAdapter();
 
 	/**
 	 * EEG device messages are passed to this method which uses Disruptor to pass
 	 * the message asynchronously for processing by subclasses.
-	 * 
+	 *
+	 * @param message the message
 	 * @see AbstractMultiConnectionSocket#parseMessage(String)
-	 * @param message
 	 */
 	protected void publishMessage(MESSAGE message) {
 		long seq = rb.next();
@@ -263,8 +304,8 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	/**
 	 * Invoked via Disruptor's onEvent processing, implement to notify event
 	 * listeners and any multi connection subscribers.
-	 * 
-	 * @param message
+	 *
+	 * @param message the message
 	 */
 	protected abstract void parseMessage(MESSAGE message);
 

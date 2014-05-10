@@ -18,6 +18,7 @@
 
 package ddf.minim.analysis;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Blackman window function.
  * 
@@ -28,9 +29,15 @@ package ddf.minim.analysis;
  *      Blackman Window</a>
  */
 public class BlackmanWindow extends WindowFunction {
+  
+  /** The alpha. */
   protected double alpha;
 
-  /** Constructs a Blackman window. */
+  /**
+   *  Constructs a Blackman window.
+   *
+   * @param alpha the alpha
+   */
   public BlackmanWindow(double alpha) {
     this.alpha = alpha;
   }
@@ -40,6 +47,9 @@ public class BlackmanWindow extends WindowFunction {
     this(0.16f);
   }
 
+  /* (non-Javadoc)
+   * @see ddf.minim.analysis.WindowFunction#value(int, int)
+   */
   protected double value(int length, int index) {
     double a0 = (1 - this.alpha) / 2f;
     double a1 = 0.5f;
