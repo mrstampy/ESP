@@ -30,7 +30,7 @@ import com.github.mrstampy.esp.dsp.EspSignalUtilities;
  */
 public class DefaultLab implements Lab {
 	private static final long serialVersionUID = 1L;
-	
+
 	private PreFFTProcessor preFFTProcessor = new PreFFTProcessor();
 	private PostFFTProcessor postFFTProcessor = new PostFFTProcessor();
 	private RawEspConnection connection;
@@ -43,21 +43,26 @@ public class DefaultLab implements Lab {
 
 	private int numBands;
 
+	private List<SignalProcessedListener> listeners = new ArrayList<SignalProcessedListener>();
+
 	/**
 	 * Instantiates a new default lab.
 	 *
-	 * @param numBands the num bands
+	 * @param numBands
+	 *          the num bands
 	 */
 	public DefaultLab(int numBands) {
 		setNumBands(numBands);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#process(double[][])
 	 */
 	@Override
-	public double[] process(double[][] signal) {
-		if (signal.length == 0) return new double[] {};
+	public void process(double[][] signal) {
+		if (signal.length == 0) return;
 
 		double[] wmad = new double[getNumBands()];
 
@@ -76,7 +81,15 @@ public class DefaultLab implements Lab {
 
 		if (calcBaseline.get()) setMinValue(wmad);
 
-		return baseline == 0 ? wmad : applyBaseline(wmad);
+		double[] processed = baseline == 0 ? wmad : applyBaseline(wmad);
+		
+		notifyProcessedListeners(processed);
+	}
+
+	private void notifyProcessedListeners(double[] processed) {
+		for(SignalProcessedListener l : listeners) {
+			l.signalProcessed(processed);
+		}
 	}
 
 	private double[] applyBaseline(double[] wmad) {
@@ -97,7 +110,9 @@ public class DefaultLab implements Lab {
 		baselineCandidate = val;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#stopCalculateBaseline()
 	 */
 	@Override
@@ -106,7 +121,9 @@ public class DefaultLab implements Lab {
 		baseline = baselineCandidate;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#calculateBaseline()
 	 */
 	@Override
@@ -115,7 +132,9 @@ public class DefaultLab implements Lab {
 		calcBaseline.set(true);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#resetBaseline()
 	 */
 	@Override
@@ -123,7 +142,9 @@ public class DefaultLab implements Lab {
 		baseline = 0;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getConnection()
 	 */
 	@Override
@@ -131,8 +152,12 @@ public class DefaultLab implements Lab {
 		return connection;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setConnection(com.github.mrstampy.esp.multiconnectionsocket.RawEspConnection)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.Lab#setConnection(com.github.mrstampy.esp
+	 * .multiconnectionsocket.RawEspConnection)
 	 */
 	@Override
 	public void setConnection(RawEspConnection connection) {
@@ -140,7 +165,9 @@ public class DefaultLab implements Lab {
 		setUtilities(connection.getUtilities());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getFftType()
 	 */
 	@Override
@@ -148,15 +175,21 @@ public class DefaultLab implements Lab {
 		return fftType;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setFftType(com.github.mrstampy.esp.dsp.lab.FFTType)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.Lab#setFftType(com.github.mrstampy.esp.
+	 * dsp.lab.FFTType)
 	 */
 	@Override
 	public void setFftType(FFTType fftType) {
 		this.fftType = fftType;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getNumBands()
 	 */
 	@Override
@@ -164,7 +197,9 @@ public class DefaultLab implements Lab {
 		return numBands;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setNumBands(int)
 	 */
 	@Override
@@ -219,7 +254,9 @@ public class DefaultLab implements Lab {
 		return getPreFFTProcessor().process(sample);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setHighPassFrequency(double)
 	 */
 	@Override
@@ -227,7 +264,9 @@ public class DefaultLab implements Lab {
 		getPreFFTProcessor().setHighFrequency(band);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setLowPassFrequency(double)
 	 */
 	@Override
@@ -235,21 +274,27 @@ public class DefaultLab implements Lab {
 		getPreFFTProcessor().setLowFrequency(band);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#isAbsoluteValues()
 	 */
 	public boolean isAbsoluteValues() {
 		return getPostFFTProcessor().isAbsoluteValues();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setAbsoluteValues(boolean)
 	 */
 	public void setAbsoluteValues(boolean absoluteValues) {
 		getPostFFTProcessor().setAbsoluteValues(absoluteValues);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getHighPassFrequency()
 	 */
 	@Override
@@ -257,7 +302,9 @@ public class DefaultLab implements Lab {
 		return getPreFFTProcessor().getHighFrequency();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getLowPassFrequency()
 	 */
 	@Override
@@ -265,7 +312,9 @@ public class DefaultLab implements Lab {
 		return getPreFFTProcessor().getLowFrequency();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getPassFilter()
 	 */
 	@Override
@@ -273,15 +322,21 @@ public class DefaultLab implements Lab {
 		return getPreFFTProcessor().getPassFilter();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setPassFilter(com.github.mrstampy.esp.dsp.lab.PassFilter)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.Lab#setPassFilter(com.github.mrstampy.esp
+	 * .dsp.lab.PassFilter)
 	 */
 	@Override
 	public void setPassFilter(PassFilter filter) {
 		getPreFFTProcessor().setPassFilter(filter);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#isNormalizeSignal()
 	 */
 	@Override
@@ -289,7 +344,9 @@ public class DefaultLab implements Lab {
 		return getPreFFTProcessor().isNormalizeSignal();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setNormalizeSignal(boolean)
 	 */
 	@Override
@@ -297,7 +354,9 @@ public class DefaultLab implements Lab {
 		getPreFFTProcessor().setNormalizeSignal(normalize);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#isNormalizeFft()
 	 */
 	@Override
@@ -305,7 +364,9 @@ public class DefaultLab implements Lab {
 		return getPostFFTProcessor().isNormalizeFft();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setNormalizeFft(boolean)
 	 */
 	@Override
@@ -313,15 +374,20 @@ public class DefaultLab implements Lab {
 		getPostFFTProcessor().setNormalizeFft(normalize);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setHighNormalizeFftFrequency(double)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.Lab#setHighNormalizeFftFrequency(double)
 	 */
 	@Override
 	public void setHighNormalizeFftFrequency(double freq) {
 		getPostFFTProcessor().setHighFrequency(freq);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getHighNormalizeFftFrequency()
 	 */
 	@Override
@@ -329,15 +395,20 @@ public class DefaultLab implements Lab {
 		return getPostFFTProcessor().getHighFrequency();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setLowNormalizeFftFrequency(double)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.Lab#setLowNormalizeFftFrequency(double)
 	 */
 	@Override
 	public void setLowNormalizeFftFrequency(double freq) {
 		getPostFFTProcessor().setLowFrequency(freq);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getLowNormalizeFftFrequency()
 	 */
 	@Override
@@ -348,7 +419,7 @@ public class DefaultLab implements Lab {
 	@Override
 	public LabValues getLabValues() {
 		DefaultLabValues values = new DefaultLabValues();
-		
+
 		values.setAbsoluteValues(isAbsoluteValues());
 		values.setFftType(getFftType());
 		values.setHighNormalizeFftFrequency(getHighNormalizeFftFrequency());
@@ -359,6 +430,9 @@ public class DefaultLab implements Lab {
 		values.setNormalizeSignal(isNormalizeSignal());
 		values.setNumBands(getNumBands());
 		values.setPassFilter(getPassFilter());
+		values.setBaseline(getBaseline());
+		values.setLowPassFilterFactor(getLowPassFilterFactor());
+		values.setHighPassFilterFactor(getHighPassFilterFactor());
 
 		return values;
 	}
@@ -375,5 +449,51 @@ public class DefaultLab implements Lab {
 		setNormalizeSignal(values.isNormalizeSignal());
 		setNumBands(values.getNumBands());
 		setPassFilter(values.getPassFilter());
+		setBaseline(values.getBaseline());
+		setLowPassFilterFactor(values.getLowPassFilterFactor());
+		setHighPassFilterFactor(values.getHighPassFilterFactor());
+	}
+
+	@Override
+	public void addSignalProcessedListener(SignalProcessedListener l) {
+		if (l != null && !listeners.contains(l)) listeners.add(l);
+	}
+
+	@Override
+	public void removeSignalProcessedListener(SignalProcessedListener l) {
+		if (l != null) listeners.remove(l);
+	}
+
+	@Override
+	public void clearSignalProcessedListeners() {
+		listeners.clear();
+	}
+
+	public double getBaseline() {
+		return baseline;
+	}
+
+	public void setBaseline(double baseline) {
+		this.baseline = baseline;
+	}
+
+	@Override
+	public void setLowPassFilterFactor(double factor) {
+		getPreFFTProcessor().setLowPassFilterFactor(factor);
+	}
+
+	@Override
+	public double getLowPassFilterFactor() {
+		return getPreFFTProcessor().getLowPassFilterFactor();
+	}
+
+	@Override
+	public void setHighPassFilterFactor(double factor) {
+		getPreFFTProcessor().setHighPassFilterFactor(factor);
+	}
+
+	@Override
+	public double getHighPassFilterFactor() {
+		return getPreFFTProcessor().getHighPassFilterFactor();
 	}
 }

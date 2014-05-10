@@ -143,5 +143,16 @@ public interface LabValues extends Serializable {
 	 * @return the low normalize fft frequency
 	 */
 	double getLowNormalizeFftFrequency();
+	
+	void setBaseline(double baseline);
+	
+	double getBaseline();
 
+	void setLowPassFilterFactor(double factor);
+	
+	double getLowPassFilterFactor();
+	
+	void setHighPassFilterFactor(double factor);
+	
+	double getHighPassFilterFactor();
 }

@@ -18,6 +18,9 @@
  */
 package com.github.mrstampy.esp.dsp.lab;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import de.dfki.lt.signalproc.filter.BandPassFilter;
 import de.dfki.lt.signalproc.filter.HighPassFilter;
 import de.dfki.lt.signalproc.filter.LowPassFilter;
@@ -37,23 +40,35 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 	private PassFilter passFilter = PassFilter.no_pass_filter;
 
 	private boolean normalizeSignal;
-	
+
+	private double lowPassFilterFactor;
+
+	private BigDecimal calculatedLowFactor;
+
+	private double highPassFilterFactor;
+
+	private BigDecimal calculatedHighFactor;
+
 	/**
 	 * Instantiates a new pre fft processor.
 	 */
 	public PreFFTProcessor() {
 		super();
 		setLowFrequency(1);
+		setLowPassFilterFactor(25);
+		setHighPassFilterFactor(20);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.DoubleArrayProcessor#process(double[])
 	 */
 	@Override
 	public double[] process(double[] array) {
 		double[] n = normalize(array);
 		double[] d = applyPassFilter(n);
-		
+
 		double[] copy = new double[array.length];
 		System.arraycopy(d, 0, copy, 0, copy.length);
 
@@ -86,10 +101,19 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 
 		key = new FrequencyKey(getLowFrequency(), getHighFrequency());
 
-		int factor = getUtilities().getDSPValues().getSampleRate() / 20;
-		bpf = getUtilities().createBandPassFilter(getLowFrequency() / factor, getHighFrequency() / factor);
-		lpf = getUtilities().createLowPassFilter(getHighFrequency() / factor);
-		hpf = getUtilities().createHighPassFilter(getLowFrequency() / factor);
+		double factoredLow = getFactoredLowFrequency();
+		double factoredHigh = getFactoredHighFrequency();
+		bpf = getUtilities().createBandPassFilter(factoredLow, factoredHigh);
+		lpf = getUtilities().createLowPassFilter(factoredHigh);
+		hpf = getUtilities().createHighPassFilter(factoredLow);
+	}
+
+	private double getFactoredHighFrequency() {
+		return new BigDecimal(getHighFrequency()).divide(calculatedHighFactor, 5, RoundingMode.HALF_UP).doubleValue();
+	}
+
+	private double getFactoredLowFrequency() {
+		return new BigDecimal(getLowFrequency()).divide(calculatedLowFactor, 5, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	private class FrequencyKey {
@@ -118,7 +142,8 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 	/**
 	 * Sets the pass filter.
 	 *
-	 * @param passFilter the new pass filter
+	 * @param passFilter
+	 *          the new pass filter
 	 */
 	public void setPassFilter(PassFilter passFilter) {
 		this.passFilter = passFilter;
@@ -136,10 +161,41 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 	/**
 	 * Sets the normalize signal.
 	 *
-	 * @param normalize the new normalize signal
+	 * @param normalize
+	 *          the new normalize signal
 	 */
 	public void setNormalizeSignal(boolean normalize) {
 		this.normalizeSignal = normalize;
+	}
+
+	public double getLowPassFilterFactor() {
+		return lowPassFilterFactor;
+	}
+
+	public void setLowPassFilterFactor(double passFilterFactor) {
+		this.lowPassFilterFactor = passFilterFactor;
+		calculateFactor();
+	}
+
+	protected void utilitiesSet() {
+		calculateFactor();
+	}
+
+	private void calculateFactor() {
+		if (getUtilities() == null) return;
+		
+		BigDecimal bd = new BigDecimal(getUtilities().getDSPValues().getSampleRate());
+
+		calculatedLowFactor = bd.divide(new BigDecimal(getLowPassFilterFactor()), 10, RoundingMode.HALF_UP);
+		calculatedHighFactor = bd.divide(new BigDecimal(getHighPassFilterFactor()), 10, RoundingMode.HALF_UP);
+	}
+
+	public double getHighPassFilterFactor() {
+		return highPassFilterFactor;
+	}
+
+	public void setHighPassFilterFactor(double highPassFilterFactor) {
+		this.highPassFilterFactor = highPassFilterFactor;
 	}
 
 }

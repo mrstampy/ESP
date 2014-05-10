@@ -15,6 +15,9 @@ public class DefaultLabValues implements LabValues, Serializable {
 	private boolean normalizeSignal;
 	private double highNormalizeFftFrequency;
 	private double lowNormalizeFftFrequency;
+	private double baseline;
+	private double lowPassFilterFactor;
+	private double highPassFilterFactor;
 
 	public FFTType getFftType() {
 		return fftType;
@@ -94,6 +97,30 @@ public class DefaultLabValues implements LabValues, Serializable {
 
 	public void setLowNormalizeFftFrequency(double lowNormalizeFftFrequency) {
 		this.lowNormalizeFftFrequency = lowNormalizeFftFrequency;
+	}
+
+	public double getBaseline() {
+		return baseline;
+	}
+
+	public void setBaseline(double baseline) {
+		this.baseline = baseline;
+	}
+
+	public double getLowPassFilterFactor() {
+		return lowPassFilterFactor;
+	}
+
+	public void setLowPassFilterFactor(double passFilterFactor) {
+		this.lowPassFilterFactor = passFilterFactor;
+	}
+
+	public double getHighPassFilterFactor() {
+		return highPassFilterFactor;
+	}
+
+	public void setHighPassFilterFactor(double highPassFilterFactor) {
+		this.highPassFilterFactor = highPassFilterFactor;
 	}
 
 }

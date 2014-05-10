@@ -83,6 +83,11 @@ public abstract class AbstractFFTProcessor implements DoubleArrayProcessor {
 	 */
 	public void setUtilities(EspSignalUtilities utilities) {
 		this.utilities = utilities;
+		utilitiesSet();
+	}
+	
+	protected void utilitiesSet() {
+		
 	}
 
 }

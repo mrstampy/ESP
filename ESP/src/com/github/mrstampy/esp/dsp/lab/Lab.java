@@ -29,9 +29,8 @@ public interface Lab extends LabValues {
 	 *
 	 * @param signal
 	 *          the signal
-	 * @return the double[]
 	 */
-	double[] process(double[][] signal);
+	void process(double[][] signal);
 
 	/**
 	 * Stop calculate baseline.
@@ -76,5 +75,11 @@ public interface Lab extends LabValues {
 	 * @param values
 	 */
 	void setLabValues(LabValues values);
+	
+	void addSignalProcessedListener(SignalProcessedListener l);
+	
+	void removeSignalProcessedListener(SignalProcessedListener l);
+	
+	void clearSignalProcessedListeners();
 
 }
