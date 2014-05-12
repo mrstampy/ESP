@@ -99,7 +99,7 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 	private void keyCheck() {
 		if (key != null && key.isSame()) return;
 
-		key = new FrequencyKey(getLowFrequency(), getHighFrequency());
+		key = new FrequencyKey(getLowFrequency(), getHighFrequency(), getLowPassFilterFactor(), getHighPassFilterFactor());
 
 		double factoredLow = getFactoredLowFrequency();
 		double factoredHigh = getFactoredHighFrequency();
@@ -109,24 +109,29 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 	}
 
 	private double getFactoredHighFrequency() {
-		return new BigDecimal(getHighFrequency()).divide(calculatedHighFactor, 5, RoundingMode.HALF_UP).doubleValue();
+		return new BigDecimal(getHighFrequency()).divide(calculatedLowFactor, 5, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	private double getFactoredLowFrequency() {
-		return new BigDecimal(getLowFrequency()).divide(calculatedLowFactor, 5, RoundingMode.HALF_UP).doubleValue();
+		return new BigDecimal(getLowFrequency()).divide(calculatedHighFactor, 5, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	private class FrequencyKey {
 		double lowKey;
 		double highKey;
+		double lowFactor;
+		double highFactor;
 
-		public FrequencyKey(double lowKey, double highKey) {
+		public FrequencyKey(double lowKey, double highKey, double lowFactor, double highFactor) {
 			this.lowKey = lowKey;
 			this.highKey = highKey;
+			this.lowFactor = lowFactor;
+			this.highFactor = highFactor;
 		}
 
 		boolean isSame() {
-			return lowKey == getLowFrequency() && highKey == getHighFrequency();
+			return lowKey == getLowFrequency() && highKey == getHighFrequency() && lowFactor == getLowPassFilterFactor()
+					&& highFactor == getHighPassFilterFactor();
 		}
 	}
 
@@ -180,14 +185,17 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 	/**
 	 * Sets the low pass filter factor.
 	 *
-	 * @param passFilterFactor the new low pass filter factor
+	 * @param passFilterFactor
+	 *          the new low pass filter factor
 	 */
 	public void setLowPassFilterFactor(double passFilterFactor) {
 		this.lowPassFilterFactor = passFilterFactor;
 		calculateFactor();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.AbstractFFTProcessor#utilitiesSet()
 	 */
 	protected void utilitiesSet() {
@@ -196,7 +204,7 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 
 	private void calculateFactor() {
 		if (getUtilities() == null) return;
-		
+
 		BigDecimal bd = new BigDecimal(getUtilities().getDSPValues().getSampleRate());
 
 		calculatedLowFactor = bd.divide(new BigDecimal(getLowPassFilterFactor()), 10, RoundingMode.HALF_UP);
@@ -215,10 +223,12 @@ class PreFFTProcessor extends AbstractFFTProcessor {
 	/**
 	 * Sets the high pass filter factor.
 	 *
-	 * @param highPassFilterFactor the new high pass filter factor
+	 * @param highPassFilterFactor
+	 *          the new high pass filter factor
 	 */
 	public void setHighPassFilterFactor(double highPassFilterFactor) {
 		this.highPassFilterFactor = highPassFilterFactor;
+		calculateFactor();
 	}
 
 }
