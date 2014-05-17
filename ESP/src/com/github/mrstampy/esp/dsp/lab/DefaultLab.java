@@ -22,6 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import rx.Scheduler;
+import rx.Scheduler.Inner;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
 import com.github.mrstampy.esp.dsp.EspSignalUtilities;
 
 // TODO: Auto-generated Javadoc
@@ -55,6 +60,32 @@ public class DefaultLab implements Lab {
 		setNumBands(numBands);
 	}
 
+	@Override
+	public void triggerProcessing() {
+		connectionCheck();
+		
+		Schedulers.newThread().schedule(new Action1<Scheduler.Inner>() {
+
+			@Override
+			public void call(Inner t1) {
+				process(getConnection().getCurrent());
+			}
+		});
+	}
+
+	@Override
+	public void triggerProcessing(final int numSamples) {
+		connectionCheck();
+
+		Schedulers.newThread().schedule(new Action1<Scheduler.Inner>() {
+
+			@Override
+			public void call(Inner t1) {
+				process(getConnection().getCurrent(numSamples));
+			}
+		});
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -82,12 +113,12 @@ public class DefaultLab implements Lab {
 		if (calcBaseline.get()) setMinValue(wmad);
 
 		double[] processed = baseline == 0 ? wmad : applyBaseline(wmad);
-		
+
 		notifyProcessedListeners(processed);
 	}
 
 	private void notifyProcessedListeners(double[] processed) {
-		for(SignalProcessedListener l : listeners) {
+		for (SignalProcessedListener l : listeners) {
 			l.signalProcessed(processed);
 		}
 	}
@@ -416,7 +447,9 @@ public class DefaultLab implements Lab {
 		return getPostFFTProcessor().getLowFrequency();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getLabValues()
 	 */
 	@Override
@@ -440,8 +473,12 @@ public class DefaultLab implements Lab {
 		return values;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setLabValues(com.github.mrstampy.esp.dsp.lab.LabValues)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.Lab#setLabValues(com.github.mrstampy.esp
+	 * .dsp.lab.LabValues)
 	 */
 	@Override
 	public void setLabValues(LabValues values) {
@@ -460,23 +497,33 @@ public class DefaultLab implements Lab {
 		setHighPassFilterFactor(values.getHighPassFilterFactor());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#addSignalProcessedListener(com.github.mrstampy.esp.dsp.lab.SignalProcessedListener)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.Lab#addSignalProcessedListener(com.github
+	 * .mrstampy.esp.dsp.lab.SignalProcessedListener)
 	 */
 	@Override
 	public void addSignalProcessedListener(SignalProcessedListener l) {
 		if (l != null && !listeners.contains(l)) listeners.add(l);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#removeSignalProcessedListener(com.github.mrstampy.esp.dsp.lab.SignalProcessedListener)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.Lab#removeSignalProcessedListener(com.github
+	 * .mrstampy.esp.dsp.lab.SignalProcessedListener)
 	 */
 	@Override
 	public void removeSignalProcessedListener(SignalProcessedListener l) {
 		if (l != null) listeners.remove(l);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.Lab#clearSignalProcessedListeners()
 	 */
 	@Override
@@ -484,29 +531,38 @@ public class DefaultLab implements Lab {
 		listeners.clear();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getBaseline()
 	 */
 	public double getBaseline() {
 		return baseline;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setBaseline(double)
 	 */
 	public void setBaseline(double baseline) {
 		this.baseline = baseline;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setLowPassFilterFactor(double)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.LabValues#setLowPassFilterFactor(double)
 	 */
 	@Override
 	public void setLowPassFilterFactor(double factor) {
 		getPreFFTProcessor().setLowPassFilterFactor(factor);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getLowPassFilterFactor()
 	 */
 	@Override
@@ -514,19 +570,28 @@ public class DefaultLab implements Lab {
 		return getPreFFTProcessor().getLowPassFilterFactor();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setHighPassFilterFactor(double)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.LabValues#setHighPassFilterFactor(double)
 	 */
 	@Override
 	public void setHighPassFilterFactor(double factor) {
 		getPreFFTProcessor().setHighPassFilterFactor(factor);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getHighPassFilterFactor()
 	 */
 	@Override
 	public double getHighPassFilterFactor() {
 		return getPreFFTProcessor().getHighPassFilterFactor();
+	}
+
+	private void connectionCheck() {
+		if (getConnection() == null) throw new RuntimeException("No RawEspConnection implementation in the lab");
 	}
 }

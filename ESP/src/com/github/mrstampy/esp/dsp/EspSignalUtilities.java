@@ -329,7 +329,7 @@ public abstract class EspSignalUtilities {
 			weight++;
 		}
 		
-		if(divisor == 0) return 0;
+		if(divisor == 0 || isInfinite(divisor)) return 0;
 
 		return new BigDecimal(total).divide(new BigDecimal(divisor), 10, RoundingMode.HALF_UP).doubleValue();
 	}
@@ -463,7 +463,13 @@ public abstract class EspSignalUtilities {
 
 	private void normalize(double[] fftd, double min, double max, double[] normalized, int lowerCutoffHz,
 			int upperCutoffHz) {
-		BigDecimal divisor = new BigDecimal(max - min);
+		BigDecimal divisor = null;
+		if(isInfinite(max) || isInfinite(min)) {
+			divisor = BigDecimal.ONE;
+		} else {
+			divisor = new BigDecimal(max - min);
+		}
+		
 		for (int i = lowerCutoffHz; i <= upperCutoffHz; i++) {
 			normalized[i] = new BigDecimal(fftd[i] - min).divide(divisor, 3, RoundingMode.HALF_UP).doubleValue();
 		}

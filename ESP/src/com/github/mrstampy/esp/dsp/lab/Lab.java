@@ -25,6 +25,18 @@ package com.github.mrstampy.esp.dsp.lab;
 public interface Lab extends LabValues {
 
 	/**
+	 * Implementations will call {@link #process(double[][])} with the
+	 * {@link RawEspConnection#getCurrent()} signal.
+	 */
+	void triggerProcessing();
+	
+	/**
+	 * Implementations will call {@link #process(double[][])} with the
+	 * {@link RawEspConnection#getCurrent(int)} signal.
+	 */
+	void triggerProcessing(int numSamples);
+	
+	/**
 	 * Process.
 	 *
 	 * @param signal
