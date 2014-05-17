@@ -40,6 +40,7 @@ public class DefaultLabValues implements LabValues, Serializable {
 	private double baseline;
 	private double lowPassFilterFactor;
 	private double highPassFilterFactor;
+	private EspWindowFunction windowFunction;
 
 	/* (non-Javadoc)
 	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getFftType()
@@ -221,6 +222,14 @@ public class DefaultLabValues implements LabValues, Serializable {
 	 */
 	public void setHighPassFilterFactor(double highPassFilterFactor) {
 		this.highPassFilterFactor = highPassFilterFactor;
+	}
+
+	public EspWindowFunction getWindowFunction() {
+		return windowFunction;
+	}
+
+	public void setWindowFunction(EspWindowFunction windowFunction) {
+		this.windowFunction = windowFunction;
 	}
 
 }

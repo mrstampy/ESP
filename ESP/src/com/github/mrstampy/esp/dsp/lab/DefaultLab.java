@@ -469,6 +469,7 @@ public class DefaultLab implements Lab {
 		values.setBaseline(getBaseline());
 		values.setLowPassFilterFactor(getLowPassFilterFactor());
 		values.setHighPassFilterFactor(getHighPassFilterFactor());
+		values.setWindowFunction(getWindowFunction());
 
 		return values;
 	}
@@ -495,6 +496,7 @@ public class DefaultLab implements Lab {
 		setBaseline(values.getBaseline());
 		setLowPassFilterFactor(values.getLowPassFilterFactor());
 		setHighPassFilterFactor(values.getHighPassFilterFactor());
+		setWindowFunction(values.getWindowFunction());
 	}
 
 	/*
@@ -593,5 +595,15 @@ public class DefaultLab implements Lab {
 
 	private void connectionCheck() {
 		if (getConnection() == null) throw new RuntimeException("No RawEspConnection implementation in the lab");
+	}
+
+	@Override
+	public EspWindowFunction getWindowFunction() {
+		return getConnection() == null ? EspWindowFunction.RECTANGULAR : getConnection().getWindowFunction();
+	}
+
+	@Override
+	public void setWindowFunction(EspWindowFunction windowFunction) {
+		if(getConnection() != null) getConnection().setWindowFunction(windowFunction);
 	}
 }

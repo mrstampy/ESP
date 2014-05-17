@@ -207,4 +207,8 @@ public interface LabValues extends Serializable {
 	 * @return the high pass filter factor
 	 */
 	double getHighPassFilterFactor();
+	
+	EspWindowFunction getWindowFunction();
+	
+	void setWindowFunction(EspWindowFunction windowFunction);
 }
