@@ -456,6 +456,7 @@ public class DefaultLab implements Lab {
 	public LabValues getLabValues() {
 		DefaultLabValues values = new DefaultLabValues();
 
+		values.setNumBands(getNumBands());
 		values.setAbsoluteValues(isAbsoluteValues());
 		values.setFftType(getFftType());
 		values.setHighNormalizeFftFrequency(getHighNormalizeFftFrequency());
@@ -464,7 +465,6 @@ public class DefaultLab implements Lab {
 		values.setLowPassFrequency(getLowPassFrequency());
 		values.setNormalizeFft(isNormalizeFft());
 		values.setNormalizeSignal(isNormalizeSignal());
-		values.setNumBands(getNumBands());
 		values.setPassFilter(getPassFilter());
 		values.setBaseline(getBaseline());
 		values.setLowPassFilterFactor(getLowPassFilterFactor());
@@ -483,6 +483,7 @@ public class DefaultLab implements Lab {
 	 */
 	@Override
 	public void setLabValues(LabValues values) {
+		setNumBands(values.getNumBands());
 		setAbsoluteValues(values.isAbsoluteValues());
 		setFftType(values.getFftType());
 		setHighNormalizeFftFrequency(values.getHighNormalizeFftFrequency());
@@ -491,7 +492,6 @@ public class DefaultLab implements Lab {
 		setLowPassFrequency(values.getLowPassFrequency());
 		setNormalizeFft(values.isNormalizeFft());
 		setNormalizeSignal(values.isNormalizeSignal());
-		setNumBands(values.getNumBands());
 		setPassFilter(values.getPassFilter());
 		setBaseline(values.getBaseline());
 		setLowPassFilterFactor(values.getLowPassFilterFactor());
