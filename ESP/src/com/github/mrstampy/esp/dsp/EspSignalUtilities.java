@@ -464,14 +464,16 @@ public abstract class EspSignalUtilities {
 	private void normalize(double[] fftd, double min, double max, double[] normalized, int lowerCutoffHz,
 			int upperCutoffHz) {
 		BigDecimal divisor = null;
+		boolean infinite = false;
 		if(isInfinite(max) || isInfinite(min)) {
 			divisor = BigDecimal.ONE;
+			infinite = true;
 		} else {
 			divisor = new BigDecimal(max - min);
 		}
 		
 		for (int i = lowerCutoffHz; i <= upperCutoffHz; i++) {
-			normalized[i] = new BigDecimal(fftd[i] - min).divide(divisor, 3, RoundingMode.HALF_UP).doubleValue();
+			normalized[i] = infinite ? fftd[i] : new BigDecimal(fftd[i] - min).divide(divisor, 3, RoundingMode.HALF_UP).doubleValue();
 		}
 	}
 }
