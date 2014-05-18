@@ -78,6 +78,27 @@ public interface RawEspConnection extends MultiConnectionSocket {
 	double[][] getCurrent(int numSamples);
 
 	/**
+	 * Return the current second's worth of samples for the specified channel.
+	 *
+	 * @return the current
+	 */
+	double[][] getCurrentFor(int channelNumber);
+
+	/**
+	 * Return the specified number of the current second's worth of samples for the specified channel.
+	 *
+	 * @param numSamples the num samples
+	 * @return the current
+	 */
+	double[][] getCurrentFor(int numSamples, int channelNumber);
+	
+	/**
+	 * Returns the number of channels
+	 * @return
+	 */
+	int getNumChannels();
+
+	/**
 	 * Return a name identifier.
 	 *
 	 * @return the name

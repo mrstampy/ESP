@@ -141,6 +141,10 @@ public abstract class AbstractRawEspConnection<SOCKET extends MultiConnectionSoc
 		this.function = function;
 		getUtilities().setWindow(createWindow());
 	}
+	
+	public int getNumChannels() {
+		return getDSPValues().getNumChannels();
+	}
 
 	private WindowFunction createWindow() {
 		switch (getWindowFunction()) {
