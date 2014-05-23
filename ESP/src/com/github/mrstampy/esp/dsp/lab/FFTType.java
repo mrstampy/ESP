@@ -23,11 +23,11 @@ package com.github.mrstampy.esp.dsp.lab;
  * The Enum FFTType.
  */
 public enum FFTType {
-	
+
 	/** The real_fft. */
-	real_fft, 
- /** The log_fft. */
- log_fft, 
- /** The no_fft. */
- no_fft;
+	real_fft,
+	/** The log_fft. */
+	log_fft,
+	/** The no_fft. */
+	no_fft;
 }
