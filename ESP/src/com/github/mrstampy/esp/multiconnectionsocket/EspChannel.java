@@ -136,5 +136,10 @@ public class EspChannel implements Serializable {
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
+	
+	@Override
+	public String toString() {
+		return getDescription();
+	}
 
 }
