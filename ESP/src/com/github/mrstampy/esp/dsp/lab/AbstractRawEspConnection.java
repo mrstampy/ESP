@@ -43,130 +43,186 @@ import ddf.minim.analysis.WindowFunction;
  * Abstract implementation.
  *
  * @author burton
- * @param <SOCKET> the generic type
+ * @param <SOCKET>
+ *          the generic type
  */
 public abstract class AbstractRawEspConnection<SOCKET extends MultiConnectionSocket> implements RawEspConnection {
 
 	private EspWindowFunction function = EspWindowFunction.RECTANGULAR;
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#addConnectionEventListener(com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#
+	 * addConnectionEventListener
+	 * (com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener)
 	 */
 	@Override
 	public void addConnectionEventListener(ConnectionEventListener listener) {
 		getSocket().addConnectionEventListener(listener);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#removeConnectionEventListener(com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#
+	 * removeConnectionEventListener
+	 * (com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener)
 	 */
 	@Override
 	public void removeConnectionEventListener(ConnectionEventListener listener) {
 		getSocket().removeConnectionEventListener(listener);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#clearConnectionEventListeners()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#
+	 * clearConnectionEventListeners()
 	 */
 	@Override
 	public void clearConnectionEventListeners() {
 		getSocket().clearConnectionEventListeners();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#start()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#start()
 	 */
 	@Override
 	public void start() throws MultiConnectionSocketException {
 		getSocket().start();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#stop()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#stop()
 	 */
 	@Override
 	public void stop() {
 		getSocket().stop();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#isConnected()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#isConnected
+	 * ()
 	 */
 	@Override
 	public boolean isConnected() {
 		return getSocket().isConnected();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#bindBroadcaster()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#
+	 * bindBroadcaster()
 	 */
 	@Override
 	public void bindBroadcaster() throws IOException {
 		getSocket().bindBroadcaster();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#unbindBroadcaster()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#
+	 * unbindBroadcaster()
 	 */
 	@Override
 	public void unbindBroadcaster() {
 		getSocket().unbindBroadcaster();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#isBound()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#isBound
+	 * ()
 	 */
 	@Override
 	public boolean isBound() {
 		return getSocket().isBound();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#canBroadcast()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#
+	 * canBroadcast()
 	 */
 	@Override
 	public boolean canBroadcast() {
 		return getSocket().canBroadcast();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.RawEspConnection#getWindowFunction()
 	 */
 	public EspWindowFunction getWindowFunction() {
 		return function;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.RawEspConnection#setWindowFunction(com.github.mrstampy.esp.dsp.lab.EspWindowFunction)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.RawEspConnection#setWindowFunction(com.
+	 * github.mrstampy.esp.dsp.lab.EspWindowFunction)
 	 */
 	public void setWindowFunction(EspWindowFunction function) {
 		this.function = function;
 		getUtilities().setWindow(createWindow());
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#getNumChannels()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#
+	 * getNumChannels()
 	 */
 	public int getNumChannels() {
 		return getSocket().getNumChannels();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#getChannels()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#getChannels
+	 * ()
 	 */
 	@Override
 	public List<EspChannel> getChannels() {
 		return getSocket().getChannels();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#getChannel(int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#getChannel
+	 * (int)
 	 */
 	@Override
 	public EspChannel getChannel(int channelNumber) {
 		return getSocket().getChannel(channelNumber);
 	}
-	
+
+	/**
+	 * Returns a {@link DefaultLab} instance. Can be overridden in subclasses for
+	 * custom {@link Lab} implementations.
+	 */
 	public Lab getDefaultLab() {
 		return new DefaultLab();
 	}
