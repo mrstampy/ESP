@@ -73,7 +73,7 @@ public class DefaultLab implements Lab {
 
 			@Override
 			public void call(Inner t1) {
-				process(getConnection().getCurrent());
+				process(getConnection().getCurrentFor(getChannel()));
 			}
 		});
 	}
