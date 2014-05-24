@@ -168,6 +168,8 @@ public abstract class AbstractLab implements Lab {
 	}
 	
 	private void numBandsCheck(int numBands) {
+		if(getConnection() == null) return;
+		
 		int max = getConnection().getDSPValues().getSampleSize();
 		if(numBands < 1 || numBands > max) throw new RuntimeException("Num Bands must be between 1 and " + max);
 	}
