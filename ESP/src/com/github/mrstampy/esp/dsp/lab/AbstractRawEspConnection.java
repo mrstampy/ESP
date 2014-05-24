@@ -19,8 +19,10 @@
 package com.github.mrstampy.esp.dsp.lab;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.github.mrstampy.esp.multiconnectionsocket.ConnectionEventListener;
+import com.github.mrstampy.esp.multiconnectionsocket.EspChannel;
 import com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket;
 import com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocketException;
 
@@ -142,8 +144,27 @@ public abstract class AbstractRawEspConnection<SOCKET extends MultiConnectionSoc
 		getUtilities().setWindow(createWindow());
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#getNumChannels()
+	 */
 	public int getNumChannels() {
-		return getDSPValues().getNumChannels();
+		return getSocket().getNumChannels();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#getChannels()
+	 */
+	@Override
+	public List<EspChannel> getChannels() {
+		return getSocket().getChannels();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#getChannel(int)
+	 */
+	@Override
+	public EspChannel getChannel(int channelNumber) {
+		return getSocket().getChannel(channelNumber);
 	}
 
 	private WindowFunction createWindow() {

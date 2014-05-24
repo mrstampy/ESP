@@ -50,6 +50,8 @@ public class DefaultLab implements Lab {
 
 	private List<SignalProcessedListener> listeners = new ArrayList<SignalProcessedListener>();
 
+	private int channel = 1;
+
 	/**
 	 * Instantiates a new default lab.
 	 *
@@ -60,10 +62,13 @@ public class DefaultLab implements Lab {
 		setNumBands(numBands);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.Lab#triggerProcessing()
+	 */
 	@Override
 	public void triggerProcessing() {
 		connectionCheck();
-		
+
 		Schedulers.newThread().schedule(new Action1<Scheduler.Inner>() {
 
 			@Override
@@ -73,6 +78,9 @@ public class DefaultLab implements Lab {
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.Lab#triggerProcessing(int)
+	 */
 	@Override
 	public void triggerProcessing(final int numSamples) {
 		connectionCheck();
@@ -470,6 +478,8 @@ public class DefaultLab implements Lab {
 		values.setLowPassFilterFactor(getLowPassFilterFactor());
 		values.setHighPassFilterFactor(getHighPassFilterFactor());
 		values.setWindowFunction(getWindowFunction());
+		values.setChannel(getChannel());
+		values.setNumChannels(getNumChannels());
 
 		return values;
 	}
@@ -497,6 +507,7 @@ public class DefaultLab implements Lab {
 		setLowPassFilterFactor(values.getLowPassFilterFactor());
 		setHighPassFilterFactor(values.getHighPassFilterFactor());
 		setWindowFunction(values.getWindowFunction());
+		setChannel(values.getChannel());
 	}
 
 	/*
@@ -597,13 +608,41 @@ public class DefaultLab implements Lab {
 		if (getConnection() == null) throw new RuntimeException("No RawEspConnection implementation in the lab");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getWindowFunction()
+	 */
 	@Override
 	public EspWindowFunction getWindowFunction() {
 		return getConnection() == null ? EspWindowFunction.RECTANGULAR : getConnection().getWindowFunction();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setWindowFunction(com.github.mrstampy.esp.dsp.lab.EspWindowFunction)
+	 */
 	@Override
 	public void setWindowFunction(EspWindowFunction windowFunction) {
-		if(getConnection() != null) getConnection().setWindowFunction(windowFunction);
+		if (getConnection() != null) getConnection().setWindowFunction(windowFunction);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getChannel()
+	 */
+	public int getChannel() {
+		return channel;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setChannel(int)
+	 */
+	public void setChannel(int channel) {
+		this.channel = channel;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getNumChannels()
+	 */
+	@Override
+	public int getNumChannels() {
+		return getConnection().getNumChannels();
 	}
 }

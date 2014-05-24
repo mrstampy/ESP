@@ -29,13 +29,15 @@ public interface Lab extends LabValues {
 	 * {@link RawEspConnection#getCurrent()} signal.
 	 */
 	void triggerProcessing();
-	
+
 	/**
 	 * Implementations will call {@link #process(double[][])} with the
 	 * {@link RawEspConnection#getCurrent(int)} signal.
+	 *
+	 * @param numSamples the num samples
 	 */
 	void triggerProcessing(int numSamples);
-	
+
 	/**
 	 * Process.
 	 *
@@ -84,24 +86,27 @@ public interface Lab extends LabValues {
 	/**
 	 * Initialization of a lab with values.
 	 *
-	 * @param values the new lab values
+	 * @param values
+	 *          the new lab values
 	 */
 	void setLabValues(LabValues values);
-	
+
 	/**
 	 * Adds the signal processed listener.
 	 *
-	 * @param l the l
+	 * @param l
+	 *          the l
 	 */
 	void addSignalProcessedListener(SignalProcessedListener l);
-	
+
 	/**
 	 * Removes the signal processed listener.
 	 *
-	 * @param l the l
+	 * @param l
+	 *          the l
 	 */
 	void removeSignalProcessedListener(SignalProcessedListener l);
-	
+
 	/**
 	 * Clear signal processed listeners.
 	 */

@@ -45,8 +45,6 @@ public abstract class AbstractDSPValues {
 	private int sampleSize;
 
 	private List<DSPValueListener> listeners = new ArrayList<DSPValueListener>();
-	
-	private int numChannels = 1;
 
 	/**
 	 * Call this constructor from subclasses.
@@ -152,14 +150,6 @@ public abstract class AbstractDSPValues {
 
 		this.sampleSize = sampleSize;
 		notifySampleSizeChange();
-	}
-	
-	public int getNumChannels() {
-		return numChannels;
-	}
-	
-	protected void setNumChannels(int numChannels) {
-		this.numChannels = numChannels;
 	}
 
 	private void notifySampleSizeChange() {

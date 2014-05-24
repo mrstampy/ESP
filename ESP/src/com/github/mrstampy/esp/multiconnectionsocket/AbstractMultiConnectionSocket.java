@@ -68,6 +68,8 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	private Disruptor<MessageEvent<MESSAGE>> disruptor;
 
 	private RingBuffer<MessageEvent<MESSAGE>> rb;
+	
+	private int numChannels;
 
 	/**
 	 * Instantiates a new abstract multi connection socket.
@@ -308,5 +310,21 @@ public abstract class AbstractMultiConnectionSocket<MESSAGE> implements MultiCon
 	 * @param message the message
 	 */
 	protected abstract void parseMessage(MESSAGE message);
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.multiconnectionsocket.MultiConnectionSocket#getNumChannels()
+	 */
+	public int getNumChannels() {
+		return numChannels;
+	}
+
+	/**
+	 * Sets the num channels.
+	 *
+	 * @param numChannels the new num channels
+	 */
+	public void setNumChannels(int numChannels) {
+		this.numChannels = numChannels;
+	}
 
 }

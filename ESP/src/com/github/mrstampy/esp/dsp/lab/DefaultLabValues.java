@@ -41,6 +41,8 @@ public class DefaultLabValues implements LabValues, Serializable {
 	private double lowPassFilterFactor;
 	private double highPassFilterFactor;
 	private EspWindowFunction windowFunction;
+	private int channel;
+	private int numChannels;
 
 	/* (non-Javadoc)
 	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getFftType()
@@ -224,12 +226,48 @@ public class DefaultLabValues implements LabValues, Serializable {
 		this.highPassFilterFactor = highPassFilterFactor;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getWindowFunction()
+	 */
 	public EspWindowFunction getWindowFunction() {
 		return windowFunction;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setWindowFunction(com.github.mrstampy.esp.dsp.lab.EspWindowFunction)
+	 */
 	public void setWindowFunction(EspWindowFunction windowFunction) {
 		this.windowFunction = windowFunction;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getChannel()
+	 */
+	public int getChannel() {
+		return channel;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setChannel(int)
+	 */
+	public void setChannel(int channel) {
+		this.channel = channel;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getNumChannels()
+	 */
+	public int getNumChannels() {
+		return numChannels;
+	}
+
+	/**
+	 * Sets the num channels.
+	 *
+	 * @param numChannels the new num channels
+	 */
+	public void setNumChannels(int numChannels) {
+		this.numChannels = numChannels;
 	}
 
 }

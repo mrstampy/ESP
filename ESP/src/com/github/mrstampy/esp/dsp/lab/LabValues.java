@@ -208,7 +208,38 @@ public interface LabValues extends Serializable {
 	 */
 	double getHighPassFilterFactor();
 	
+	/**
+	 * Gets the window function.
+	 *
+	 * @return the window function
+	 */
 	EspWindowFunction getWindowFunction();
 	
+	/**
+	 * Sets the window function.
+	 *
+	 * @param windowFunction the new window function
+	 */
 	void setWindowFunction(EspWindowFunction windowFunction);
+
+	/**
+	 * Returns the channel being processed by this lab.
+	 *
+	 * @return the channel
+	 */
+	int getChannel();
+
+	/**
+	 * Set the channel for this lab.
+	 *
+	 * @param channel the new channel
+	 */
+	void setChannel(int channel);
+
+	/**
+	 * Returns the number of channels available for processing.
+	 *
+	 * @return the num channels
+	 */
+	int getNumChannels();
 }
