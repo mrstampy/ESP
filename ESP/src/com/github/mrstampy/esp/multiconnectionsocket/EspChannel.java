@@ -139,7 +139,7 @@ public class EspChannel implements Serializable {
 	
 	@Override
 	public String toString() {
-		return getDescription();
+		return getDescription() == null ? "Channel " + getChannelNumber() : getDescription();
 	}
 
 }
