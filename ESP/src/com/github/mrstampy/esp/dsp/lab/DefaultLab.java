@@ -37,6 +37,14 @@ public class DefaultLab extends AbstractLab implements Lab {
 	private volatile double baseline = 0;
 	private double baselineCandidate = 0;
 	private EspSignalUtilities utilities;
+	
+	/**
+	 * Instantiates a new default lab.
+	 *
+	 */
+	public DefaultLab() {
+		super();
+	}
 
 	/**
 	 * Instantiates a new default lab.
@@ -45,6 +53,7 @@ public class DefaultLab extends AbstractLab implements Lab {
 	 *          the num bands
 	 */
 	public DefaultLab(int numBands) {
+		this();
 		setNumBands(numBands);
 	}
 

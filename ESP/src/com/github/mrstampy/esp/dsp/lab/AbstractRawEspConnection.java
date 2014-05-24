@@ -166,6 +166,10 @@ public abstract class AbstractRawEspConnection<SOCKET extends MultiConnectionSoc
 	public EspChannel getChannel(int channelNumber) {
 		return getSocket().getChannel(channelNumber);
 	}
+	
+	public Lab getDefaultLab() {
+		return new DefaultLab();
+	}
 
 	private WindowFunction createWindow() {
 		switch (getWindowFunction()) {

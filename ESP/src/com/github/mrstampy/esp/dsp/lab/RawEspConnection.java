@@ -50,7 +50,8 @@ public interface RawEspConnection extends MultiConnectionSocket {
 	/**
 	 * Set the window function.
 	 *
-	 * @param function the new window function
+	 * @param function
+	 *          the new window function
 	 * @see EspSignalUtilities#setWindow(ddf.minim.analysis.WindowFunction)
 	 */
 	void setWindowFunction(EspWindowFunction function);
@@ -72,7 +73,8 @@ public interface RawEspConnection extends MultiConnectionSocket {
 	/**
 	 * Return the specified number of the current second's worth of samples.
 	 *
-	 * @param numSamples the num samples
+	 * @param numSamples
+	 *          the num samples
 	 * @return the current
 	 */
 	double[][] getCurrent(int numSamples);
@@ -80,16 +82,20 @@ public interface RawEspConnection extends MultiConnectionSocket {
 	/**
 	 * Return the current second's worth of samples for the specified channel.
 	 *
-	 * @param channelNumber the channel number
+	 * @param channelNumber
+	 *          the channel number
 	 * @return the current
 	 */
 	double[][] getCurrentFor(int channelNumber);
 
 	/**
-	 * Return the specified number of the current second's worth of samples for the specified channel.
+	 * Return the specified number of the current second's worth of samples for
+	 * the specified channel.
 	 *
-	 * @param numSamples the num samples
-	 * @param channelNumber the channel number
+	 * @param numSamples
+	 *          the num samples
+	 * @param channelNumber
+	 *          the channel number
 	 * @return the current
 	 */
 	double[][] getCurrentFor(int numSamples, int channelNumber);
@@ -100,4 +106,12 @@ public interface RawEspConnection extends MultiConnectionSocket {
 	 * @return the name
 	 */
 	String getName();
+
+	/**
+	 * Returns an instance of the default lab implementation for use with this
+	 * connection.
+	 * 
+	 * @return
+	 */
+	Lab getDefaultLab();
 }
