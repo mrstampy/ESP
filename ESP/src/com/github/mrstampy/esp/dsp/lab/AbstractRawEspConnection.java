@@ -257,6 +257,6 @@ public abstract class AbstractRawEspConnection<SOCKET extends MultiConnectionSoc
 	 *
 	 * @return the socket
 	 */
-	protected abstract SOCKET getSocket();
+	public abstract SOCKET getSocket();
 
 }
