@@ -152,6 +152,7 @@ public abstract class AbstractLab implements Lab {
 	 */
 	@Override
 	public int getNumBands() {
+		numBandsCheck(numBands);
 		return numBands;
 	}
 
@@ -162,7 +163,13 @@ public abstract class AbstractLab implements Lab {
 	 */
 	@Override
 	public void setNumBands(int numBands) {
+		numBandsCheck(numBands);
 		this.numBands = numBands;
+	}
+	
+	private void numBandsCheck(int numBands) {
+		int max = getConnection().getDSPValues().getSampleSize();
+		if(numBands < 1 || numBands > max) throw new RuntimeException("Num Bands must be between 1 and " + max);
 	}
 
 	/*
