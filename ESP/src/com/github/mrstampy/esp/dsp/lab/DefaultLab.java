@@ -22,35 +22,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import rx.Scheduler;
-import rx.Scheduler.Inner;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-
 import com.github.mrstampy.esp.dsp.EspSignalUtilities;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class DefaultLab.
  */
-public class DefaultLab implements Lab {
+public class DefaultLab extends AbstractLab implements Lab {
 	private static final long serialVersionUID = 1L;
 
 	private PreFFTProcessor preFFTProcessor = new PreFFTProcessor();
 	private PostFFTProcessor postFFTProcessor = new PostFFTProcessor();
-	private RawEspConnection connection;
-	private FFTType fftType = FFTType.no_fft;
-	private EspSignalUtilities utilities;
-
 	private AtomicBoolean calcBaseline = new AtomicBoolean(false);
 	private volatile double baseline = 0;
 	private double baselineCandidate = 0;
-
-	private int numBands;
-
-	private List<SignalProcessedListener> listeners = new ArrayList<SignalProcessedListener>();
-
-	private int channel = 1;
+	private EspSignalUtilities utilities;
 
 	/**
 	 * Instantiates a new default lab.
@@ -60,38 +46,6 @@ public class DefaultLab implements Lab {
 	 */
 	public DefaultLab(int numBands) {
 		setNumBands(numBands);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#triggerProcessing()
-	 */
-	@Override
-	public void triggerProcessing() {
-		connectionCheck();
-
-		Schedulers.newThread().schedule(new Action1<Scheduler.Inner>() {
-
-			@Override
-			public void call(Inner t1) {
-				process(getConnection().getCurrentFor(getChannel()));
-			}
-		});
-	}
-
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#triggerProcessing(int)
-	 */
-	@Override
-	public void triggerProcessing(final int numSamples) {
-		connectionCheck();
-
-		Schedulers.newThread().schedule(new Action1<Scheduler.Inner>() {
-
-			@Override
-			public void call(Inner t1) {
-				process(getConnection().getCurrent(numSamples));
-			}
-		});
 	}
 
 	/*
@@ -115,7 +69,7 @@ public class DefaultLab implements Lab {
 		}
 
 		for (int i = 0; i < wmad.length; i++) {
-			wmad[i] = utilities.wma(getPowers(samples, i));
+			wmad[i] = getUtilities().wma(getPowers(samples, i));
 		}
 
 		if (calcBaseline.get()) setMinValue(wmad);
@@ -123,12 +77,6 @@ public class DefaultLab implements Lab {
 		double[] processed = baseline == 0 ? wmad : applyBaseline(wmad);
 
 		notifyProcessedListeners(processed);
-	}
-
-	private void notifyProcessedListeners(double[] processed) {
-		for (SignalProcessedListener l : listeners) {
-			l.signalProcessed(processed);
-		}
 	}
 
 	private double[] applyBaseline(double[] wmad) {
@@ -147,6 +95,28 @@ public class DefaultLab implements Lab {
 			val = Math.min(d, val);
 		}
 		baselineCandidate = val;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.github.mrstampy.esp.dsp.lab.AbstractLab#setNumBands(int)
+	 */
+	public void setNumBands(int numBands) {
+		super.setNumBands(numBands);
+		getPreFFTProcessor().setHighFrequency(numBands);
+		getPostFFTProcessor().setHighFrequency(numBands);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.Lab#setConnection(com.github.mrstampy.esp
+	 * .dsp.lab.RawEspConnection)
+	 */
+	@Override
+	public void setConnection(RawEspConnection connection) {
+		super.setConnection(connection);
+		setUtilities(connection.getUtilities());
 	}
 
 	/*
@@ -181,85 +151,22 @@ public class DefaultLab implements Lab {
 		baseline = 0;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getConnection()
+	/**
+	 * Gets the pre fft processor.
+	 *
+	 * @return the pre fft processor
 	 */
-	@Override
-	public RawEspConnection getConnection() {
-		return connection;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.github.mrstampy.esp.dsp.lab.Lab#setConnection(com.github.mrstampy.esp
-	 * .multiconnectionsocket.RawEspConnection)
-	 */
-	@Override
-	public void setConnection(RawEspConnection connection) {
-		this.connection = connection;
-		setUtilities(connection.getUtilities());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getFftType()
-	 */
-	@Override
-	public FFTType getFftType() {
-		return fftType;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.github.mrstampy.esp.dsp.lab.Lab#setFftType(com.github.mrstampy.esp.
-	 * dsp.lab.FFTType)
-	 */
-	@Override
-	public void setFftType(FFTType fftType) {
-		this.fftType = fftType;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getNumBands()
-	 */
-	@Override
-	public int getNumBands() {
-		return numBands;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#setNumBands(int)
-	 */
-	@Override
-	public void setNumBands(int numBands) {
-		this.numBands = numBands;
-		getPreFFTProcessor().setHighFrequency(numBands);
-		getPostFFTProcessor().setHighFrequency(numBands);
-	}
-
-	private PreFFTProcessor getPreFFTProcessor() {
+	PreFFTProcessor getPreFFTProcessor() {
 		return preFFTProcessor;
 	}
 
-	private PostFFTProcessor getPostFFTProcessor() {
+	/**
+	 * Gets the post fft processor.
+	 *
+	 * @return the post fft processor
+	 */
+	PostFFTProcessor getPostFFTProcessor() {
 		return postFFTProcessor;
-	}
-
-	private void setUtilities(EspSignalUtilities utilities) {
-		this.utilities = utilities;
-		getPreFFTProcessor().setUtilities(utilities);
-		getPostFFTProcessor().setUtilities(utilities);
 	}
 
 	private double[] applyFft(double[] d) {
@@ -267,9 +174,9 @@ public class DefaultLab implements Lab {
 
 		switch (getFftType()) {
 		case log_fft:
-			return utilities.fftLogPowerSpectrum(d);
+			return getUtilities().fftLogPowerSpectrum(d);
 		case real_fft:
-			return utilities.fftRealSpectrum(d);
+			return getUtilities().fftRealSpectrum(d);
 		default:
 			return d;
 		}
@@ -458,95 +365,6 @@ public class DefaultLab implements Lab {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#getLabValues()
-	 */
-	@Override
-	public LabValues getLabValues() {
-		DefaultLabValues values = new DefaultLabValues();
-
-		values.setNumBands(getNumBands());
-		values.setAbsoluteValues(isAbsoluteValues());
-		values.setFftType(getFftType());
-		values.setHighNormalizeFftFrequency(getHighNormalizeFftFrequency());
-		values.setLowNormalizeFftFrequency(getLowNormalizeFftFrequency());
-		values.setHighPassFrequency(getHighPassFrequency());
-		values.setLowPassFrequency(getLowPassFrequency());
-		values.setNormalizeFft(isNormalizeFft());
-		values.setNormalizeSignal(isNormalizeSignal());
-		values.setPassFilter(getPassFilter());
-		values.setBaseline(getBaseline());
-		values.setLowPassFilterFactor(getLowPassFilterFactor());
-		values.setHighPassFilterFactor(getHighPassFilterFactor());
-		values.setWindowFunction(getWindowFunction());
-		values.setChannel(getChannel());
-		values.setNumChannels(getNumChannels());
-
-		return values;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.github.mrstampy.esp.dsp.lab.Lab#setLabValues(com.github.mrstampy.esp
-	 * .dsp.lab.LabValues)
-	 */
-	@Override
-	public void setLabValues(LabValues values) {
-		setNumBands(values.getNumBands());
-		setAbsoluteValues(values.isAbsoluteValues());
-		setFftType(values.getFftType());
-		setHighNormalizeFftFrequency(values.getHighNormalizeFftFrequency());
-		setLowNormalizeFftFrequency(values.getLowNormalizeFftFrequency());
-		setHighPassFrequency(values.getHighPassFrequency());
-		setLowPassFrequency(values.getLowPassFrequency());
-		setNormalizeFft(values.isNormalizeFft());
-		setNormalizeSignal(values.isNormalizeSignal());
-		setPassFilter(values.getPassFilter());
-		setBaseline(values.getBaseline());
-		setLowPassFilterFactor(values.getLowPassFilterFactor());
-		setHighPassFilterFactor(values.getHighPassFilterFactor());
-		setWindowFunction(values.getWindowFunction());
-		setChannel(values.getChannel());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.github.mrstampy.esp.dsp.lab.Lab#addSignalProcessedListener(com.github
-	 * .mrstampy.esp.dsp.lab.SignalProcessedListener)
-	 */
-	@Override
-	public void addSignalProcessedListener(SignalProcessedListener l) {
-		if (l != null && !listeners.contains(l)) listeners.add(l);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.github.mrstampy.esp.dsp.lab.Lab#removeSignalProcessedListener(com.github
-	 * .mrstampy.esp.dsp.lab.SignalProcessedListener)
-	 */
-	@Override
-	public void removeSignalProcessedListener(SignalProcessedListener l) {
-		if (l != null) listeners.remove(l);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.mrstampy.esp.dsp.lab.Lab#clearSignalProcessedListeners()
-	 */
-	@Override
-	public void clearSignalProcessedListeners() {
-		listeners.clear();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getBaseline()
 	 */
 	public double getBaseline() {
@@ -604,11 +422,30 @@ public class DefaultLab implements Lab {
 		return getPreFFTProcessor().getHighPassFilterFactor();
 	}
 
-	private void connectionCheck() {
-		if (getConnection() == null) throw new RuntimeException("No RawEspConnection implementation in the lab");
+	/**
+	 * Sets the utilities.
+	 *
+	 * @param utilities
+	 *          the new utilities
+	 */
+	protected void setUtilities(EspSignalUtilities utilities) {
+		this.utilities = utilities;
+		getPreFFTProcessor().setUtilities(utilities);
+		getPostFFTProcessor().setUtilities(utilities);
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Gets the utilities.
+	 *
+	 * @return the utilities
+	 */
+	protected EspSignalUtilities getUtilities() {
+		return utilities;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getWindowFunction()
 	 */
 	@Override
@@ -616,33 +453,15 @@ public class DefaultLab implements Lab {
 		return getConnection() == null ? EspWindowFunction.RECTANGULAR : getConnection().getWindowFunction();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setWindowFunction(com.github.mrstampy.esp.dsp.lab.EspWindowFunction)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.github.mrstampy.esp.dsp.lab.LabValues#setWindowFunction(com.github.
+	 * mrstampy.esp.dsp.lab.EspWindowFunction)
 	 */
 	@Override
 	public void setWindowFunction(EspWindowFunction windowFunction) {
 		if (getConnection() != null) getConnection().setWindowFunction(windowFunction);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getChannel()
-	 */
-	public int getChannel() {
-		return channel;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#setChannel(int)
-	 */
-	public void setChannel(int channel) {
-		this.channel = channel;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.github.mrstampy.esp.dsp.lab.LabValues#getNumChannels()
-	 */
-	@Override
-	public int getNumChannels() {
-		return getConnection().getNumChannels();
 	}
 }
