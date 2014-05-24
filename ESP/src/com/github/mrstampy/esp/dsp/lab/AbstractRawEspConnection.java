@@ -220,11 +220,15 @@ public abstract class AbstractRawEspConnection<SOCKET extends MultiConnectionSoc
 	}
 
 	/**
-	 * Returns a {@link DefaultLab} instance. Can be overridden in subclasses for
-	 * custom {@link Lab} implementations.
+	 * Returns a {@link DefaultLab} instance set to use this connection. Can be
+	 * overridden in subclasses for custom {@link Lab} implementations.
 	 */
 	public Lab getDefaultLab() {
-		return new DefaultLab();
+		DefaultLab lab = new DefaultLab();
+
+		lab.setConnection(this);
+
+		return lab;
 	}
 
 	private WindowFunction createWindow() {
