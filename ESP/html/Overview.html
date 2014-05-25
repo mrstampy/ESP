@@ -50,35 +50,35 @@
 	
 	<h2>Primary Design Specifics</h2>
 	
-	<h3><a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/multiconnectionsocket/MultiConnectionSocket.java">The MultiConnectSocket Interface</a></h3>
+	<h3><a href="com/github/mrstampy/esp/multiconnectionsocket/MultiConnectionSocket.html">The MultiConnectSocket Interface</a></h3>
 	
 	<p>
 		This interface defines the methods that must be implemented for a class
 		which provides access to EEG hardware.  
-		An <a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/multiconnectionsocket/AbstractMultiConnectionSocket.java">abstract superclass</a>
+		An <a href="com/github/mrstampy/esp/multiconnectionsocket/AbstractMultiConnectionSocket.html">abstract superclass</a>
 		exists for ease of implementation.
 	</p>
 	
-	<h3><a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/dsp/lab/RawEspConnection.java">The RawEspConnection Interface</a></h3>
+	<h3><a href="com/github/mrstampy/esp/dsp/lab/RawEspConnection.html">The RawEspConnection Interface</a></h3>
 	
 	<p>
 		RawEspConnection extends the MultiConnectSocket interface.
 		Implementations are intended to encapsulate and control a MultiConnectSocket instance through the implementation
 		of the common methods, as well as provide the current seconds' worth of samples on demand for direct use or further
 		processing.  Signal processing methods exist to provide ease of processing the signal.  
-		An <a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/dsp/lab/AbstractRawEspConnection.java">abstract superclass</a>
+		An <a href="com/github/mrstampy/esp/dsp/lab/AbstractRawEspConnection.html">abstract superclass</a>
 		exists for ease of implementation.
 	</p>
 	
-	<h3><a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/dsp/lab/Lab.java">The Lab Interface</a></h3>
+	<h3><a href="com/github/mrstampy/esp/dsp/lab/Lab.html">The Lab Interface</a></h3>
 	
 	<p>
 		While the ESP library provides DSP processing classes, how the signal is processed is left to 
 		programs using the library.  Lab implementations provide the ability to obtain the current seconds' worth of samples
 		from the encapsulated RawEspConnection, process the signal and notify the program when a sample is ready for use.
 		
-		A <a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/dsp/lab/DefaultLab.java">default implementation</a>
-		exists and an <a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/dsp/lab/AbstractLab.java">abstract superclass</a> provides ease
+		A <a href="com/github/mrstampy/esp/dsp/lab/DefaultLab.html">default implementation</a>
+		exists and an <a href="com/github/mrstampy/esp/dsp/lab/AbstractLab.html">abstract superclass</a> provides ease
 		of custom lab implementation. 
 	</p>
 	
@@ -97,7 +97,7 @@
 			
 			// optional, common to all MultiConnectSocket implementations:
 			// add a listener to receive connect/disconnect events
-			socket.addConnectionEventListener(new <a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/multiconnectionsocket/ConnectionEventListener.java">ConnectionEventListener()</a> {
+			socket.addConnectionEventListener(new <a href="com/github/mrstampy/esp/multiconnectionsocket/ConnectionEventListener.html">ConnectionEventListener()</a> {
 				public void connectionEventPerformed(ConnectionEvent e) {
 					doSomethingWith(e);
 				}
@@ -120,7 +120,7 @@
 		This functionality is from where the MultiConnectSocket derives its name.  Device specific
 		implementations provide the ability to open a socket on a configurable port.  Such sockets
 		facilitate a subscribe and publish of device signals. This allows separate processes and machines
-		to <a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/multiconnectionsocket/AbstractSocketConnector.java">receive the device signals</a> 
+		to <a href="com/github/mrstampy/esp/multiconnectionsocket/AbstractSocketConnector.html">receive the device signals</a> 
 		for their own purposes - signal recording, secondary processing, display etc.
 				
 		<code>
@@ -162,7 +162,7 @@
 			
 			// optional, common to all RawEspConnection implementations:
 			// add a listener to receive connect/disconnect events
-			connection.addConnectionEventListener(new <a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/multiconnectionsocket/ConnectionEventListener.java">ConnectionEventListener()</a> {
+			connection.addConnectionEventListener(new <a href="com/github/mrstampy/esp/multiconnectionsocket/ConnectionEventListener.html">ConnectionEventListener()</a> {
 				public void connectionEventPerformed(ConnectionEvent e) {
 					doSomethingWith(e);
 				}
@@ -191,7 +191,7 @@
 			
 			// optional, common to all RawEspConnection implementations:
 			// add a listener to receive connect/disconnect events
-			connection.addConnectionEventListener(new <a href="https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/multiconnectionsocket/ConnectionEventListener.java">ConnectionEventListener()</a> {
+			connection.addConnectionEventListener(new <a href="com/github/mrstampy/esp/multiconnectionsocket/ConnectionEventListener.html">ConnectionEventListener()</a> {
 				public void connectionEventPerformed(ConnectionEvent e) {
 					doSomethingWith(e);
 				}
