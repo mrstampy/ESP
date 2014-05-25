@@ -21,7 +21,7 @@ This library provides the ability to connect to the [NeuroSky](http://www.neuros
 * Sample rates above 1kHz allowed
 * Reasonable results sampling into the 50kHz range
 # ESP - An EEG Signal Processing Library
-	
+
 ## Design Goals
 
 ESP is designed to provide Java programs access to EEG device signals and provide the ability to process the signals for the purposes of the program. The ESP library itself is not an implementation, however there are several implementations for specific EEG devices:
@@ -29,7 +29,7 @@ ESP is designed to provide Java programs access to EEG device signals and provid
 * [ESP-Nia](http://mrstampy.github.io/ESP-Nia/)
 * [ESP-ThinkGear](http://mrstampy.github.io/ESP-ThinkGear/)
 * [ESP-OpenBCI (experimental)](http://mrstampy.github.io/ESP-OpenBCI/)
-* [ESPLab (JavaFX 8.0 GUI for the ESP Lab interface)](http://mrstampy.github.io/ESPLab/
+* [ESPLab (JavaFX 8.0 GUI for the ESP Lab interface)](http://mrstampy.github.io/ESPLab/)
 	
 ESP provides a common structure for device specific implementations.  This allows programs using the ESP libraries to cater for multiple devices from a single codebase.
 
