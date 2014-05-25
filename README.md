@@ -61,7 +61,7 @@ This is the lowest level use case.  Programs using ESP library implementations i
 		
 		// optional, common to all MultiConnectSocket implementations:
 		// add a listener to receive connect/disconnect events
-		socket.addConnectionEventListener(new [ConnectionEventListener()](https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/multiconnectionsocket/ConnectionEventListener.java) {
+		socket.addConnectionEventListener(new ConnectionEventListener() {
 			public void connectionEventPerformed(ConnectionEvent e) {
 				doSomethingWith(e);
 			}
@@ -107,7 +107,7 @@ RawEspConnection implementations aggregate the current second's worth of data, i
 		
 		// optional, common to all RawEspConnection implementations:
 		// add a listener to receive connect/disconnect events
-		connection.addConnectionEventListener(new [ConnectionEventListener()](https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/multiconnectionsocket/ConnectionEventListener.java) {
+		connection.addConnectionEventListener(new ConnectionEventListener() {
 			public void connectionEventPerformed(ConnectionEvent e) {
 				doSomethingWith(e);
 			}
@@ -127,7 +127,7 @@ Lab implementations provide the ability to process the current seconds' worth of
 		
 		// optional, common to all RawEspConnection implementations:
 		// add a listener to receive connect/disconnect events
-		connection.addConnectionEventListener(new [ConnectionEventListener()](https://github.com/mrstampy/ESP/blob/master/ESP/src/com/github/mrstampy/esp/multiconnectionsocket/ConnectionEventListener.java) {
+		connection.addConnectionEventListener(new ConnectionEventListener() {
 			public void connectionEventPerformed(ConnectionEvent e) {
 				doSomethingWith(e);
 			}
